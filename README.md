@@ -10,7 +10,6 @@
 
 
 #### Задачи
-- [x] list syntax required (any unordered or ordered list supported)
 - [x] **ЛР1:** Добыча корпуса документов
 - [ ] **ЛР2:** Оценка качества поиска
 - [ ] **ЛР3:** Булев индекс
