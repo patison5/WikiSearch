@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ru" data-vue-meta="%7B%22lang%22:%7B%22ssr%22:%22ru%22%7D%7D">
+<head >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+  <title>C++0x (С++11). Лямбда-выражения / Хабр</title>
+  <style>
+    /* cyrillic-ext */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveSxf6TF0.woff2) format('woff2');
+      unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    /* cyrillic */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveQhf6TF0.woff2) format('woff2');
+      unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    /* latin-ext */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveSBf6TF0.woff2) format('woff2');
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveRhf6.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+  </style>
+  <link rel="preload" href="https://assets.habr.com/habr-web/css/chunk-vendors.0f7bdd8f.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/chunk-vendors.670ab961.js" as="script"><link rel="preload" href="https://assets.habr.com/habr-web/css/app.01bb2993.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/app.76acc47b.js" as="script"><link rel="preload" href="https://assets.habr.com/habr-web/css/chunk-f458c7c4.e48e8f79.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/chunk-f458c7c4.6e221df6.js" as="script">
+  <link rel="stylesheet" href="https://assets.habr.com/habr-web/css/chunk-vendors.0f7bdd8f.css"><link rel="stylesheet" href="https://assets.habr.com/habr-web/css/app.01bb2993.css"><link rel="stylesheet" href="https://assets.habr.com/habr-web/css/chunk-f458c7c4.e48e8f79.css">
+  <script>window.i18nFetch = new Promise((res, rej) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', '/js/i18n/ru-compiled.4f7c12b4e1b1b4c0e44ef6f9f33b1f9f.json');
+          xhr.responseType = 'json';
+          xhr.onload = function(e) {
+            if (this.status === 200) {
+              res({ru: xhr.response});
+            } else {
+              rej(e);
+            }
+          };
+          xhr.send();
+        });</script>
+  
+  <script data-vue-meta="ssr" src="/js/ads.js" onload="window['zhY4i4nJ9K'] = true" data-vmid="checkad"></script><script data-vue-meta="ssr" type="application/ld+json" data-vmid="ldjson-schema">{"@context":"http:\/\/schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/habr.com\/ru\/post\/66021\/"},"headline":"C++0x (С++11). Лямбда-выражения","datePublished":"2009-08-03T01:46:04+04:00","dateModified":"2012-10-03T14:42:51+04:00","author":{"@type":"Person","name":"Сергей Оленда́ренко"},"publisher":{"@type":"Organization","name":"Habr","logo":{"@type":"ImageObject","url":"https:\/\/habrastorage.org\/webt\/a_\/lk\/9m\/a_lk9mjkccjox-zccjrpfolmkmq.png"}},"description":"Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-...","url":"https:\/\/habr.com\/ru\/post\/66021\/#post-content-body","about":["h_cpp","f_develop"],"image":["http:\/\/progg.ru\/image.axd?url=http%3A%2F%2Fhabrahabr.ru%2Fblogs%2Fcpp%2F66021%2F"]}</script>
+  <script src="//www.googletagservices.com/tag/js/gpt.js" async></script>
+  <style>.grecaptcha-badge{visibility: hidden;}</style>
+  <meta name="habr-version" content="2.47.1">
+  
+  <meta data-vue-meta="ssr" property="fb:app_id" content="444736788986613"><meta data-vue-meta="ssr" property="fb:pages" content="472597926099084"><meta data-vue-meta="ssr" name="twitter:card" content="summary_large_image"><meta data-vue-meta="ssr" name="twitter:site" content="@habr_eng"><meta data-vue-meta="ssr" property="og:title" content="C++0x (С++11). Лямбда-выражения" data-vmid="og:title"><meta data-vue-meta="ssr" name="twitter:title" content="C++0x (С++11). Лямбда-выражения" data-vmid="twitter:title"><meta data-vue-meta="ssr" name="aiturec:title" content="C++0x (С++11). Лямбда-выражения" data-vmid="aiturec:title"><meta data-vue-meta="ssr" name="description" content="Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что..." data-vmid="description"><meta data-vue-meta="ssr" itemprop="description" content="Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что..." data-vmid="description:itemprop"><meta data-vue-meta="ssr" property="og:description" content="Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что..." data-vmid="og:description"><meta data-vue-meta="ssr" name="twitter:description" content="Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что..." data-vmid="twitter:description"><meta data-vue-meta="ssr" property="aiturec:description" content="Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что..." data-vmid="aiturec:description"><meta data-vue-meta="ssr" itemprop="image" content="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="image:itemprop"><meta data-vue-meta="ssr" property="og:image" content="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="og:image"><meta data-vue-meta="ssr" property="aiturec:image" content="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="aiturec:image"><meta data-vue-meta="ssr" name="twitter:image" content="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="twitter:image"><meta data-vue-meta="ssr" property="vk:image" content="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="vk:image"><meta data-vue-meta="ssr" property="aiturec:item_id" content="66021" data-vmid="aiturec:item_id"><meta data-vue-meta="ssr" property="aiturec:datetime" content="2009-08-02T21:46:04.000Z" data-vmid="aiturec:datetime"><meta data-vue-meta="ssr" property="og:type" content="article" data-vmid="og:type"><meta data-vue-meta="ssr" property="og:locale" content="ru_RU" data-vmid="og:locale"><meta data-vue-meta="ssr" property="og:image:width" content="1200" data-vmid="og:image:width"><meta data-vue-meta="ssr" property="og:image:height" content="630" data-vmid="og:image:height">
+  <link data-vue-meta="ssr" href="https://habr.com/ru/rss/post/66021/?fl=ru" type="application/rss+xml" title="" rel="alternate" name="rss"><link data-vue-meta="ssr" href="https://habr.com/ru/post/66021/" rel="canonical" data-vmid="canonical"><link data-vue-meta="ssr" data-vmid="hreflang"><link data-vue-meta="ssr" image_src="image" href="https://habr.com/share/publication/66021/03b75034185d970acb51009cb7795d2b/" data-vmid="image:href">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303b44">
+  <meta name="msapplication-TileColor" content="#629FBC">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link
+    rel="shortcut icon"
+    type="image/png"
+    sizes="16x16"
+    href="https://assets.habr.com/habr-web/img/favicons/favicon-16.png"
+  >
+  <link
+    rel="shortcut icon"
+    type="image/png"
+    sizes="32x32"
+    href="https://assets.habr.com/habr-web/img/favicons/favicon-32.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="76x76"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-76.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="120x120"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-120.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="152x152"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-152.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="180x180"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-180.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="256x256"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-256.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1136x640.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2436x1125.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1792x828.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_828x1792.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1334x750.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1242x2668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2208x1242.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1125x2436.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1242x2208.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2732x2048.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2688x1242.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2224x1668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_750x1334.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2048x2732.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2388x1668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1668x2224.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_640x1136.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1668x2388.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2048x1536.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1536x2048.png"
+  >
+  <link
+    rel="mask-icon"
+    color="#77a2b6"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-120.svg"
+  >
+  <link
+    crossorigin="use-credentials"
+    href="/manifest.webmanifest"
+    rel="manifest"
+  >
+</head>
+<body>
+
+
+<div id="app" data-server-rendered="true" data-async-called="true"><div class="tm-layout__wrapper"><!----> <div></div> <!----> <header class="tm-header"><div class="tm-page-width"><div class="tm-header__container"><!----> <span class="tm-header__logo-wrap"><a href="/ru/" class="tm-header__logo tm-header__logo_ru"><svg height="16" width="16" class="tm-svg-img tm-header__icon"><title>Хабр</title> <use xlink:href="/img/habr-logo-ru.svg#logo"></use></svg></a> <span class="tm-header__beta-sign" style="display:none;">β</span></span> <div class="tm-dropdown tm-header__projects"><div class="tm-dropdown__head"><button class="tm-header__dropdown-toggle"><svg height="16" width="16" class="tm-svg-img tm-header__icon tm-header__icon_dropdown"><title>Открыть список</title> <use xlink:href="/img/megazord-v24.cee85629.svg#arrow-down"></use></svg></button></div> <!----></div> <a href="/ru/sandbox/start/" class="tm-header__become-author-btn">
+              Как стать автором
+            </a> <div class="tm-feature tm-header__feature tm-feature_variant-inline"><!----></div> <!----> <!----></div></div></header> <div class="tm-layout"><div class="tm-page-progress-bar"></div> <div data-menu-sticky="true" class="tm-base-layout__header tm-base-layout__header_is-sticky"><div class="tm-page-width"><div class="tm-base-layout__header-wrapper"><div class="tm-main-menu"><div class="tm-main-menu__section"><nav class="tm-main-menu__section-content"><!----> <a href="/ru/all/" class="tm-main-menu__item">
+        Все потоки
+      </a> <a href="/ru/flows/develop/" class="tm-main-menu__item">
+          Разработка
+        </a><a href="/ru/flows/admin/" class="tm-main-menu__item">
+          Администрирование
+        </a><a href="/ru/flows/design/" class="tm-main-menu__item">
+          Дизайн
+        </a><a href="/ru/flows/management/" class="tm-main-menu__item">
+          Менеджмент
+        </a><a href="/ru/flows/marketing/" class="tm-main-menu__item">
+          Маркетинг
+        </a><a href="/ru/flows/popsci/" class="tm-main-menu__item">
+          Научпоп
+        </a></nav></div></div> <div class="tm-header-user-menu tm-base-layout__user-menu"><a href="/ru/search/" class="tm-header-user-menu__item tm-header-user-menu__search"><svg height="24" width="24" class="tm-svg-img tm-header-user-menu__icon tm-header-user-menu__icon_search tm-header-user-menu__icon_dark"><title>Поиск</title> <use xlink:href="/img/megazord-v24.cee85629.svg#search"></use></svg></a> <!----> <!----> <!----> <div class="tm-header-user-menu__item tm-header-user-menu__user_desktop"><div class="tm-dropdown"><div class="tm-dropdown__head"><svg height="24" width="24" data-test-id="menu-toggle-guest" class="tm-svg-img tm-header-user-menu__icon"><title>Профиль</title> <use xlink:href="/img/megazord-v24.cee85629.svg#header-user"></use></svg> <!----></div> <!----></div> <!----></div> <!----></div></div></div></div> <!----> <div class="tm-page-width"></div> <main class="tm-layout__container"><div hl="ru" data-async-called="true" class="tm-page"><div class="tm-page-width"><!----> <div class="tm-page__wrapper"><div class="tm-page__main tm-page__main_has-sidebar"><div class="pull-down"><div class="pull-down__header" style="height:0px;"><div class="pull-down__content" style="bottom:10px;"><svg height="24" width="24" class="tm-svg-img pull-down__arrow"><title>Обновить</title> <use xlink:href="/img/megazord-v24.cee85629.svg#pull-arrow"></use></svg></div></div> <!----> <div class="tm-page-article__body"><article class="tm-page-article__content tm-page-article__content_inner"><div class="tm-page-article__head-wrapper"><!----> <div class="tm-article-snippet tm-page-article__snippet"><div class="tm-article-snippet__meta-container"><div class="tm-article-snippet__meta"><span class="tm-user-info tm-article-snippet__author"><a href="/ru/users/GooRoo/" title="GooRoo" class="tm-user-info__userpic"><div class="tm-entity-image"><img alt="" height="24" loading="lazy" src="//habrastorage.org/r/w32/getpro/habr/avatars/97d/fb3/1e1/97dfb31e1954a5bacabf40b367a4945f.jpg" width="24" class="tm-entity-image__pic"></div></a> <span class="tm-user-info__user"><a href="/ru/users/GooRoo/" class="tm-user-info__username">
+      GooRoo
+    </a> </span></span> <span class="tm-article-snippet__datetime-published"><time datetime="2009-08-02T21:46:04.000Z" title="2009-08-03, 01:46">3  августа  2009 в 01:46</time></span></div> <!----></div> <h1 lang="ru" class="tm-article-snippet__title tm-article-snippet__title_h1"><span>C++0x (С++11). Лямбда-выражения</span></h1> <div class="tm-article-snippet__hubs"><span class="tm-article-snippet__hubs-item"><a href="/ru/hub/cpp/" class="tm-article-snippet__hubs-item-link"><span>C++</span> <span title="Профильный хаб" class="tm-article-snippet__profiled-hub">*</span></a></span></div> <div class="tm-article-snippet__labels"><div class="tm-article-snippet__label"><span>
+        Tutorial
+      </span></div></div> <!----> <!----></div></div> <!----> <div data-gallery-root="" lang="ru" class="tm-article-body"><div id="post-content-body" class="article-formatted-body article-formatted-body_version-1"><div xmlns="http://www.w3.org/1999/xhtml">Буквально на днях случайно наткнулся на Хабре на <a href="http://habrahabr.ru/blogs/cpp/65798/" title="Лямбда выражения теперь и в С++">статью о лямбда-выражениях</a> из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что статья недостаточно полная, поэтому я решил попробовать более детально изложить материал.<br/>
+<br/>
+<a name="habracut"></a><br/>
+<br/>
+<h2>Вспомним основы</h2><br/>
+<br/>
+Лямбда-выражения — одна из фич функциональных языков, которую в последнее время начали добавлять также в императивные языки типа C#, C++ etc. Лямбда-выражениями называются безымянные локальные функции, которые можно создавать прямо внутри какого-либо выражения.<br/>
+<br/>
+В прошлой статье лямбда-выражения сравнивали с указателями на функции и с функторами. Так вот первое, что следует уяснить: <strong>лямбда-выражения в C++ — это краткая форма записи анонимных функторов</strong>. Рассмотрим пример:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 1
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	for_each(srcVec.begin(), srcVec.end(), [](int _n)
+	{
+		cout &lt;&lt; _n &lt;&lt; " ";
+	});
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Фактически данный код целиком соответствует такому:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 2
+#include &lt;algorithm> 
+#include &lt;cstdlib> 
+#include &lt;iostream> 
+#include &lt;vector>
+ 
+using namespace std;
+ 
+class MyLambda 
+{
+	public: void operator ()(int _x) const { cout &lt;&lt; _x &lt;&lt; " "; } 
+};
+ 
+int main() 
+{
+	vector&lt;int> srcVec; 
+	for (int val = 0; val &lt; 10; val++)
+	{ 
+		srcVec.push_back(val); 
+	}
+ 
+	for_each(srcVec.begin(), srcVec.end(), MyLambda()); 
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS; 
+}
+</code></pre><br/>
+<br/>
+Вывод соответственно будет следующим:<br/>
+<blockquote>0 1 2 3 4 5 6 7 8 9<br/>
+</blockquote><br/>
+<br/>
+На что здесь стоит обратить внимание. Во-первых, из <em>Листинга 1</em> мы видим, что лямбда-выражение всегда начинается с <strong>[]</strong> (скобки могут быть непустыми — об этом позже), затем идет необязательный список параметров, а затем непосредственно тело функции. Во-вторых, тип возвращаемого значения мы не указывали, и по умолчанию лямбда возвращает <strong>void</strong> (далее мы увидим, как и зачем можно указать возвращаемый тип явно). В-третьих, как видно по <em>Листингу 2</em>, по умолчанию генерируется константный метод (к этому тоже еще вернемся).<br/>
+<br/>
+Не знаю, как вам, но мне <strong>for_each</strong>, записанный с помощью лямбда-выражения, нравится гораздо больше. Попробуем написать немного усложненный пример:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 3
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	int result =
+		count_if(srcVec.begin(), srcVec.end(), [] (int _n)
+		{
+			return (_n % 2) == 0;
+		});
+ 
+	cout &lt;&lt; result &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+В данном случае лямбда играет роль <em>унарного предиката</em>, то есть тип возвращаемого значения <strong>bool</strong>, хотя мы нигде этого не указывали. При наличии одного <strong>return</strong> в лямбда-выражении, компилятор вычисляет тип возвращаемого значения самостоятельно. Если же в лямбда-выражении присутствует <strong>if</strong> или <strong>switch</strong> (или другие сложные конструкции), как в приведенном ниже коде, то на компилятор полагаться уже нельзя:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 4
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	vector&lt;double> destVec;
+	transform(srcVec.begin(), srcVec.end(),
+	          back_inserter(destVec), [] (int _n)
+	{
+		if (_n &lt; 5)
+			return _n + 1.0;
+		else if (_n % 2 == 0)
+			return _n / 2.0;
+		else
+			return _n * _n;
+	});
+ 
+	ostream_iterator&lt;double> outIt(cout, " ");
+	copy(destVec.begin(), destVec.end(), outIt);
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Код из <em>Листинга 4</em> не компилируется, а, к примеру, Visual Studio пишет ошибку на каждый <strong>return</strong> такого содержания:<br/>
+<pre>«error C3499: a lambda that has been specified to have a void return type cannot return a value»</pre><br/>
+Компилятор не может самостоятельно вычислить тип возвращаемого значения, поэтому мы должны его указать явно:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 5
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	vector&lt;double> destVec;
+	transform(srcVec.begin(), srcVec.end(),
+	          back_inserter(destVec), [] (int _n) -> double
+	{
+		if (_n &lt; 5)
+			return _n + 1.0;
+		else if (_n % 2 == 0)
+			return _n / 2.0;
+		else
+			return _n * _n;
+	});
+ 
+	ostream_iterator&lt;double> outIt(cout, " ");
+	copy(destVec.begin(), destVec.end(), outIt);
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Теперь компиляция проходит успешно, а вывод, как и ожидалось, будет следующим:<br/>
+<blockquote>1 2 3 4 5 25 3 49 4 81<br/>
+</blockquote><br/>
+<br/>
+Единственное, что мы добавили в <em>Листинге 5</em>, это тип возвращаемого значения для лямбда-выражения в виде <strong>-> double</strong>. Синтаксис немного странноват и смахивает больше на Haskell, чем на C++. Но указывать возвращаемый тип «слева» (как в функциях) не получилось бы, потому что лямбда должна начинаться с <strong>[]</strong>, чтобы компилятор смог её различить.<br/>
+<br/>
+<h2>Захват переменных из внешнего контекста</h2><br/>
+<br/>
+Все лямбда-выражения, приведенные выше, выглядели как анонимные функции, потому что не хранили никакого промежуточного состояния. Но лямбда-выражения в C++ — это анонимные функторы, а значит состояние они хранить могут! Используя лямбда-выражения, напишем программу, которая выводит количество чисел, попадающих в заданный пользователем интервал [lower; upper):<br/>
+<br/>
+<pre><code class="cpp">// Листинг 6
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;numeric>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	int lowerBound = 0, upperBound = 0;
+	cout &lt;&lt; "Enter the value range: ";
+	cin >> lowerBound >> upperBound;
+ 
+	int result = 
+		count_if(srcVec.begin(), srcVec.end(),
+		         [lowerBound, upperBound] (int _n)
+		{
+			return lowerBound &lt;= _n &amp;&amp; _n &lt; upperBound;
+		});
+	cout &lt;&lt; result &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Наконец, мы добрались до того момента, когда лямбда-выражение начинается не с пустых скобок. Как видно в <em>Листинге 6</em>, внутри квадратных скобок могут указываться переменные. Это называется… эээм… <em>«список захвата»</em> (capture list). Для чего это нужно? На первый взгляд может показаться, что внешней областью видимости для лямбда-выражения является функция <strong>main()</strong> и мы можем беспрепятственно использовать переменные, объявленные в ней, внутри тела лямбда-выражения, однако это не так. Почему? Потому что фактически тело лямбды — это тело перегруженного <strong>operator()()</strong> (как бы это назвать… оператора функционального вызова что ли) внутри анонимного функтора, то есть для кода из <em>Листинга 6</em> компилятор неявно сгенерирует примерно такой код:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 7
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+class MyLambda
+{
+public:
+	MyLambda(int _lowerBound, int _upperBound)
+		: m_lowerBound(_lowerBound)
+		, m_upperBound(_upperBound)
+	{}
+ 
+	bool operator ()(int _n) const
+	{
+		return m_lowerBound &lt;= _n &amp;&amp; _n &lt; m_upperBound;
+	}
+ 
+private:
+	int m_lowerBound, m_upperBound;
+};
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	for (int val = 0; val &lt; 10; val++)
+	{
+		srcVec.push_back(val);
+	}
+ 
+	int lowerBound = 0, upperBound = 0;
+	cout &lt;&lt; "Enter the value range: ";
+	cin >> lowerBound >> upperBound;
+ 
+	int result = count_if(srcVec.begin(),
+	                      srcVec.end(),
+	                      MyLambda(lowerBound, upperBound));
+	cout &lt;&lt; result &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+<em>Листинг 7</em> немного всё разъясняет. Наша лямбда превратилась в функтор, внутри тела которого мы не можем напрямую использовать переменные, объявленные в <strong>main()</strong>, так как это непересекающиеся области видимости. Для того чтобы доступ к <strong>lowerBound</strong> и <strong>upperBound</strong> все-таки был, эти переменные сохраняются внутри самого функтора (происходит тот самый «захват»): конструктор их инициализирует, а внутри <strong>operator()()</strong> они используются. Я специально дал этим переменным имена, начинающиеся с префикса «<strong>m_</strong>», чтобы подчеркнуть различие.<br/>
+<br/>
+Если мы попытаемся изменить «захваченные» переменные внутри лямбды, нас ждет неудача, потому что по умолчанию генерируемый <strong>operator()()</strong> объявлен как <strong>const</strong>. Для того чтобы это обойти, мы можем указать спецификатор <strong>mutable</strong>, как в следующем примере:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 8
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;numeric>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	int init = 0;
+	generate_n(back_inserter(srcVec), 10, [init] () mutable
+	{
+		return init++;
+	});
+ 
+	ostream_iterator&lt;int> outIt(cout, " ");
+	copy(srcVec.begin(), srcVec.end(), outIt);
+	cout &lt;&lt; endl &lt;&lt; "init: " &lt;&lt; init &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+ <br/>
+Ранее я упоминал, что список параметров лямбды можно опускать, когда он пустой, однако для того чтобы компилятор правильно распарсил применение слова <strong>mutable</strong>, мы должны явно указать пустой список параметров.<br/>
+При выполнении программы из <em>Листинга 8</em> получаем следующее:<br/>
+<blockquote>0 1 2 3 4 5 6 7 8 9<br/>
+init: 0<br/>
+</blockquote><br/>
+<br/>
+Как видим, благодаря ключевому слову <strong>mutable</strong>, мы можем менять значение «захваченной» переменной внутри тела лямбда-выражения, но, как и следовало ожидать, эти изменения не отражаются на локальной переменной, так как захват происходит по значению. C++ позволяет нам захватывать переменные по ссылке и даже указывать <em>«режим захвата», используемый по умолчанию</em>. Что это означает? Мы можем не указывать каждую переменную в списке захвата по отдельности: вместо этого можно просто указать режим по умолчанию для захвата, и тогда все переменные из внешнего контекста, которые используются внутри лямбды, будут захвачены компилятором автоматически. Для указания режима захвата по умолчанию существует специальный синтаксис: <strong>[=]</strong> или <strong>[&amp;]</strong> для захвата по значению и по ссылке соответственно. При этом для каждой переменной можно указать свой режим захвата, однако режим по умолчанию, естественно, указывается только единожды, причем в самом начале списка захвата. Вот варианты использования:<br/>
+<br/>
+<pre><code class="cpp">[]                      // без захвата переменных из внешней области видимости
+[=]                     // все переменные захватываются по значению
+[&amp;]                     // все переменные захватываются по ссылке
+[x, y]                  // захват x и y по значению
+[&amp;x, &amp;y]                // захват x и y по ссылке
+[in, &amp;out]              // захват in по значению, а out — по ссылке
+[=, &amp;out1, &amp;out2]       // захват всех переменных по значению, кроме out1 и out2,	
+                        // которые захватываются по ссылке
+[&amp;, x, &amp;y]              // захват всех переменных по ссылке, кроме x…
+</code></pre><br/>
+<br/>
+Следует отметить, что синтаксис наподобие <strong>&amp;out</strong> в данном случае не означает взятие адреса. Его следует читать скорее как <strong>SomeType &amp; out</strong>, то есть это просто передача параметра по ссылке. Рассмотрим пример:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 9
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	int init = 0;
+	generate_n(back_inserter(srcVec), 10, [&amp;] () mutable
+	{
+		return init++;
+	});
+ 
+	ostream_iterator&lt;int> outIt(cout, " ");
+	copy(srcVec.begin(), srcVec.end(), outIt);
+	cout &lt;&lt; endl &lt;&lt; "init: " &lt;&lt; init &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+В этот раз вместо явного захвата переменной <strong>init</strong>, я указал режим захвата по умолчанию: <strong>[&amp;]</strong>. Теперь когда компилятор встречает внутри тела лямбды переменную из внешнего контекста, он автоматически захватывает её по ссылке. Вот эквивалентный <em>Листингу 9</em> код:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 10
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+class MyLambda
+{
+public:
+	explicit MyLambda(int &amp; _init) : init(_init) { }
+ 
+	int operator ()() { return init++; }
+ 
+private:
+	int &amp; init;
+};
+ 
+int main()
+{
+	vector&lt;int> srcVec;
+	int init = 0;
+	generate_n(back_inserter(srcVec), 10, MyLambda(init));
+ 
+	ostream_iterator&lt;int> outIt(cout, " ");
+	copy(srcVec.begin(), srcVec.end(), outIt);
+	cout &lt;&lt; endl &lt;&lt; "init: " &lt;&lt; init &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+И соответственно вывод будет следующим:<br/>
+<blockquote>0 1 2 3 4 5 6 7 8 9<br/>
+init: 10<br/>
+</blockquote><br/>
+<br/>
+Теперь вам главное не запутаться, что, где и когда передавать по ссылке. Фактически, если мы указываем <strong>[&amp;]</strong> и не указываем <strong>mutable</strong>, то все равно сможем менять значение захваченной переменной и это отразится на локальной, потому что <strong>operator()() const</strong> подразумевает, что мы не можем менять, на что указывает ссылка, а это и так невозможно.<br/>
+<br/>
+Если лямбда-выражение имеет вид <strong>[=] (int &amp; _val) mutable { … }</strong>, то переменные захватываются по значению, но меняться будет только их внутренняя копия, а вот параметр передается по ссылке, то бишь изменения отразятся и на оригинале. Если <strong>[] (const SomeBigObject &amp; _val) { … }</strong>, то ничего не захватывается, а параметр принимается по константной ссылке и т.д.<br/>
+<br/>
+Я так понял, что выполнить захват «по константной ссылке» невозможно. Ну, может, оно нам и не надо.<br/>
+<br/>
+А что будет, если мы напишем такое, слегка надуманное лямбда-выражение внутри метода класса:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 11
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+class MyMegaInitializer
+{
+public:
+	MyMegaInitializer(int _base, int _power)
+		: m_val(_base)
+		, m_power(_power)
+	{}
+ 
+	void initializeVector(vector&lt;int> &amp; _vec)
+	{
+		for_each(_vec.begin(), _vec.end(),
+		         [m_val, m_power] (int &amp; _val) mutable
+		{
+			_val = m_val;
+			m_val *= m_power;
+		});
+	}
+ 
+private:
+	int m_val, m_power;
+};
+ 
+int main()
+{
+	vector&lt;int> myVec(11);
+	MyMegaInitializer initializer(1, 2);
+	initializer.initializeVector(myVec);
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Несмотря на все наши ожидания, код не будет скомпилирован, так как компилятор не сможет захватить <strong>m_val</strong> и <strong>m_power</strong>: эти переменные вне области видимости. Вот что говорит на это Visual Studio:<br/>
+<pre>«error C3480: 'MyMegaInitializer::m_power': a lambda capture variable must be from an enclosing function scope»</pre><br/>
+Как же быть? Чтобы получить доступ к членам класса, в capture-list нужно поместить <strong>this</strong>:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 12
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+ 
+class MyMegaInitializer
+{
+public:
+	MyMegaInitializer(int _base, int _power)
+		: m_val(_base)
+		, m_power(_power)
+	{}
+ 
+	void initializeVector(vector&lt;int> &amp; _vec)
+	{
+		for_each(_vec.begin(), _vec.end(), [this] (int &amp; _val) mutable
+		{
+			_val = m_val;
+			m_val *= m_power; 
+		});
+	}
+ 
+private:
+	int m_val, m_power;
+};
+ 
+int main()
+{
+	vector&lt;int> myVec(11);
+	MyMegaInitializer initializer(1, 2);
+	initializer.initializeVector(myVec);
+ 
+	for_each(myVec.begin(), myVec.end(), [] (int _val)
+	{
+		cout &lt;&lt; _val &lt;&lt; " ";
+	});
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Данная программа делает именно то, чего мы ожидали:<br/>
+<blockquote>1 2 4 8 16 32 64 128 256 512 1024<br/>
+</blockquote><br/>
+<br/>
+Следует заметить, что <strong>this</strong> можно захватить только по значению, и если вы попытаетесь произвести захват по ссылке, компилятор выдаст ошибку. Даже если вы в коде из <em>Листинга 12</em> напишете <strong>[&amp;]</strong> вместо <strong>[this]</strong>, то <strong>this</strong> будет все равно захвачен по значению.<br/>
+<br/>
+<h2>Прочее</h2><br/>
+<br/>
+Помимо всего вышеперечисленного, в заголовке лямбда-выражения можно указать throw-list — список исключений, которые лямбда может сгенерировать. Например, такая лямбда не может генерировать исключения:<br/>
+<pre><code class="cpp">[] (int _n) throw() { … }
+</code></pre><br/>
+А такая генерирует только <strong>bad_alloc</strong>:<br/>
+<pre><code class="cpp">[=] (const std::string &amp; _str) mutable throw(std::bad_alloc) -> bool { … }
+</code></pre><br/>
+И т.п.<br/>
+<br/>
+Естественно, если его не указывать, то лямбда может генерировать любое исключение.<br/>
+<br/>
+К счастью, в финальном варианте стандарта throw-спецификации объявлены устаревшими. Вместо этого оставили ключевое слово <strong>noexcept</strong>, которое говорит, что функция не должна генерировать исключение вообще.<br/>
+<br/>
+Таким образом, общий вид лямбда-выражения следующий (сорри за такой «вольный вид» грамматики):<br/>
+<pre>
+    lambda-expression ::=
+                  ‘[’  [&lt;список_захвата>]  ‘]’
+                [ ‘(’  &lt;список_параметров> ‘)’  [‘mutable’ ] ]
+                [ ‘noexcept’ ]
+                [ ‘->’  &lt;тип_возвращаемого_значения> ]
+                  ‘{’  [&lt;тело_лямбды>]  ‘}’
+</pre><br/>
+<br/>
+<h2>Повторное использование лямбда-выражений. Генерация лямбда-выражений.</h2><br/>
+<br/>
+Все вышеперечисленное довольно удобно, но основная мощь лямбда-выражений приходится на то, что мы можем сохранить лямбду в переменной или передавать как параметр в функцию. В Boost для этого есть класс <a href="http://www.boost.org/doc/libs/1_39_0/doc/html/function.html">Function</a>, который, если я не ошибаюсь, войдет в новый стандарт STL (возможно, в немного измененном виде). На данный момент уже можно поюзать фичи из обновленного STL, однако, пока что эти фичи находятся в подпространстве имен <strong>std::tr1</strong>.<br/>
+<br/>
+Возможность сохранения лямбда-выражений позволяет нам не только повторно использовать лямбды, но и писать функции, которые генерируют лямбда-выражения, и даже лямбды, которые генерируют лямбды.<br/>
+<br/>
+Рассмотрим следующий пример:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 13
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;functional>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+using std::tr1::function;
+ 
+int main()
+{
+	vector&lt;int> myVec;
+	int init = 0;
+	generate_n(back_inserter(myVec), 10, [&amp;]
+	{
+		return init++;
+	});
+ 
+	function&lt;void (int)> traceLambda = [] (int _val) -> void
+		                           {
+			                            cout &lt;&lt; _val &lt;&lt; " ";
+		                           };
+ 
+	for_each(myVec.begin(), myVec.end(), traceLambda);
+	cout &lt;&lt; endl;
+ 
+	function&lt;function&lt;int (int)> (int)> lambdaGen =
+		[] (int _val) -> function&lt;int (int)>
+		{
+			return [_val] (int _n) -> int { return _n + _val; };
+		};
+ 
+	transform(myVec.begin(), myVec.end(), myVec.begin(), lambdaGen(2));
+	for_each(myVec.begin(), myVec.end(), traceLambda);
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Данная программа выводит:<br/>
+<blockquote>0 1 2 3 4 5 6 7 8 9<br/>
+2 3 4 5 6 7 8 9 10 11<br/>
+</blockquote><br/>
+<br/>
+Рассмотрим подробнее. Вначале у нас инициализируется вектор с помощью <strong>generate_n()</strong>. Тут всё просто. Далее мы создаем переменную <strong>traceLambda</strong> типа <strong>function&lt;void (int)></strong> (то есть функция, принимающая <strong>int</strong> и возвращающая <strong>void</strong>) и присваиваем ей лямбда-выражение, которое выводит на консоль значение и пробел. Далее мы используем только что сохраненную лямбду для вывода всех элементов вектора.<br/>
+<br/>
+После этого мы видим немаленькое объявление <strong>lambdaGen</strong>, которая является лямбда-выражением, принимающим один параметр <strong>int</strong> и возвращающим другую лямбду, принимающую <strong>int</strong> и возвращающую <strong>int</strong>.<br/>
+<br/>
+Следом за этим мы ко всем элементам вектора применяем <strong>transform()</strong>, в качестве мутационной функции для которого указываем <strong>lambdaGen(2)</strong>. Фактически <strong>lambdaGen(2)</strong> возвращает другую лямбду, которая прибавляет к переданному параметру число 2 и возвращает результат. Этот код, естественно, немного надуманный, ибо то же самое можно было записать как <br/>
+<pre><code class="cpp">transform(myVec.begin(), myVec.end(), myVec.begin(), bind2nd(plus&lt;int>(), 2));
+</code></pre><br/>
+однако в качестве примера довольно показательно.<br/>
+<br/>
+Затем мы снова выводим значения всех элементов вектора, используя для этого сохраненную ранее лямбду <strong>traceLambda</strong>.<br/>
+<br/>
+На самом деле, данный код можно было записать еще короче. В новом стандарте C++ значение ключевого слова <strong>auto</strong> будет заменено. Если раньше <strong>auto</strong> означало, что переменная создается в стеке, и подразумевалось неявно в случае, если вы не указали что-либо другое (<strong>register</strong>, к примеру), то сейчас это такой себе аналог <strong>var</strong> в C# (то есть тип переменной, объявленной как <strong>auto</strong>, определяется компилятором самостоятельно на основе того, чем эта переменная инициализируется).<br/>
+Следует заметить, что <strong>auto</strong>-переменная не сможет хранить значения разных типов в течение одного запуска программы. C++ как был, так и остается статически типизированным языком, и указание <strong>auto</strong> лишь говорит компилятору самостоятельно позаботиться об определении типа: после инициализации сменить тип переменной будет уже нельзя.<br/>
+<br/>
+Кроме того что ключевое слово <strong>auto</strong> весьма полезно при работе с циклами вида<br/>
+<pre><code class="cpp">for (auto it = vec.begin(); it != vec.end(); ++it)
+{
+	// ...
+}
+</code></pre><br/>
+его очень удобно использовать с лямбда-выражениями. Теперь код из <em>Листинга 13</em> можно переписать так:<br/>
+<br/>
+<pre><code class="cpp">// Листинг 14
+#include &lt;algorithm>
+#include &lt;cstdlib>
+#include &lt;functional>
+#include &lt;iostream>
+#include &lt;iterator>
+#include &lt;vector>
+ 
+using namespace std;
+using std::tr1::function;
+ 
+int main()
+{
+	vector&lt;int> myVec;
+	int init = 0;
+	generate_n(back_inserter(myVec), 10, [&amp;]
+	{
+		return init++;
+	});
+ 
+	auto traceLambda = [] (int _val) -> void { cout &lt;&lt; _val &lt;&lt; " "; };
+ 
+	for_each(myVec.begin(), myVec.end(), traceLambda);
+	cout &lt;&lt; endl;
+ 
+	auto lambdaGen = [] (int _val) -> function&lt;int (int)>
+	{
+		return [_val] (int _n) -> int { return _n + _val; };
+	};
+ 
+	transform(myVec.begin(), myVec.end(), myVec.begin(), lambdaGen(2));
+	for_each(myVec.begin(), myVec.end(), traceLambda);
+	cout &lt;&lt; endl;
+ 
+	return EXIT_SUCCESS;
+}
+</code></pre><br/>
+<br/>
+Пожалуй, на этом я закончу описание лямбда-выражений. Если будут вопросы, поправки или замечания, с удовольствием выслушаю.<br/>
+<br/>
+PROFIT!<br/>
+<br/>
+<a href="http://progg.ru/C0x-%D0%9B%D1%8F%D0%BC%D0%B1%D0%B4%D0%B0-%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F-C-%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80"><img alt="Progg it" src="http://progg.ru/image.axd?url=http%3A%2F%2Fhabrahabr.ru%2Fblogs%2Fcpp%2F66021%2F"/></a><br/>
+<br/>
+<strong>ETA (20.02.2012):</strong> Оказалось, что для кого-то эта статья до сих пор актуальна, поэтому поправил подсветку синтаксиса и подкорректировал информацию про throw-списки в объявлении лямбд. Помимо непосредственно лямбда-выражений другие фичи из нового стандарта С++11 (например, списки инициализации контейнеров) решил не добавлять, так что статья осталась практически в первозданном виде.</div></div> <!----> <!----></div> <div class="tm-article-body__tags"><div class="tm-article-body__tags-links"><span class="tm-article-body__tags-title">Теги:</span> <span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Blambda%5D" class="tm-article-body__tags-item-link">lambda</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Blambda%20functions%5D" class="tm-article-body__tags-item-link">lambda functions</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Blambda%20expressions%5D" class="tm-article-body__tags-item-link">lambda expressions</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bc%2B%2B0x%5D" class="tm-article-body__tags-item-link">c++0x</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bc%2B%2B%5D" class="tm-article-body__tags-item-link">c++</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5B%D1%81%2B%2B11%5D" class="tm-article-body__tags-item-link">с++11</a></span></div> <div class="tm-article-body__tags-links"><span class="tm-article-body__tags-title">Хабы:</span> <span class="tm-article-body__tags-item"><a href="/ru/hub/cpp/" class="tm-article-body__tags-item-link">
+                  C++
+                </a></span></div></div></article> <div class="tm-article__icons-wrapper"><div class="tm-data-icons tm-page-article__counters-panel"><div class="tm-article-rating tm-data-icons__item"><div class="tm-votes-meter tm-article-rating__votes-switcher"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_medium"><title>Всего голосов 75: ↑71 и ↓4</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 75: ↑71 и ↓4" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_medium">+67</span></div> <DIV class="v-portal" style="display:none;"></DIV></div> <!----> <!----> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    403
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/66021/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      81
+    </span></a> <!----></div> <div title="Поделиться" class="tm-sharing tm-data-icons__item"><button type="button" class="tm-sharing__button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tm-sharing__icon"><path fill="currentColor" d="M10.33.275l9.047 7.572a.2.2 0 010 .306l-9.048 7.572a.2.2 0 01-.328-.153V11c-8 0-9.94 6-9.94 6S-1 5 10 5V.428a.2.2 0 01.328-.153z"></path></svg></button> <!----></div> <DIV class="v-portal" style="display:none;"></DIV></div></div> <!----></div> <!----> <div class="tm-page-article__additional-blocks"><!----> <section class="tm-block tm-block_spacing-bottom"><!----> <div class="tm-block__body"><div class="tm-article-author tm-page-article__author"><!----> <div class="tm-user-card tm-article-author__user-card tm-user-card_variant-two-column"><div class="tm-user-card__info-container"><div class="tm-user-card__header"><div class="tm-user-card__header-data"><a href="/ru/users/GooRoo/" class="tm-user-card__userpic tm-user-card__userpic_size-40"><div class="tm-entity-image"><img alt="" src="//habrastorage.org/getpro/habr/avatars/97d/fb3/1e1/97dfb31e1954a5bacabf40b367a4945f.jpg" class="tm-entity-image__pic"></div></a> <div class="tm-user-card__meta"><div title=" 294 голоса " class="tm-karma tm-user-card__karma"><div class="tm-karma__votes tm-karma__votes_positive">
+    116.2
+  </div> <div class="tm-karma__text">
+    Карма
+  </div></div> <div title="Рейтинг пользователя" class="tm-rating tm-user-card__rating"><div class="tm-rating__header"> <div class="tm-rating__counter">0</div></div> <div class="tm-rating__text">
+    Рейтинг
+  </div></div></div></div></div> <div class="tm-user-card__info"><div class="tm-user-card__title"><span class="tm-user-card__name">Сергей Оленда́ренко</span> <a href="/ru/users/GooRoo/" class="tm-user-card__nickname">
+          @GooRoo
+        </a> <!----></div> <p class="tm-user-card__short-info">Пользователь</p></div></div> <div class="tm-user-card__buttons tm-user-card__buttons_variant-two-column"><!----> <!----> <!----> <!----> <!----></div></div> <!----></div></div> <!----></section> <div class="tm-page-article__comments"><div class="tm-article-page-comments"><div class="tm-article-comments-counter-link tm-article-comments-counter-button"><a href="/ru/post/66021/comments/" class="tm-article-comments-counter-link__link tm-article-comments-counter-link__link_button-style"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon tm-article-comments-counter-link__icon_contrasted"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value tm-article-comments-counter-link__value_contrasted">
+       Комментарии 81 
+    </span></a> <!----></div></div></div> <div class="tm-ad-banner__container tm-page-article__banner"><!----> <div id="articleBottomBanner" class="tm-ad-banner"></div></div> <section class="tm-block tm-block_spacing-around"><header class="tm-block__header"><h2 class="tm-block__title">Похожие публикации</h2> <!----></header> <div class="tm-block__body"><ul class="tm-article-list-block__list"><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2019-05-27T16:43:29.000Z" title="2019-05-27, 19:43">27  мая  2019 в 19:43</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/453720/" class="tm-article-title__link"><span>Тонкости Lambda Expressions в C#</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 19: ↑19 и ↓0</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 19: ↑19 и ↓0" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+19</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">13K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    59
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/453720/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      6
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2018-12-26T11:52:37.000Z" title="2018-12-26, 14:52">26  декабря  2018 в 14:52</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/430202/" class="tm-article-title__link"><span>Написание системы попарно взаимодействующих частиц на C++ с использованием DirectX 11</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 19: ↑17 и ↓2</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 19: ↑17 и ↓2" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+15</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">8.2K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    70
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/430202/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      17
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2017-03-31T15:48:17.000Z" title="2017-03-31, 18:48">31  марта  2017 в 18:48</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/JetBrains/blog/325372/" class="tm-article-title__link"><span>Релиз CLion 2017.1: C++14, C++17, код на дизассемблере в отладчике, Catch, MSVC и многое другое</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 24: ↑22 и ↓2</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 24: ↑22 и ↓2" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+20</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">16K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    29
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/JetBrains/blog/325372/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      68
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li> <!----></ul></div> <!----></section> <!----> <!----> <section class="tm-block tm-block_spacing-around"><header class="tm-block__header"><h2 class="tm-block__title">Лучшие публикации за сутки</h2> <!----></header> <div class="tm-block__body"><ul class="tm-article-list-block__list"><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-27T09:00:04.000Z" title="2021-09-27, 12:00">сегодня в 12:00</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/ruvds/blog/580060/" class="tm-article-title__link"><span>Арракис, который мы заслужили</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 138: ↑133 и ↓5</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 138: ↑133 и ↓5" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+128</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">18K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    36
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/ruvds/blog/580060/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      98
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-27T13:03:14.000Z" title="2021-09-27, 16:03">сегодня в 16:03</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/ruvds/blog/580124/" class="tm-article-title__link"><span>Электролюминесцентные индикаторы из прошлого</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 64: ↑64 и ↓0</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 64: ↑64 и ↓0" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+64</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">3.8K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    35
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/ruvds/blog/580124/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      11
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-26T19:37:10.000Z" title="2021-09-26, 22:37">вчера в 22:37</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/580086/" class="tm-article-title__link"><span>Термо принтер и JavaScript</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 53: ↑52 и ↓1</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 53: ↑52 и ↓1" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+51</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">11K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    38
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/580086/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      54
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-26T21:49:14.000Z" title="2021-09-27, 00:49">сегодня в 00:49</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/580092/" class="tm-article-title__link"><span>30 сентября: Let's Encrypt и конец срока действия IdenTrust DST Root CA X3</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 47: ↑47 и ↓0</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 47: ↑47 и ↓0" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+47</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">19K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    56
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/580092/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      92
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-27T16:41:21.000Z" title="2021-09-27, 19:41">сегодня в 19:41</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/lamptest/blog/580228/" class="tm-article-title__link"><span>Идеальная светодиодная лампа за 21 рубль</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 42: ↑42 и ↓0</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 42: ↑42 и ↓0" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+42</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">5.2K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    20
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/lamptest/blog/580228/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      17
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li> <!----></ul></div> <!----></section> <!----> <!----></div></div></div> <div class="tm-page__sidebar"><div hl="ru" id="66021" class="tm-layout-sidebar"><div class="tm-layout-sidebar__ads tm-layout-sidebar__ads_initial"><div class="tm-ad-banner__container tm-layout-sidebar__banner"><!----> <div id="sidebarBanner" class="tm-ad-banner"></div></div></div> <div class="tm-sexy-sidebar tm-sexy-sidebar_initial" style="margin-top:0px;"><!----></div></div></div></div></div></div></main> <!----></div> <div class="tm-footer-menu"><div class="tm-page-width"><div class="tm-footer-menu__container"><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Ваш аккаунт
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/kek/v1/auth/habrahabr/?back=/ru/post/66021/&amp;hl=ru" rel="nofollow" target="_self">
+                Войти
+              </a></li><li class="tm-footer-menu__list-item"><a href="/kek/v1/auth/habrahabr-register/?back=/ru/post/66021/&amp;hl=ru" rel="nofollow" target="_self">
+                Регистрация
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Разделы
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/ru/" class="footer-menu__item-link router-link-active">
+                Публикации
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/news/" class="footer-menu__item-link">
+                Новости
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/hubs/" class="footer-menu__item-link">
+                Хабы
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/companies/" class="footer-menu__item-link">
+                Компании
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/users/" class="footer-menu__item-link">
+                Авторы
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/sandbox/" class="footer-menu__item-link">
+                Песочница
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Информация
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/ru/docs/help/" class="footer-menu__item-link">
+                Устройство сайта
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/authors/codex/" class="footer-menu__item-link">
+                Для авторов
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/companies/corpblogs/" class="footer-menu__item-link">
+                Для компаний
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/docs/transparency/" class="footer-menu__item-link">
+                Документы
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://account.habr.com/info/agreement" target="_blank">
+                Соглашение
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://account.habr.com/info/confidential/" target="_blank">
+                Конфиденциальность
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Услуги
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="https://docs.google.com/presentation/d/e/2PACX-1vQLwRfQmXibiUlWaRg-BAc38s7oM3lJiaPju7qmdJsp8ysIvZ_G-Npem0njJLMozE2bPHMpDqiI5hhy/pub?start=false&amp;loop=false&amp;delayms=60000&amp;slide=id.g91a03369cd_4_297" target="_blank">
+                Реклама
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://habrastorage.org/storage/stuff/habr/service_price.pdf" target="_blank">
+                Тарифы
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://docs.google.com/presentation/d/e/2PACX-1vQJJds8-Di7BQSP_guHxICN7woVYoN5NP_22ra-BIo4bqnTT9FR6fB-Ku2P0AoRpX0Ds-LRkDeAoD8F/pub?start=false&amp;loop=false&amp;delayms=60000" target="_blank">
+                Контент
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://tmtm.timepad.ru/" target="_blank">
+                Семинары
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/megaprojects/" class="footer-menu__item-link">
+                Мегапроекты
+              </a></li></ul></div></div></div></div></div> <div class="tm-footer"><div class="tm-page-width"><div class="tm-footer__container"><!----> <div class="tm-footer__social"><a href="https://www.facebook.com/habrahabr.ru" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Facebook</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-facebook"></use></svg></a><a href="https://twitter.com/habr_com" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Twitter</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-twitter"></use></svg></a><a href="https://vk.com/habr" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>VK</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-vkontakte"></use></svg></a><a href="https://telegram.me/habr_com" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Telegram</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-telegram"></use></svg></a><a href="https://www.youtube.com/channel/UCd_sTwKqVrweTt4oAKY5y4w" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Youtube</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-youtube"></use></svg></a><a href="https://zen.yandex.ru/habr" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Яндекс Дзен</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-zen"></use></svg></a></div> <DIV class="v-portal" style="display:none;"></DIV> <button class="tm-footer__link"><!---->
+        Настройка языка
+      </button> <a href="/ru/about" class="tm-footer__link">
+        О сайте
+      </a> <a href="/ru/feedback/" class="tm-footer__link">
+        Техническая поддержка
+      </a> <!----> <a href="/berserk-mode-nope" class="tm-footer__link">
+        Вернуться на старую версию
+      </a> <div class="tm-footer-copyright"><span class="tm-copyright"><span class="tm-copyright__years">© 2006–2021 </span> <span class="tm-copyright__name">«<a href="https://company.habr.com/" rel="noopener" target="_blank" class="tm-copyright__link">Habr</a>»</span></span></div></div></div></div> <!----> <!----></div> <div class="vue-portal-target"></div></div>
+<script>window.__INITIAL_STATE__={"adblock":{"hasAcceptableAdsFilter":false,"hasAdblock":false},"articlesList":{"articlesList":{"66021":{"id":"66021","timePublished":"2009-08-02T21:46:04+00:00","isCorporative":false,"lang":"ru","titleHtml":"C++0x (С++11). Лямбда-выражения","leadData":{"textHtml":"Буквально на днях случайно наткнулся на Хабре на \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fblogs\u002Fcpp\u002F65798\u002F\" title=\"Лямбда выражения теперь и в С++\"\u003Eстатью о лямбда-выражениях\u003C\u002Fa\u003E из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что статья недостаточно полная, поэтому я решил попробовать более детально изложить материал.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n","imageUrl":null,"buttonTextHtml":"Читать дальше","image":null},"editorVersion":"1.0","postType":"article","postLabels":[{"type":"tutorial","data":null}],"author":{"scoreStats":{"score":116.2,"votesCount":294},"rating":0,"relatedData":null,"contacts":[],"authorContacts":[],"paymentDetails":{"paymentYandexMoney":null,"paymentPayPalMe":null,"paymentWebmoney":null},"id":"47034","alias":"GooRoo","fullname":"Сергей Оленда́ренко","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F97d\u002Ffb3\u002F1e1\u002F97dfb31e1954a5bacabf40b367a4945f.jpg","speciality":null},"statistics":{"commentsCount":81,"favoritesCount":403,"readingCount":266757,"score":67,"votesCount":75},"hubs":[{"relatedData":null,"id":"559","alias":"cpp","type":"collective","title":"C++","titleHtml":"C++","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"textHtml":"\u003Cdiv xmlns=\"http:\u002F\u002Fwww.w3.org\u002F1999\u002Fxhtml\"\u003EБуквально на днях случайно наткнулся на Хабре на \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fblogs\u002Fcpp\u002F65798\u002F\" title=\"Лямбда выражения теперь и в С++\"\u003Eстатью о лямбда-выражениях\u003C\u002Fa\u003E из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что статья недостаточно полная, поэтому я решил попробовать более детально изложить материал.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ca name=\"habracut\"\u003E\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch2\u003EВспомним основы\u003C\u002Fh2\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЛямбда-выражения — одна из фич функциональных языков, которую в последнее время начали добавлять также в императивные языки типа C#, C++ etc. Лямбда-выражениями называются безымянные локальные функции, которые можно создавать прямо внутри какого-либо выражения.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ прошлой статье лямбда-выражения сравнивали с указателями на функции и с функторами. Так вот первое, что следует уяснить: \u003Cstrong\u003Eлямбда-выражения в C++ — это краткая форма записи анонимных функторов\u003C\u002Fstrong\u003E. Рассмотрим пример:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 1\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tfor_each(srcVec.begin(), srcVec.end(), [](int _n)\n\t{\n\t\tcout &lt;&lt; _n &lt;&lt; \" \";\n\t});\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nФактически данный код целиком соответствует такому:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 2\n#include &lt;algorithm\u003E \n#include &lt;cstdlib\u003E \n#include &lt;iostream\u003E \n#include &lt;vector\u003E\n \nusing namespace std;\n \nclass MyLambda \n{\n\tpublic: void operator ()(int _x) const { cout &lt;&lt; _x &lt;&lt; \" \"; } \n};\n \nint main() \n{\n\tvector&lt;int\u003E srcVec; \n\tfor (int val = 0; val &lt; 10; val++)\n\t{ \n\t\tsrcVec.push_back(val); \n\t}\n \n\tfor_each(srcVec.begin(), srcVec.end(), MyLambda()); \n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS; \n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВывод соответственно будет следующим:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E0 1 2 3 4 5 6 7 8 9\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНа что здесь стоит обратить внимание. Во-первых, из \u003Cem\u003EЛистинга 1\u003C\u002Fem\u003E мы видим, что лямбда-выражение всегда начинается с \u003Cstrong\u003E[]\u003C\u002Fstrong\u003E (скобки могут быть непустыми — об этом позже), затем идет необязательный список параметров, а затем непосредственно тело функции. Во-вторых, тип возвращаемого значения мы не указывали, и по умолчанию лямбда возвращает \u003Cstrong\u003Evoid\u003C\u002Fstrong\u003E (далее мы увидим, как и зачем можно указать возвращаемый тип явно). В-третьих, как видно по \u003Cem\u003EЛистингу 2\u003C\u002Fem\u003E, по умолчанию генерируется константный метод (к этому тоже еще вернемся).\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНе знаю, как вам, но мне \u003Cstrong\u003Efor_each\u003C\u002Fstrong\u003E, записанный с помощью лямбда-выражения, нравится гораздо больше. Попробуем написать немного усложненный пример:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 3\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tint result =\n\t\tcount_if(srcVec.begin(), srcVec.end(), [] (int _n)\n\t\t{\n\t\t\treturn (_n % 2) == 0;\n\t\t});\n \n\tcout &lt;&lt; result &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ данном случае лямбда играет роль \u003Cem\u003Eунарного предиката\u003C\u002Fem\u003E, то есть тип возвращаемого значения \u003Cstrong\u003Ebool\u003C\u002Fstrong\u003E, хотя мы нигде этого не указывали. При наличии одного \u003Cstrong\u003Ereturn\u003C\u002Fstrong\u003E в лямбда-выражении, компилятор вычисляет тип возвращаемого значения самостоятельно. Если же в лямбда-выражении присутствует \u003Cstrong\u003Eif\u003C\u002Fstrong\u003E или \u003Cstrong\u003Eswitch\u003C\u002Fstrong\u003E (или другие сложные конструкции), как в приведенном ниже коде, то на компилятор полагаться уже нельзя:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 4\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tvector&lt;double\u003E destVec;\n\ttransform(srcVec.begin(), srcVec.end(),\n\t          back_inserter(destVec), [] (int _n)\n\t{\n\t\tif (_n &lt; 5)\n\t\t\treturn _n + 1.0;\n\t\telse if (_n % 2 == 0)\n\t\t\treturn _n \u002F 2.0;\n\t\telse\n\t\t\treturn _n * _n;\n\t});\n \n\tostream_iterator&lt;double\u003E outIt(cout, \" \");\n\tcopy(destVec.begin(), destVec.end(), outIt);\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nКод из \u003Cem\u003EЛистинга 4\u003C\u002Fem\u003E не компилируется, а, к примеру, Visual Studio пишет ошибку на каждый \u003Cstrong\u003Ereturn\u003C\u002Fstrong\u003E такого содержания:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E«error C3499: a lambda that has been specified to have a void return type cannot return a value»\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nКомпилятор не может самостоятельно вычислить тип возвращаемого значения, поэтому мы должны его указать явно:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 5\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tvector&lt;double\u003E destVec;\n\ttransform(srcVec.begin(), srcVec.end(),\n\t          back_inserter(destVec), [] (int _n) -\u003E double\n\t{\n\t\tif (_n &lt; 5)\n\t\t\treturn _n + 1.0;\n\t\telse if (_n % 2 == 0)\n\t\t\treturn _n \u002F 2.0;\n\t\telse\n\t\t\treturn _n * _n;\n\t});\n \n\tostream_iterator&lt;double\u003E outIt(cout, \" \");\n\tcopy(destVec.begin(), destVec.end(), outIt);\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nТеперь компиляция проходит успешно, а вывод, как и ожидалось, будет следующим:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E1 2 3 4 5 25 3 49 4 81\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЕдинственное, что мы добавили в \u003Cem\u003EЛистинге 5\u003C\u002Fem\u003E, это тип возвращаемого значения для лямбда-выражения в виде \u003Cstrong\u003E-\u003E double\u003C\u002Fstrong\u003E. Синтаксис немного странноват и смахивает больше на Haskell, чем на C++. Но указывать возвращаемый тип «слева» (как в функциях) не получилось бы, потому что лямбда должна начинаться с \u003Cstrong\u003E[]\u003C\u002Fstrong\u003E, чтобы компилятор смог её различить.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch2\u003EЗахват переменных из внешнего контекста\u003C\u002Fh2\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВсе лямбда-выражения, приведенные выше, выглядели как анонимные функции, потому что не хранили никакого промежуточного состояния. Но лямбда-выражения в C++ — это анонимные функторы, а значит состояние они хранить могут! Используя лямбда-выражения, напишем программу, которая выводит количество чисел, попадающих в заданный пользователем интервал [lower; upper):\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 6\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;numeric\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tint lowerBound = 0, upperBound = 0;\n\tcout &lt;&lt; \"Enter the value range: \";\n\tcin \u003E\u003E lowerBound \u003E\u003E upperBound;\n \n\tint result = \n\t\tcount_if(srcVec.begin(), srcVec.end(),\n\t\t         [lowerBound, upperBound] (int _n)\n\t\t{\n\t\t\treturn lowerBound &lt;= _n &amp;&amp; _n &lt; upperBound;\n\t\t});\n\tcout &lt;&lt; result &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНаконец, мы добрались до того момента, когда лямбда-выражение начинается не с пустых скобок. Как видно в \u003Cem\u003EЛистинге 6\u003C\u002Fem\u003E, внутри квадратных скобок могут указываться переменные. Это называется… эээм… \u003Cem\u003E«список захвата»\u003C\u002Fem\u003E (capture list). Для чего это нужно? На первый взгляд может показаться, что внешней областью видимости для лямбда-выражения является функция \u003Cstrong\u003Emain()\u003C\u002Fstrong\u003E и мы можем беспрепятственно использовать переменные, объявленные в ней, внутри тела лямбда-выражения, однако это не так. Почему? Потому что фактически тело лямбды — это тело перегруженного \u003Cstrong\u003Eoperator()()\u003C\u002Fstrong\u003E (как бы это назвать… оператора функционального вызова что ли) внутри анонимного функтора, то есть для кода из \u003Cem\u003EЛистинга 6\u003C\u002Fem\u003E компилятор неявно сгенерирует примерно такой код:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 7\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nclass MyLambda\n{\npublic:\n\tMyLambda(int _lowerBound, int _upperBound)\n\t\t: m_lowerBound(_lowerBound)\n\t\t, m_upperBound(_upperBound)\n\t{}\n \n\tbool operator ()(int _n) const\n\t{\n\t\treturn m_lowerBound &lt;= _n &amp;&amp; _n &lt; m_upperBound;\n\t}\n \nprivate:\n\tint m_lowerBound, m_upperBound;\n};\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tfor (int val = 0; val &lt; 10; val++)\n\t{\n\t\tsrcVec.push_back(val);\n\t}\n \n\tint lowerBound = 0, upperBound = 0;\n\tcout &lt;&lt; \"Enter the value range: \";\n\tcin \u003E\u003E lowerBound \u003E\u003E upperBound;\n \n\tint result = count_if(srcVec.begin(),\n\t                      srcVec.end(),\n\t                      MyLambda(lowerBound, upperBound));\n\tcout &lt;&lt; result &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cem\u003EЛистинг 7\u003C\u002Fem\u003E немного всё разъясняет. Наша лямбда превратилась в функтор, внутри тела которого мы не можем напрямую использовать переменные, объявленные в \u003Cstrong\u003Emain()\u003C\u002Fstrong\u003E, так как это непересекающиеся области видимости. Для того чтобы доступ к \u003Cstrong\u003ElowerBound\u003C\u002Fstrong\u003E и \u003Cstrong\u003EupperBound\u003C\u002Fstrong\u003E все-таки был, эти переменные сохраняются внутри самого функтора (происходит тот самый «захват»): конструктор их инициализирует, а внутри \u003Cstrong\u003Eoperator()()\u003C\u002Fstrong\u003E они используются. Я специально дал этим переменным имена, начинающиеся с префикса «\u003Cstrong\u003Em_\u003C\u002Fstrong\u003E», чтобы подчеркнуть различие.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЕсли мы попытаемся изменить «захваченные» переменные внутри лямбды, нас ждет неудача, потому что по умолчанию генерируемый \u003Cstrong\u003Eoperator()()\u003C\u002Fstrong\u003E объявлен как \u003Cstrong\u003Econst\u003C\u002Fstrong\u003E. Для того чтобы это обойти, мы можем указать спецификатор \u003Cstrong\u003Emutable\u003C\u002Fstrong\u003E, как в следующем примере:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 8\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;numeric\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tint init = 0;\n\tgenerate_n(back_inserter(srcVec), 10, [init] () mutable\n\t{\n\t\treturn init++;\n\t});\n \n\tostream_iterator&lt;int\u003E outIt(cout, \" \");\n\tcopy(srcVec.begin(), srcVec.end(), outIt);\n\tcout &lt;&lt; endl &lt;&lt; \"init: \" &lt;&lt; init &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n \u003Cbr\u002F\u003E\r\nРанее я упоминал, что список параметров лямбды можно опускать, когда он пустой, однако для того чтобы компилятор правильно распарсил применение слова \u003Cstrong\u003Emutable\u003C\u002Fstrong\u003E, мы должны явно указать пустой список параметров.\u003Cbr\u002F\u003E\r\nПри выполнении программы из \u003Cem\u003EЛистинга 8\u003C\u002Fem\u003E получаем следующее:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E0 1 2 3 4 5 6 7 8 9\u003Cbr\u002F\u003E\r\ninit: 0\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nКак видим, благодаря ключевому слову \u003Cstrong\u003Emutable\u003C\u002Fstrong\u003E, мы можем менять значение «захваченной» переменной внутри тела лямбда-выражения, но, как и следовало ожидать, эти изменения не отражаются на локальной переменной, так как захват происходит по значению. C++ позволяет нам захватывать переменные по ссылке и даже указывать \u003Cem\u003E«режим захвата», используемый по умолчанию\u003C\u002Fem\u003E. Что это означает? Мы можем не указывать каждую переменную в списке захвата по отдельности: вместо этого можно просто указать режим по умолчанию для захвата, и тогда все переменные из внешнего контекста, которые используются внутри лямбды, будут захвачены компилятором автоматически. Для указания режима захвата по умолчанию существует специальный синтаксис: \u003Cstrong\u003E[=]\u003C\u002Fstrong\u003E или \u003Cstrong\u003E[&amp;]\u003C\u002Fstrong\u003E для захвата по значению и по ссылке соответственно. При этом для каждой переменной можно указать свой режим захвата, однако режим по умолчанию, естественно, указывается только единожды, причем в самом начале списка захвата. Вот варианты использования:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E[]                      \u002F\u002F без захвата переменных из внешней области видимости\n[=]                     \u002F\u002F все переменные захватываются по значению\n[&amp;]                     \u002F\u002F все переменные захватываются по ссылке\n[x, y]                  \u002F\u002F захват x и y по значению\n[&amp;x, &amp;y]                \u002F\u002F захват x и y по ссылке\n[in, &amp;out]              \u002F\u002F захват in по значению, а out — по ссылке\n[=, &amp;out1, &amp;out2]       \u002F\u002F захват всех переменных по значению, кроме out1 и out2,\t\n                        \u002F\u002F которые захватываются по ссылке\n[&amp;, x, &amp;y]              \u002F\u002F захват всех переменных по ссылке, кроме x…\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nСледует отметить, что синтаксис наподобие \u003Cstrong\u003E&amp;out\u003C\u002Fstrong\u003E в данном случае не означает взятие адреса. Его следует читать скорее как \u003Cstrong\u003ESomeType &amp; out\u003C\u002Fstrong\u003E, то есть это просто передача параметра по ссылке. Рассмотрим пример:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 9\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tint init = 0;\n\tgenerate_n(back_inserter(srcVec), 10, [&amp;] () mutable\n\t{\n\t\treturn init++;\n\t});\n \n\tostream_iterator&lt;int\u003E outIt(cout, \" \");\n\tcopy(srcVec.begin(), srcVec.end(), outIt);\n\tcout &lt;&lt; endl &lt;&lt; \"init: \" &lt;&lt; init &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ этот раз вместо явного захвата переменной \u003Cstrong\u003Einit\u003C\u002Fstrong\u003E, я указал режим захвата по умолчанию: \u003Cstrong\u003E[&amp;]\u003C\u002Fstrong\u003E. Теперь когда компилятор встречает внутри тела лямбды переменную из внешнего контекста, он автоматически захватывает её по ссылке. Вот эквивалентный \u003Cem\u003EЛистингу 9\u003C\u002Fem\u003E код:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 10\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nclass MyLambda\n{\npublic:\n\texplicit MyLambda(int &amp; _init) : init(_init) { }\n \n\tint operator ()() { return init++; }\n \nprivate:\n\tint &amp; init;\n};\n \nint main()\n{\n\tvector&lt;int\u003E srcVec;\n\tint init = 0;\n\tgenerate_n(back_inserter(srcVec), 10, MyLambda(init));\n \n\tostream_iterator&lt;int\u003E outIt(cout, \" \");\n\tcopy(srcVec.begin(), srcVec.end(), outIt);\n\tcout &lt;&lt; endl &lt;&lt; \"init: \" &lt;&lt; init &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nИ соответственно вывод будет следующим:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E0 1 2 3 4 5 6 7 8 9\u003Cbr\u002F\u003E\r\ninit: 10\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nТеперь вам главное не запутаться, что, где и когда передавать по ссылке. Фактически, если мы указываем \u003Cstrong\u003E[&amp;]\u003C\u002Fstrong\u003E и не указываем \u003Cstrong\u003Emutable\u003C\u002Fstrong\u003E, то все равно сможем менять значение захваченной переменной и это отразится на локальной, потому что \u003Cstrong\u003Eoperator()() const\u003C\u002Fstrong\u003E подразумевает, что мы не можем менять, на что указывает ссылка, а это и так невозможно.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЕсли лямбда-выражение имеет вид \u003Cstrong\u003E[=] (int &amp; _val) mutable { … }\u003C\u002Fstrong\u003E, то переменные захватываются по значению, но меняться будет только их внутренняя копия, а вот параметр передается по ссылке, то бишь изменения отразятся и на оригинале. Если \u003Cstrong\u003E[] (const SomeBigObject &amp; _val) { … }\u003C\u002Fstrong\u003E, то ничего не захватывается, а параметр принимается по константной ссылке и т.д.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЯ так понял, что выполнить захват «по константной ссылке» невозможно. Ну, может, оно нам и не надо.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nА что будет, если мы напишем такое, слегка надуманное лямбда-выражение внутри метода класса:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 11\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nclass MyMegaInitializer\n{\npublic:\n\tMyMegaInitializer(int _base, int _power)\n\t\t: m_val(_base)\n\t\t, m_power(_power)\n\t{}\n \n\tvoid initializeVector(vector&lt;int\u003E &amp; _vec)\n\t{\n\t\tfor_each(_vec.begin(), _vec.end(),\n\t\t         [m_val, m_power] (int &amp; _val) mutable\n\t\t{\n\t\t\t_val = m_val;\n\t\t\tm_val *= m_power;\n\t\t});\n\t}\n \nprivate:\n\tint m_val, m_power;\n};\n \nint main()\n{\n\tvector&lt;int\u003E myVec(11);\n\tMyMegaInitializer initializer(1, 2);\n\tinitializer.initializeVector(myVec);\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНесмотря на все наши ожидания, код не будет скомпилирован, так как компилятор не сможет захватить \u003Cstrong\u003Em_val\u003C\u002Fstrong\u003E и \u003Cstrong\u003Em_power\u003C\u002Fstrong\u003E: эти переменные вне области видимости. Вот что говорит на это Visual Studio:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E«error C3480: 'MyMegaInitializer::m_power': a lambda capture variable must be from an enclosing function scope»\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nКак же быть? Чтобы получить доступ к членам класса, в capture-list нужно поместить \u003Cstrong\u003Ethis\u003C\u002Fstrong\u003E:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 12\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\n \nclass MyMegaInitializer\n{\npublic:\n\tMyMegaInitializer(int _base, int _power)\n\t\t: m_val(_base)\n\t\t, m_power(_power)\n\t{}\n \n\tvoid initializeVector(vector&lt;int\u003E &amp; _vec)\n\t{\n\t\tfor_each(_vec.begin(), _vec.end(), [this] (int &amp; _val) mutable\n\t\t{\n\t\t\t_val = m_val;\n\t\t\tm_val *= m_power; \n\t\t});\n\t}\n \nprivate:\n\tint m_val, m_power;\n};\n \nint main()\n{\n\tvector&lt;int\u003E myVec(11);\n\tMyMegaInitializer initializer(1, 2);\n\tinitializer.initializeVector(myVec);\n \n\tfor_each(myVec.begin(), myVec.end(), [] (int _val)\n\t{\n\t\tcout &lt;&lt; _val &lt;&lt; \" \";\n\t});\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nДанная программа делает именно то, чего мы ожидали:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E1 2 4 8 16 32 64 128 256 512 1024\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nСледует заметить, что \u003Cstrong\u003Ethis\u003C\u002Fstrong\u003E можно захватить только по значению, и если вы попытаетесь произвести захват по ссылке, компилятор выдаст ошибку. Даже если вы в коде из \u003Cem\u003EЛистинга 12\u003C\u002Fem\u003E напишете \u003Cstrong\u003E[&amp;]\u003C\u002Fstrong\u003E вместо \u003Cstrong\u003E[this]\u003C\u002Fstrong\u003E, то \u003Cstrong\u003Ethis\u003C\u002Fstrong\u003E будет все равно захвачен по значению.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch2\u003EПрочее\u003C\u002Fh2\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПомимо всего вышеперечисленного, в заголовке лямбда-выражения можно указать throw-list — список исключений, которые лямбда может сгенерировать. Например, такая лямбда не может генерировать исключения:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E[] (int _n) throw() { … }\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nА такая генерирует только \u003Cstrong\u003Ebad_alloc\u003C\u002Fstrong\u003E:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E[=] (const std::string &amp; _str) mutable throw(std::bad_alloc) -\u003E bool { … }\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nИ т.п.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЕстественно, если его не указывать, то лямбда может генерировать любое исключение.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nК счастью, в финальном варианте стандарта throw-спецификации объявлены устаревшими. Вместо этого оставили ключевое слово \u003Cstrong\u003Enoexcept\u003C\u002Fstrong\u003E, которое говорит, что функция не должна генерировать исключение вообще.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nТаким образом, общий вид лямбда-выражения следующий (сорри за такой «вольный вид» грамматики):\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\n    lambda-expression ::=\n                  ‘[’  [&lt;список_захвата\u003E]  ‘]’\n                [ ‘(’  &lt;список_параметров\u003E ‘)’  [‘mutable’ ] ]\n                [ ‘noexcept’ ]\n                [ ‘-\u003E’  &lt;тип_возвращаемого_значения\u003E ]\n                  ‘{’  [&lt;тело_лямбды\u003E]  ‘}’\n\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch2\u003EПовторное использование лямбда-выражений. Генерация лямбда-выражений.\u003C\u002Fh2\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВсе вышеперечисленное довольно удобно, но основная мощь лямбда-выражений приходится на то, что мы можем сохранить лямбду в переменной или передавать как параметр в функцию. В Boost для этого есть класс \u003Ca href=\"http:\u002F\u002Fwww.boost.org\u002Fdoc\u002Flibs\u002F1_39_0\u002Fdoc\u002Fhtml\u002Ffunction.html\"\u003EFunction\u003C\u002Fa\u003E, который, если я не ошибаюсь, войдет в новый стандарт STL (возможно, в немного измененном виде). На данный момент уже можно поюзать фичи из обновленного STL, однако, пока что эти фичи находятся в подпространстве имен \u003Cstrong\u003Estd::tr1\u003C\u002Fstrong\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВозможность сохранения лямбда-выражений позволяет нам не только повторно использовать лямбды, но и писать функции, которые генерируют лямбда-выражения, и даже лямбды, которые генерируют лямбды.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nРассмотрим следующий пример:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 13\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;functional\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\nusing std::tr1::function;\n \nint main()\n{\n\tvector&lt;int\u003E myVec;\n\tint init = 0;\n\tgenerate_n(back_inserter(myVec), 10, [&amp;]\n\t{\n\t\treturn init++;\n\t});\n \n\tfunction&lt;void (int)\u003E traceLambda = [] (int _val) -\u003E void\n\t\t                           {\n\t\t\t                            cout &lt;&lt; _val &lt;&lt; \" \";\n\t\t                           };\n \n\tfor_each(myVec.begin(), myVec.end(), traceLambda);\n\tcout &lt;&lt; endl;\n \n\tfunction&lt;function&lt;int (int)\u003E (int)\u003E lambdaGen =\n\t\t[] (int _val) -\u003E function&lt;int (int)\u003E\n\t\t{\n\t\t\treturn [_val] (int _n) -\u003E int { return _n + _val; };\n\t\t};\n \n\ttransform(myVec.begin(), myVec.end(), myVec.begin(), lambdaGen(2));\n\tfor_each(myVec.begin(), myVec.end(), traceLambda);\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nДанная программа выводит:\u003Cbr\u002F\u003E\r\n\u003Cblockquote\u003E0 1 2 3 4 5 6 7 8 9\u003Cbr\u002F\u003E\r\n2 3 4 5 6 7 8 9 10 11\u003Cbr\u002F\u003E\r\n\u003C\u002Fblockquote\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nРассмотрим подробнее. Вначале у нас инициализируется вектор с помощью \u003Cstrong\u003Egenerate_n()\u003C\u002Fstrong\u003E. Тут всё просто. Далее мы создаем переменную \u003Cstrong\u003EtraceLambda\u003C\u002Fstrong\u003E типа \u003Cstrong\u003Efunction&lt;void (int)\u003E\u003C\u002Fstrong\u003E (то есть функция, принимающая \u003Cstrong\u003Eint\u003C\u002Fstrong\u003E и возвращающая \u003Cstrong\u003Evoid\u003C\u002Fstrong\u003E) и присваиваем ей лямбда-выражение, которое выводит на консоль значение и пробел. Далее мы используем только что сохраненную лямбду для вывода всех элементов вектора.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПосле этого мы видим немаленькое объявление \u003Cstrong\u003ElambdaGen\u003C\u002Fstrong\u003E, которая является лямбда-выражением, принимающим один параметр \u003Cstrong\u003Eint\u003C\u002Fstrong\u003E и возвращающим другую лямбду, принимающую \u003Cstrong\u003Eint\u003C\u002Fstrong\u003E и возвращающую \u003Cstrong\u003Eint\u003C\u002Fstrong\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nСледом за этим мы ко всем элементам вектора применяем \u003Cstrong\u003Etransform()\u003C\u002Fstrong\u003E, в качестве мутационной функции для которого указываем \u003Cstrong\u003ElambdaGen(2)\u003C\u002Fstrong\u003E. Фактически \u003Cstrong\u003ElambdaGen(2)\u003C\u002Fstrong\u003E возвращает другую лямбду, которая прибавляет к переданному параметру число 2 и возвращает результат. Этот код, естественно, немного надуманный, ибо то же самое можно было записать как \u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003Etransform(myVec.begin(), myVec.end(), myVec.begin(), bind2nd(plus&lt;int\u003E(), 2));\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nоднако в качестве примера довольно показательно.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЗатем мы снова выводим значения всех элементов вектора, используя для этого сохраненную ранее лямбду \u003Cstrong\u003EtraceLambda\u003C\u002Fstrong\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНа самом деле, данный код можно было записать еще короче. В новом стандарте C++ значение ключевого слова \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E будет заменено. Если раньше \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E означало, что переменная создается в стеке, и подразумевалось неявно в случае, если вы не указали что-либо другое (\u003Cstrong\u003Eregister\u003C\u002Fstrong\u003E, к примеру), то сейчас это такой себе аналог \u003Cstrong\u003Evar\u003C\u002Fstrong\u003E в C# (то есть тип переменной, объявленной как \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E, определяется компилятором самостоятельно на основе того, чем эта переменная инициализируется).\u003Cbr\u002F\u003E\r\nСледует заметить, что \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E-переменная не сможет хранить значения разных типов в течение одного запуска программы. C++ как был, так и остается статически типизированным языком, и указание \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E лишь говорит компилятору самостоятельно позаботиться об определении типа: после инициализации сменить тип переменной будет уже нельзя.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nКроме того что ключевое слово \u003Cstrong\u003Eauto\u003C\u002Fstrong\u003E весьма полезно при работе с циклами вида\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003Efor (auto it = vec.begin(); it != vec.end(); ++it)\n{\n\t\u002F\u002F ...\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nего очень удобно использовать с лямбда-выражениями. Теперь код из \u003Cem\u003EЛистинга 13\u003C\u002Fem\u003E можно переписать так:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"cpp\"\u003E\u002F\u002F Листинг 14\n#include &lt;algorithm\u003E\n#include &lt;cstdlib\u003E\n#include &lt;functional\u003E\n#include &lt;iostream\u003E\n#include &lt;iterator\u003E\n#include &lt;vector\u003E\n \nusing namespace std;\nusing std::tr1::function;\n \nint main()\n{\n\tvector&lt;int\u003E myVec;\n\tint init = 0;\n\tgenerate_n(back_inserter(myVec), 10, [&amp;]\n\t{\n\t\treturn init++;\n\t});\n \n\tauto traceLambda = [] (int _val) -\u003E void { cout &lt;&lt; _val &lt;&lt; \" \"; };\n \n\tfor_each(myVec.begin(), myVec.end(), traceLambda);\n\tcout &lt;&lt; endl;\n \n\tauto lambdaGen = [] (int _val) -\u003E function&lt;int (int)\u003E\n\t{\n\t\treturn [_val] (int _n) -\u003E int { return _n + _val; };\n\t};\n \n\ttransform(myVec.begin(), myVec.end(), myVec.begin(), lambdaGen(2));\n\tfor_each(myVec.begin(), myVec.end(), traceLambda);\n\tcout &lt;&lt; endl;\n \n\treturn EXIT_SUCCESS;\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПожалуй, на этом я закончу описание лямбда-выражений. Если будут вопросы, поправки или замечания, с удовольствием выслушаю.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nPROFIT!\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ca href=\"http:\u002F\u002Fprogg.ru\u002FC0x-%D0%9B%D1%8F%D0%BC%D0%B1%D0%B4%D0%B0-%D0%B2%D1%8B%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F-C-%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80\"\u003E\u003Cimg alt=\"Progg it\" src=\"http:\u002F\u002Fprogg.ru\u002Fimage.axd?url=http%3A%2F%2Fhabrahabr.ru%2Fblogs%2Fcpp%2F66021%2F\"\u002F\u003E\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cstrong\u003EETA (20.02.2012):\u003C\u002Fstrong\u003E Оказалось, что для кого-то эта статья до сих пор актуальна, поэтому поправил подсветку синтаксиса и подкорректировал информацию про throw-списки в объявлении лямбд. Помимо непосредственно лямбда-выражений другие фичи из нового стандарта С++11 (например, списки инициализации контейнеров) решил не добавлять, так что статья осталась практически в первозданном виде.\u003C\u002Fdiv\u003E","tags":[{"titleHtml":"lambda"},{"titleHtml":"lambda functions"},{"titleHtml":"lambda expressions"},{"titleHtml":"c++0x"},{"titleHtml":"c++"},{"titleHtml":"с++11"}],"metadata":{"stylesUrls":[],"scriptUrls":[],"shareImageUrl":"https:\u002F\u002Fhabr.com\u002Fshare\u002Fpublication\u002F66021\u002F03b75034185d970acb51009cb7795d2b\u002F","shareImageWidth":1200,"shareImageHeight":630,"vkShareImageUrl":"https:\u002F\u002Fhabr.com\u002Fshare\u002Fpublication\u002F66021\u002F03b75034185d970acb51009cb7795d2b\u002F?format=vk","schemaJsonLd":"{\"@context\":\"http:\\\u002F\\\u002Fschema.org\",\"@type\":\"Article\",\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https:\\\u002F\\\u002Fhabr.com\\\u002Fru\\\u002Fpost\\\u002F66021\\\u002F\"},\"headline\":\"C++0x (С++11). Лямбда-выражения\",\"datePublished\":\"2009-08-03T01:46:04+04:00\",\"dateModified\":\"2012-10-03T14:42:51+04:00\",\"author\":{\"@type\":\"Person\",\"name\":\"Сергей Оленда́ренко\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Habr\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https:\\\u002F\\\u002Fhabrastorage.org\\\u002Fwebt\\\u002Fa_\\\u002Flk\\\u002F9m\\\u002Fa_lk9mjkccjox-zccjrpfolmkmq.png\"}},\"description\":\"Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-...\",\"url\":\"https:\\\u002F\\\u002Fhabr.com\\\u002Fru\\\u002Fpost\\\u002F66021\\\u002F#post-content-body\",\"about\":[\"h_cpp\",\"f_develop\"],\"image\":[\"http:\\\u002F\\\u002Fprogg.ru\\\u002Fimage.axd?url=http%3A%2F%2Fhabrahabr.ru%2Fblogs%2Fcpp%2F66021%2F\"]}","metaDescription":"Буквально на днях случайно наткнулся на Хабре на статью о лямбда-выражениях из нового (будущего) стандарта C++. Статья хорошая и даёт понять преимущества лямбда-выражений, однако, мне показалось, что...","mainImageUrl":null,"amp":false},"polls":[],"commentsEnabled":true,"votesEnabled":true,"status":"published","plannedPublishTime":null,"checked":null,"isEditorial":false},"572164":{"id":"572164","timePublished":"2021-09-27T11:37:23+00:00","isCorporative":false,"lang":"ru","titleHtml":"Первые шаги в ОТО: прецессия орбиты Меркурия","editorVersion":"2.0","postType":"article","postLabels":[{"type":"tutorial","data":null}],"author":{"id":"1832999","alias":"Yermack","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F690\u002F140\u002F823\u002F690140823f555d03574a59d46f648d24.jpg","speciality":"Пользователь"},"statistics":{"commentsCount":2,"favoritesCount":19,"readingCount":2452,"score":13,"votesCount":13},"hubs":[{"relatedData":null,"id":"18840","alias":"julia","type":"collective","title":"Julia","titleHtml":"Julia","isProfiled":true},{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21968","alias":"physics","type":"collective","title":"Физика","titleHtml":"Физика","isProfiled":false},{"relatedData":null,"id":"22022","alias":"astronomy","type":"collective","title":"Астрономия","titleHtml":"Астрономия","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EКогда речь заходит о теории относительности, частенько на ровном месте разрастаются споры, которые были занесены в почву непонимания и обильно удобрены мифами, недосказанностью и недостаточной математической подготовкой. Даже на лекциях от некоторых профессоров можно услышать, что детище гения Эйнштейна не имеет практической пользы, а на робкие попытки пролепетать что-то про спутниковые системы навигации они пренебрежительно отмахиваются, дескать, там все сложно и двояко. \u003C\u002Fp\u003E\u003Cp\u003EТак что совершенно естественно желание попробовать провести некоторые расчеты самолично, потрогать формулы, покрутить параметры, чтобы постепенно заложить интуицию в столь горячей теме.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fa9f\u002Ff59\u002Fb65\u002Fa9ff59b65da6e8b1e6f59314aadb8e3d.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fa9f\u002Ff59\u002Fb65\u002Fa9ff59b65da6e8b1e6f59314aadb8e3d.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"прецессия"},{"titleHtml":"меркурий"},{"titleHtml":"теория относительности"},{"titleHtml":"уравнения эйнштейна"},{"titleHtml":"метрики"},{"titleHtml":"спасибо scihub"},{"titleHtml":"спасибо mathpix"},{"titleHtml":"астрология_точная_наука"}]},"579542":{"id":"579542","timePublished":"2021-09-26T19:00:02+00:00","isCorporative":true,"lang":"ru","titleHtml":"Jetpack Compose — как легко построить UI на Android","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2713395","alias":"i15in","fullname":"Иван","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F25f\u002Fe4b\u002Ff94\u002F25fe4bf94867d9647a0ae809abf2e429.jpg","speciality":"Android developer"},"statistics":{"commentsCount":12,"favoritesCount":56,"readingCount":4411,"score":31,"votesCount":39},"hubs":[{"relatedData":null,"id":"18232","alias":"funcorp","type":"corporative","title":"Блог компании FUNCORP","titleHtml":"Блог компании FUNCORP","isProfiled":false},{"relatedData":null,"id":"6345","alias":"mobile_dev","type":"collective","title":"Разработка мобильных приложений","titleHtml":"Разработка мобильных приложений","isProfiled":true},{"relatedData":null,"id":"9188","alias":"ui","type":"collective","title":"Интерфейсы","titleHtml":"Интерфейсы","isProfiled":true},{"relatedData":null,"id":"17107","alias":"android_dev","type":"collective","title":"Разработка под Android","titleHtml":"Разработка под Android","isProfiled":true},{"relatedData":null,"id":"19441","alias":"kotlin","type":"collective","title":"Kotlin","titleHtml":"Kotlin","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"2","alias":"design","title":"Дизайн"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВ июле этого года вместе с Android Studio Arctic Fox вышла одна из долгожданных библиотек — Jetpack Compose. Она позволяет создавать пользовательский интерфейс в декларативном стиле и обещает быть революцией в построении UI.\u003C\u002Fp\u003E\u003Cp\u003EРазбираемся, так ли это на самом деле, какие у библиотеки преимущества и недостатки. Подробности — в статье.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F5da\u002F63d\u002F3cb\u002F5da63d3cbeb8e38de3dde2792d851722.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F5da\u002F63d\u002F3cb\u002F5da63d3cbeb8e38de3dde2792d851722.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"разработка мобильных приложений"},{"titleHtml":"jetpack compose"},{"titleHtml":"ui"},{"titleHtml":"интерфейсы"},{"titleHtml":"android"},{"titleHtml":"kotlin"},{"titleHtml":"android studio"},{"titleHtml":"arctic fox"},{"titleHtml":"пользовательские интерфейсы"}]},"579854":{"id":"579854","timePublished":"2021-09-27T06:03:01+00:00","isCorporative":true,"lang":"ru","titleHtml":"Видишь уязвимости? А они есть! Наше исследование популярных CMS-систем","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2684283","alias":"Solar_Pentest","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":8,"favoritesCount":20,"readingCount":3619,"score":27,"votesCount":29},"hubs":[{"relatedData":null,"id":"20826","alias":"solarsecurity","type":"corporative","title":"Блог компании Ростелеком-Солар","titleHtml":"Блог компании Ростелеком-Солар","isProfiled":false},{"relatedData":null,"id":"50","alias":"infosecurity","type":"collective","title":"Информационная безопасность","titleHtml":"Информационная безопасность","isProfiled":true},{"relatedData":null,"id":"260","alias":"php","type":"collective","title":"PHP","titleHtml":"PHP","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EЛьвиная доля всех работ по анализу защищенности внешнего периметра – это тестирование веб-приложений. Здесь могут быть как корпоративные решения, так и «домашние» разработки на базе различных публичных систем управления контентом (CMS). Мы всегда проводим глубокий анализ подобных решений на тестовых стендах и зачастую находим уязвимости нулевого дня. Собственно, из опыта таких проектов и родилась идея собрать исследовательскую команду и провести глубокий анализ популярных CMS-систем и различных плагинов для них. В этом посте мы поделимся результатами нашего исследования, а также продемонстрируем примеры уязвимого кода наиболее интересных, на наш взгляд, уязвимостей и примеры их эксплуатации. Конечно все эти уязвимости уже исправлены и описываются здесь с разрешения владельцев систем.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F6df\u002F317\u002F4e6\u002F6df3174e60bbe263a70bcafdf9e51e6b.jpg","buttonTextHtml":"Не всё то в безопасности, что с Bug Bounty","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F6df\u002F317\u002F4e6\u002F6df3174e60bbe263a70bcafdf9e51e6b.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"cms"},{"titleHtml":"уязвимости"},{"titleHtml":"уязвимости и их эксплуатация"},{"titleHtml":"уязвимость нулевого дня"}]},"580008":{"id":"580008","timePublished":"2021-09-27T06:30:02+00:00","isCorporative":false,"lang":"ru","titleHtml":"Летний Магнитогорск","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2614609","alias":"city_scraper","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F8f8\u002Fd6c\u002F328\u002F8f8d6c328ec3a513103b6757c2c21610.png","speciality":"Пользователь"},"statistics":{"commentsCount":6,"favoritesCount":3,"readingCount":3567,"score":14,"votesCount":20},"hubs":[{"relatedData":null,"id":"22012","alias":"Ecology","type":"collective","title":"Экология","titleHtml":"Экология","isProfiled":false},{"relatedData":null,"id":"22024","alias":"urban","type":"collective","title":"Урбанизм","titleHtml":"Урбанизм","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EМагнитогорск Челябинской области – один из крупнейших мировых центров чёрной металлургии. В России это шестой из крупнейших городов, которые не являются центрами субъектов страны. \u003C\u002Fp\u003E\u003Cp\u003EСовсем недавно город был одним из наиболее неблагополучных с точки зрения загрязнения атмосферного воздуха, но в 2021 году был зафиксирован «повышенный» уровень – то есть не «высокий» или «очень высокий», как раньше. \u003C\u002Fp\u003E\u003Cp\u003EКак этот город выглядит летом? Где и как его жители могут проводить время?\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F030\u002F0d1\u002Fcff\u002F0300d1cff2029948d33d803000331724.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F030\u002F0d1\u002Fcff\u002F0300d1cff2029948d33d803000331724.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"Магнитогорск"},{"titleHtml":"промышленность"},{"titleHtml":"промышленные города"},{"titleHtml":"урбанизм\u002Fурбания"},{"titleHtml":"урбанистика"},{"titleHtml":"города России"},{"titleHtml":"города"}]},"580050":{"id":"580050","timePublished":"2021-09-27T10:23:25+00:00","isCorporative":false,"lang":"ru","titleHtml":"Один человек ответил на 85+ тысяч вопросов на Stack Overflow (24,1 ответа в день)","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"1585037","alias":"sahsAGU","fullname":"Александр Гуреев","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F43c\u002F6c7\u002F0ab\u002F43c6c70ab024d45474e6abe8db797573.jpg","speciality":"Автор"},"statistics":{"commentsCount":34,"favoritesCount":10,"readingCount":10002,"score":11,"votesCount":17},"hubs":[{"relatedData":null,"id":"260","alias":"php","type":"collective","title":"PHP","titleHtml":"PHP","isProfiled":true},{"relatedData":null,"id":"306","alias":"mysql","type":"collective","title":"MySQL","titleHtml":"MySQL","isProfiled":true},{"relatedData":null,"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"relatedData":null,"id":"594","alias":"sql","type":"collective","title":"SQL","titleHtml":"SQL","isProfiled":true},{"relatedData":null,"id":"7152","alias":"data_mining","type":"collective","title":"Data Mining","titleHtml":"Data Mining","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003E\u003Cstrong\u003EВ среднем 24,1 ответа в день (если все 365 дней в году считать рабочими) на протяжении почти 10 лет.\u003C\u002Fstrong\u003E \u003C\u002Fp\u003E\u003Cp\u003EНесколько дней назад на некоторых англоязычных ресурсах началось обсуждение одного очень необычного пользователя Stack Overflow. Его зовут Гордон Линофф (Gordon Linoff), он из Нью-Йорка, и за 9 лет и 8 месяцев своего присутствия на платформе он дал 85,201 ответов на различные вопросы, в основном связанные с SQL и дата-майнингом (цифра актуальна на 27.09.2021). \u003C\u002Fp\u003E\u003Cp\u003EЧто это за маг?\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F396\u002F5ac\u002Fef4\u002F3965acef48ae14917c514fa091f60d1a.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F396\u002F5ac\u002Fef4\u002F3965acef48ae14917c514fa091f60d1a.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"sql"},{"titleHtml":"mysql"},{"titleHtml":"stackoverflow"},{"titleHtml":"базы данных"},{"titleHtml":"дата майнинг"},{"titleHtml":"data mining"}]},"580060":{"id":"580060","timePublished":"2021-09-27T09:00:04+00:00","isCorporative":true,"lang":"ru","titleHtml":"Арракис, который мы заслужили","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"238277","alias":"Zelenyikot","fullname":"Виталий Егоров","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F22b\u002F2d7\u002F7a5\u002F22b2d77a57b687aae24784a3e53089c9.jpg","speciality":"Популяризатор космонавтики"},"statistics":{"commentsCount":98,"favoritesCount":36,"readingCount":17653,"score":128,"votesCount":138},"hubs":[{"relatedData":null,"id":"19791","alias":"ruvds","type":"corporative","title":"Блог компании RUVDS.com","titleHtml":"Блог компании RUVDS.com","isProfiled":false},{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21962","alias":"space","type":"collective","title":"Космонавтика","titleHtml":"Космонавтика","isProfiled":false},{"relatedData":null,"id":"21984","alias":"sci-fi","type":"collective","title":"Научная фантастика","titleHtml":"Научная фантастика","isProfiled":false},{"relatedData":null,"id":"22014","alias":"futurenow","type":"collective","title":"Будущее здесь","titleHtml":"Будущее здесь","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F580060\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fk0\u002Fds\u002Fy5\u002Fk0dsy5npxclyjdytiroqga7-leu.jpeg\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E\u003Cbr\u003E\r\nВо вселенной писателя-фантаста Фрэнка Герберта, Дюна, она же Арракис &mdash; это пустынная и маловодная планета с двумя лунами. По сюжету, она находится за пределами Солнечной системы, но если мы захотим поискать ближайшую схожую параллель,&nbsp;то больше всего подходит планета Марс. Предлагаю воспользоваться возможностями, которые даёт современная космонавтика, и совершить воображаемую прогулку на нашу Дюну.\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"Марс"},{"titleHtml":"Дюна"},{"titleHtml":"MRO"},{"titleHtml":"Curiosity"},{"titleHtml":"марсоход"},{"titleHtml":"ruvds_статьи"}]},"580080":{"id":"580080","timePublished":"2021-09-26T19:12:55+00:00","isCorporative":false,"lang":"ru","titleHtml":"Дайджест свежих материалов из мира фронтенда за последнюю неделю №486 (20 — 26 сентября 2021)","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"59347","alias":"alexzfort","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fd2a\u002Fe8a\u002F5ac\u002Fd2ae8a5ac9876f838ebdd45f3ea3bc3b.png","speciality":""},"statistics":{"commentsCount":2,"favoritesCount":23,"readingCount":3826,"score":17,"votesCount":17},"hubs":[{"relatedData":null,"id":"91","alias":"webdev","type":"collective","title":"Разработка веб-сайтов","titleHtml":"Разработка веб-сайтов","isProfiled":true},{"relatedData":null,"id":"307","alias":"css","type":"collective","title":"CSS","titleHtml":"CSS","isProfiled":true},{"relatedData":null,"id":"357","alias":"javascript","type":"collective","title":"JavaScript","titleHtml":"JavaScript","isProfiled":true},{"relatedData":null,"id":"17103","alias":"html5","type":"collective","title":"HTML","titleHtml":"HTML","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"Предлагаем вашему вниманию подборку с ссылками на новые материалы из области фронтенда и около него.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Cp\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fec\u002F0x\u002Fkx\u002Fec0xkxfr5jd-rci1wjo9bmr4cns.jpeg\"\u003E\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"дайджест"},{"titleHtml":"фронтенд"},{"titleHtml":"css"},{"titleHtml":"js"},{"titleHtml":"es6"},{"titleHtml":"vue"},{"titleHtml":"react"},{"titleHtml":"angular"},{"titleHtml":"ember"},{"titleHtml":"html5"},{"titleHtml":"браузеры"},{"titleHtml":"ссылки"}]},"580086":{"id":"580086","timePublished":"2021-09-26T19:37:10+00:00","isCorporative":false,"lang":"ru","titleHtml":"Термо принтер и JavaScript","editorVersion":"2.0","postType":"article","postLabels":[{"type":"recovery","data":null}],"author":{"id":"1709955","alias":"IIIarp","fullname":"Сергей Шарпов","avatarUrl":"","speciality":"Веб разработчик"},"statistics":{"commentsCount":54,"favoritesCount":38,"readingCount":10892,"score":51,"votesCount":53},"hubs":[{"relatedData":null,"id":"84","alias":"crazydev","type":"collective","title":"Ненормальное программирование","titleHtml":"Ненормальное программирование","isProfiled":true},{"relatedData":null,"id":"357","alias":"javascript","type":"collective","title":"JavaScript","titleHtml":"JavaScript","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EПриобрел я на днях термопринтер (кассовый аппарат, если изволите) жене для магазина и решил что смогу его обуздать как истинный программист и сделать свою веб кассу, вместо того, что-бы использовать платные решения, ведь задача простая, печатать чеки, но это оказалось не так то и просто...\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F4f3\u002F259\u002Fe4e\u002F4f3259e4e73b5bfae82890fd3db512a0.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F4f3\u002F259\u002Fe4e\u002F4f3259e4e73b5bfae82890fd3db512a0.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"термопринтер"},{"titleHtml":"javascript"},{"titleHtml":"webusb"}]},"580088":{"id":"580088","timePublished":"2021-09-26T21:17:27+00:00","isCorporative":false,"lang":"ru","titleHtml":"Запуск X-приложения в chroot на примере POSE (или «QEMU не нужен»)","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"1481597","alias":"edo1h","fullname":null,"avatarUrl":"","speciality":"немного программист, немного админ"},"statistics":{"commentsCount":5,"favoritesCount":14,"readingCount":1211,"score":16,"votesCount":16},"hubs":[{"relatedData":null,"id":"221","alias":"sys_admin","type":"collective","title":"Системное администрирование","titleHtml":"Системное администрирование","isProfiled":true},{"relatedData":null,"id":"7289","alias":"nix","type":"collective","title":"*nix","titleHtml":"*nix","isProfiled":true}],"flows":[{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EЭта мини-статья родилась как ответ на статью \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F579296\" rel=\"noopener noreferrer nofollow\"\u003EУпрощаем эмуляцию X86 с помощью Live CD\u003C\u002Fa\u003E, в которой для запуска старых 32-битных приложений на 64-битных дистрибутивах Linux предлагалось использовать QEMU + Live CD — по моему мнению «из пушки по воробьям». Опишу своё решение на \u003Ccode\u003Echroot\u003C\u002Fcode\u003E + \u003Ccode\u003Edebootstrap\u003C\u002Fcode\u003E. \u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"chroot"},{"titleHtml":"debootstrap"},{"titleHtml":"xwindow"}]},"580090":{"id":"580090","timePublished":"2021-09-26T21:19:11+00:00","isCorporative":false,"lang":"ru","titleHtml":"Сравнение подходов к реализации распределенных транзакций для микросервисов","editorVersion":"2.0","postType":"article","postLabels":[{"type":"sandbox","data":null},{"type":"translation","data":{"originalAuthorName":"Bilgin Ibryam","originalUrl":"https:\u002F\u002Fdevelopers.redhat.com\u002Farticles\u002F2021\u002F09\u002F21\u002Fdistributed-transaction-patterns-microservices-compared"}}],"author":{"id":"194270","alias":"sprosin","fullname":"Sergey Prosin","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fd67\u002F5d8\u002F1d6\u002Fd675d81d6fe5bf69493735cef4910eb5.jpg","speciality":"Веду команды к релизам, пишу статьи, выступаю."},"statistics":{"commentsCount":6,"favoritesCount":97,"readingCount":5409,"score":18,"votesCount":18},"hubs":[{"relatedData":null,"id":"7504","alias":"refactoring","type":"collective","title":"Проектирование и рефакторинг","titleHtml":"Проектирование и рефакторинг","isProfiled":true},{"relatedData":null,"id":"21482","alias":"distributed_systems","type":"collective","title":"Распределённые системы","titleHtml":"Распределённые системы","isProfiled":true},{"relatedData":null,"id":"22115","alias":"microservices","type":"collective","title":"Микросервисы","titleHtml":"Микросервисы","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EКак архитектор-консультант в Red Hat, я имел возможность поработать над множеством проектов для наших клиентов. У каждого из них есть свои особенности, которые, однако, имеют некоторые общие черты. Большинство клиентов хотят знать, как скоординировать запись в несколько систем одновременно. Ответ на этот вопрос обычно включает подробное объяснение двойной записи, распределенных транзакций, современных альтернатив, а также возможных сценариев сбоев и недостатков каждого подхода. Как правило, именно в этот момент заказчик понимает, что разделение монолитного приложения на микросервисы - долгий и сложный путь, обычно требующий компромиссов.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fbc4\u002F35d\u002Fff3\u002Fbc435dff35d09143dacf29bbc1e470a7.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fbc4\u002F35d\u002Fff3\u002Fbc435dff35d09143dacf29bbc1e470a7.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"распределенные системы"},{"titleHtml":"микросервисы"},{"titleHtml":"транзакции"},{"titleHtml":"распределенные транзакции"},{"titleHtml":"оркестрация"},{"titleHtml":"оркестрация микросервисов"},{"titleHtml":"хореография"},{"titleHtml":"конвейеры"}]},"580092":{"id":"580092","timePublished":"2021-09-26T21:49:14+00:00","isCorporative":false,"lang":"ru","titleHtml":"30 сентября: Let's Encrypt и конец срока действия IdenTrust DST Root CA X3","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"805873","alias":"rantal","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":92,"favoritesCount":56,"readingCount":18729,"score":47,"votesCount":47},"hubs":[{"relatedData":null,"id":"50","alias":"infosecurity","type":"collective","title":"Информационная безопасность","titleHtml":"Информационная безопасность","isProfiled":true},{"relatedData":null,"id":"17350","alias":"s_admin","type":"collective","title":"Серверное администрирование","titleHtml":"Серверное администрирование","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003E30 сентября 2021 14:01:15  GMT оканчивается срок действия корневого сертификата IdenTrust DST Root CA X3.\u003C\u002Fp\u003E\u003Cp\u003EЭто событие достойно вашего внимания по той причине, что после наступления этого момента ряд устаревших систем перестанут доверять сертификатам,&nbsp;выпущенным центром сертификации Let’s Encrypt. С учётом того, что на текущий момент Let's Encrypt предоставляет бесплатные криптографические сертификаты примерно для \u003Ca href=\"https:\u002F\u002Fletsencrypt.org\u002Fstats\u002F\" rel=\"noopener noreferrer nofollow\"\u003E250 миллионов доменных имен\u003C\u002Fa\u003E, а \"устаревшие системы\" - это порой системы возрастом всего 5-6 лет, вряд ли окончание срока действия сертификата&nbsp;DST Root CA X3 пройдёт для всех гладко и незаметно. В чём причина, кого конкретно это затронет, и что можно сделать?\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"let's encrypt"},{"titleHtml":"DST Root CA X3"},{"titleHtml":"корневой сертификат"},{"titleHtml":"https"},{"titleHtml":"tls"},{"titleHtml":"openssl"}]},"580094":{"id":"580094","timePublished":"2021-09-26T22:35:26+00:00","isCorporative":false,"lang":"ru","titleHtml":"Блокчейн нас подвёл? Почему ДЭГ — это плохо и можем ли мы адекватно контролировать процесс подсчёта голосов?","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"206414","alias":"PoltoS","fullname":"Сергей Полторак","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F5cf\u002F03a\u002Fc7f\u002F5cf03ac7fe60ea8a6686bd4c57627ddc.png","speciality":""},"statistics":{"commentsCount":98,"favoritesCount":27,"readingCount":14776,"score":32,"votesCount":54},"hubs":[{"relatedData":null,"id":"118","alias":"crypto","type":"collective","title":"Криптография","titleHtml":"Криптография","isProfiled":true},{"relatedData":null,"id":"210","alias":"it_testing","type":"collective","title":"Тестирование IT-систем","titleHtml":"Тестирование IT-систем","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EИнтересно наблюдать, как дискредитируется термин блокчейна на выборах в госдуму. Вроде голосование было на блокчейне, но его якобы подделали. Т.е. блокчейн можно подделать или ЦИК и ДИТ нам подсунули какой-то лохчейн вместо блокчейна?!? И мало кто обсуждает происходящее по существу без эмоций, связанных с результатами партий и кандидатов.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F6e5\u002F82b\u002F9d0\u002F6e582b9d062dd29fa41c7842a8b76495.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F6e5\u002F82b\u002F9d0\u002F6e582b9d062dd29fa41c7842a8b76495.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"Криптография"},{"titleHtml":"блокчейн"},{"titleHtml":"открытые данные"},{"titleHtml":"электронное голосование"},{"titleHtml":"выборы"},{"titleHtml":"выборы в госдуму"},{"titleHtml":"дэг"},{"titleHtml":"дэг 2021"}]},"580124":{"id":"580124","timePublished":"2021-09-27T13:03:14+00:00","isCorporative":true,"lang":"ru","titleHtml":"Электролюминесцентные индикаторы из прошлого","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"146371","alias":"radiolok","fullname":"Артем Кашканов","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fa46\u002Fc6a\u002F151\u002Fa46c6a15193f7c0cac79d2736b107358.jpg","speciality":"Релейно-декатронный маньяк"},"statistics":{"commentsCount":11,"favoritesCount":35,"readingCount":3839,"score":64,"votesCount":64},"hubs":[{"relatedData":null,"id":"19791","alias":"ruvds","type":"corporative","title":"Блог компании RUVDS.com","titleHtml":"Блог компании RUVDS.com","isProfiled":false},{"relatedData":null,"id":"21484","alias":"electronics","type":"collective","title":"Производство и разработка электроники","titleHtml":"Производство и разработка электроники","isProfiled":true},{"relatedData":null,"id":"21906","alias":"history","type":"collective","title":"История IT","titleHtml":"История IT","isProfiled":false},{"relatedData":null,"id":"21930","alias":"antikvariat","type":"collective","title":"Старое железо","titleHtml":"Старое железо","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"Сегодня речь пойдёт об электролюминесцентных индикаторах. Но, не о тех, которые окружают вас повсюду и к которым вы привыкли, а о других — получивших огромную популярность в 60-е годы прошлого века, и так же стремительно канувших в небытие. Заодно запущу свою коллекцию индикаторов, как серийно выпускавшихся, так и уникальных опытных и даже — лабораторных образцов.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F523004\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F94e\u002F51f\u002F459\u002F94e51f459ae59c9d2fe6c448cb07bcca.gif\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"Индикатор"},{"titleHtml":"электролюминесцентность"},{"titleHtml":"ruvds_статьи"}]},"580150":{"id":"580150","timePublished":"2021-09-27T10:50:03+00:00","isCorporative":true,"lang":"ru","titleHtml":"Топ-5 когнитивных искажений при планировании в IT","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2794469","alias":"KM_QA","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":7,"favoritesCount":40,"readingCount":4414,"score":32,"votesCount":34},"hubs":[{"relatedData":null,"id":"14332","alias":"oleg-bunin","type":"corporative","title":"Блог компании Конференции Олега Бунина (Онтико)","titleHtml":"Блог компании Конференции Олега Бунина (Онтико)","isProfiled":false},{"relatedData":null,"id":"19583","alias":"dev_management","type":"collective","title":"Управление разработкой","titleHtml":"Управление разработкой","isProfiled":true},{"relatedData":null,"id":"20736","alias":"hr_management","type":"collective","title":"Управление персоналом","titleHtml":"Управление персоналом","isProfiled":true},{"relatedData":null,"id":"20754","alias":"tech_events","type":"collective","title":"Конференции","titleHtml":"Конференции","isProfiled":false},{"relatedData":null,"id":"21990","alias":"brain","type":"collective","title":"Мозг","titleHtml":"Мозг","isProfiled":false}],"flows":[{"id":"3","alias":"management","title":"Менеджмент"},{"id":"4","alias":"marketing","title":"Маркетинг"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EЭта статья подходит для тимлидов и их подопечных, а также для всех, кто оценивает проекты и задачи. Я расскажу, как и почему мы делаем ошибки из-за когнитивных искажений. Попадаем в них мы почти все, просто потому что мы живые люди. И на примере одного дня из жизни тимлида я хочу показать, в какие искажения чаще всего влетают в IT, и&nbsp; — самое полезное&nbsp; —&nbsp; как из них можно выходить.\u003C\u002Fp\u003E\u003Cp\u003E\u003Cstrong\u003EЗамечу, что искать когнитивные искажения стоит, в первую очередь, у себя, а не у коллег. \u003C\u002Fstrong\u003EИ что рассказывать про искажения намного проще, чем не влетать в их на практике, однако, если этому научиться, то в перспективе это изрядно окупается, потому что экономит и время, и деньги, помогая и нам, и команде.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fb78\u002F76f\u002F001\u002Fb7876f0010e85c328462a735df0b76e8.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fb78\u002F76f\u002F001\u002Fb7876f0010e85c328462a735df0b76e8.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"когнитивные искажения"},{"titleHtml":"нейрофизиология"},{"titleHtml":"мозг"},{"titleHtml":"психология"},{"titleHtml":"тимлидство"},{"titleHtml":"тимлид"},{"titleHtml":"управление людьми"},{"titleHtml":"управление проектами и командой"},{"titleHtml":"управление командой"},{"titleHtml":"управление персоналом"}]},"580172":{"id":"580172","timePublished":"2021-09-27T11:45:49+00:00","isCorporative":true,"lang":"ru","titleHtml":"Небинарный ngIf*","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"1050218","alias":"Waterplea","fullname":"Александр Инкин","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fa70\u002F569\u002Ff31\u002Fa70569f31346559ce2b8b875e7f97480.jpg","speciality":"Google Developer Expert | Angular"},"statistics":{"commentsCount":1,"favoritesCount":10,"readingCount":780,"score":14,"votesCount":14},"hubs":[{"relatedData":null,"id":"17420","alias":"tinkoff","type":"corporative","title":"Блог компании TINKOFF","titleHtml":"Блог компании TINKOFF","isProfiled":false},{"relatedData":null,"id":"91","alias":"webdev","type":"collective","title":"Разработка веб-сайтов","titleHtml":"Разработка веб-сайтов","isProfiled":true},{"relatedData":null,"id":"18109","alias":"angular","type":"collective","title":"Angular","titleHtml":"Angular","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВам когда-нибудь хотелось отобразить состояние загрузки, пока \u003Ccode\u003EngIf\u003C\u002Fcode\u003E ждет ответа от \u003Ccode\u003Easync\u003C\u002Fcode\u003E-пайпа? Или, может, вы мечтали передать в \u003Ccode\u003EngFor\u003C\u002Fcode\u003E шаблон для пустого массива? Возможно, вы бросили это, потому что вам не хотелось реализовывать базовую логику этих директив самому. На самом деле в этом нет нужды! Один и тот же селектор может подцепить несколько директив, что позволяет расширить функциональность встроенных директив дополнительной логикой.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F846\u002F786\u002F3e2\u002F8467863e2df65db32cb31f4b16c822ef.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F846\u002F786\u002F3e2\u002F8467863e2df65db32cb31f4b16c822ef.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"template"},{"titleHtml":"directive"},{"titleHtml":"angular"},{"titleHtml":"structural"}]},"580194":{"id":"580194","timePublished":"2021-09-27T12:36:12+00:00","isCorporative":true,"lang":"ru","titleHtml":"Сотрудники на карте: отвечаем на 10 важных вопросов о трекинге","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"1254716","alias":"Axelus","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F118\u002Fc4f\u002F08f\u002F118c4f08ffa66438ad6be22e205d563d.png","speciality":"Разработчик"},"statistics":{"commentsCount":0,"favoritesCount":6,"readingCount":905,"score":13,"votesCount":15},"hubs":[{"relatedData":null,"id":"20758","alias":"regionsoft","type":"corporative","title":"Блог компании RegionSoft","titleHtml":"Блог компании RegionSoft","isProfiled":false},{"relatedData":null,"id":"6398","alias":"it-infrastructure","type":"collective","title":"IT-инфраструктура","titleHtml":"IT-инфраструктура","isProfiled":true},{"relatedData":null,"id":"12365","alias":"saas","type":"collective","title":"SaaS \u002F S+S","titleHtml":"SaaS \u002F S+S","isProfiled":true},{"relatedData":null,"id":"17783","alias":"geo","type":"collective","title":"Геоинформационные сервисы","titleHtml":"Геоинформационные сервисы","isProfiled":true},{"relatedData":null,"id":"20736","alias":"hr_management","type":"collective","title":"Управление персоналом","titleHtml":"Управление персоналом","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"3","alias":"management","title":"Менеджмент"},{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EЛюбой контроль сотрудников — опасный и болезненный вопрос, особенно в небольших компаниях. Часто в дружеские и открытые отношения компании не вписывается ни одна из форм контроля, рассчитывать можно только на доверие. Но пресловутый ковид и здесь внёс свои коррективы: расширение удалённой работы, увеличение штата мобильных сотрудников, частичная занятость пополнили ряды полевых сисадминов, аутсорсеров поддержки и остальных «разъездных» работников. Увы, люди разные и вслед за приятными плодами и бонусами удалёнки пришли негативные истории про поведение курьеров, опоздания и откровенные нарушения сотрудников на территории клиентов, неявки на работу или к заказчику и т.д. С этим столкнулись и ритейл, и ИТ, и любая сфера с мобильными сотрудниками. Очень хочется верить в лучшее, но без минимального контроля можно просто потерять бизнес — и тогда пострадают коллеги нерадивых сотрудников.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fe4a\u002F5b9\u002Fa9d\u002Fe4a5b9a9d62c342fa897f4531ec9301b.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fe4a\u002F5b9\u002Fa9d\u002Fe4a5b9a9d62c342fa897f4531ec9301b.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"geomonitor"},{"titleHtml":"геолокация"},{"titleHtml":"геозона"},{"titleHtml":"трекинг"}]},"580196":{"id":"580196","timePublished":"2021-09-27T12:28:15+00:00","isCorporative":true,"lang":"ru","titleHtml":"Зачем нужен динамический анализ кода, на примере проекта PVS-Studio","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"2302295","alias":"MrROBUST","fullname":"Алексей Говоров","avatarUrl":"","speciality":"Пользователь"},"statistics":{"commentsCount":0,"favoritesCount":3,"readingCount":550,"score":9,"votesCount":9},"hubs":[{"relatedData":null,"id":"18095","alias":"pvs-studio","type":"corporative","title":"Блог компании PVS-Studio","titleHtml":"Блог компании PVS-Studio","isProfiled":false},{"relatedData":null,"id":"559","alias":"cpp","type":"collective","title":"C++","titleHtml":"C++","isProfiled":true},{"relatedData":null,"id":"11606","alias":"vs","type":"collective","title":"Visual Studio","titleHtml":"Visual Studio","isProfiled":true},{"relatedData":null,"id":"21456","alias":"win_dev","type":"collective","title":"Разработка под Windows","titleHtml":"Разработка под Windows","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВ разговоре с Маршаллом Клоу на подкасте CppCast #300 ABI Stability была затронута достаточно давняя новость о поддержке компиляторами Visual Studio инструмента AddressSanitizer (ASan). Мы уже достаточно давно внедрили ASan в свою систему тестирования и хотим рассказать о паре интересных ошибок, которые он помог найти.\u003C\u002Fp\u003E\u003Cbr\u003E\r\n\u003Cp\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F7ef\u002F2db\u002F210\u002F7ef2db210d677f9a8c07026d4361d3ba.png\" alt=\"0868_PVS-Studio_ASan_ru\u002Fimage2.png\"\u003E\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"pvs-studio"},{"titleHtml":"clang"},{"titleHtml":"asan"},{"titleHtml":"sanitizer"},{"titleHtml":"динамический анализ кода"}]},"580206":{"id":"580206","timePublished":"2021-09-27T12:51:03+00:00","isCorporative":false,"lang":"ru","titleHtml":"МТС отказался от скрытых мобильных подписок?","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2467147","alias":"Plusodin","fullname":"Владимир","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F343\u002Fb77\u002Fd12\u002F343b77d12f047368849a9880276f936e.jpg","speciality":"Пользователь"},"statistics":{"commentsCount":7,"favoritesCount":3,"readingCount":3805,"score":10,"votesCount":10},"hubs":[{"relatedData":null,"id":"22008","alias":"cellular","type":"collective","title":"Сотовая связь","titleHtml":"Сотовая связь","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EПривет, Хабр!\u003C\u002Fp\u003E\u003Cp\u003EНу что, подходит к концу первый сезон сериала «О скрытых мобильных подписках и операторах связи». Предыдущие три серии: \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F550448\u002F\" rel=\"noopener noreferrer nofollow\"\u003EМегафон\u003C\u002Fa\u003E, \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F563260\u002F\" rel=\"noopener noreferrer nofollow\"\u003EБилайн\u003C\u002Fa\u003E, \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F571256\u002F\" rel=\"noopener noreferrer nofollow\"\u003ETele2\u003C\u002Fa\u003E.\u003C\u002Fp\u003E\u003Cp\u003EНу и вишенка на этом торте – МТС.\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"мтс"},{"titleHtml":"мобильные подписки"},{"titleHtml":"подписки"},{"titleHtml":"оператор связи"},{"titleHtml":"теле2"},{"titleHtml":"мегафон"},{"titleHtml":"билайн"}]},"580210":{"id":"580210","timePublished":"2021-09-27T12:53:02+00:00","isCorporative":false,"lang":"ru","titleHtml":"PHP Дайджест № 212 (13 – 27 сентября 2021)","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"100489","alias":"pronskiy","fullname":"Роман Пронский","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F27f\u002Fb99\u002Feb3\u002F27fb99eb3e30e3221c5839e88be02395.jpg","speciality":"PHP"},"statistics":{"commentsCount":1,"favoritesCount":8,"readingCount":2906,"score":32,"votesCount":32},"hubs":[{"relatedData":null,"id":"91","alias":"webdev","type":"collective","title":"Разработка веб-сайтов","titleHtml":"Разработка веб-сайтов","isProfiled":true},{"relatedData":null,"id":"260","alias":"php","type":"collective","title":"PHP","titleHtml":"PHP","isProfiled":true},{"relatedData":null,"id":"477","alias":"symfony","type":"collective","title":"Symfony","titleHtml":"Symfony","isProfiled":true},{"relatedData":null,"id":"9554","alias":"yii","type":"collective","title":"Yii","titleHtml":"Yii","isProfiled":true},{"relatedData":null,"id":"18812","alias":"laravel","type":"collective","title":"Laravel","titleHtml":"Laravel","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fek\u002F6r\u002Fr1\u002Fek6rr1odvyzb89tfv0lq4cmfxi4.jpeg\"\u003E\u003C\u002Fdiv\u003E\u003Cbr\u003E\r\nПодборка свежих новостей и материалов из мира PHP.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nВышел PHP 8.1 RC2 и уже доступен первый пакет с использованием перечислений, будет сделан форк Magento, новый тип стандартов PER в дополнение к PSR, стартовала PhpStorm 2021.3 EAP, Symfony 6 будет полностью типизирован — как обновляться?\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nДля PHP 8.2 предложены новые оптимизированные структуры данных.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nТакже в выпуске порция инструментов, полезные статьи, видео и анонсы двух митапов.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nПриятного чтения!\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"дайджест"},{"titleHtml":"php-дайджест"},{"titleHtml":"PHP"},{"titleHtml":"Symfony"},{"titleHtml":"Laravel"},{"titleHtml":"Magento"},{"titleHtml":"PHPUnit"},{"titleHtml":"PHP 8.1"},{"titleHtml":"PHP 8.2"}]},"580228":{"id":"580228","timePublished":"2021-09-27T16:41:21+00:00","isCorporative":true,"lang":"ru","titleHtml":"Идеальная светодиодная лампа за 21 рубль","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"108988","alias":"AlexeyNadezhin","fullname":"Алексей Надежин","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Ffdc\u002F3ac\u002F9a2\u002Ffdc3ac9a2dc0107cc956f1bd0cf5fc2b.jpg","speciality":"Блогер"},"statistics":{"commentsCount":17,"favoritesCount":20,"readingCount":5205,"score":42,"votesCount":42},"hubs":[{"relatedData":null,"id":"21646","alias":"lamptest","type":"corporative","title":"Блог компании LampTest","titleHtml":"Блог компании LampTest","isProfiled":false},{"relatedData":null,"id":"21894","alias":"gadgets","type":"collective","title":"Гаджеты","titleHtml":"Гаджеты","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"Удивительно осознавать, что достаточно сложное электронное устройство, которым является светодиодная лампочка, может стоить 21 рубль. \u003Cbr\u003E\r\n\u003Cbr\u003E\r\nЕщё сложнее поверить, что эта лампочка безукоризненна по всем параметрам.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F20f\u002F849\u002Ffcd\u002F20f849fcd6a3891f506676fc87223bdf.jpg\"\u003E\u003C\u002Fdiv\u003E\u003Cbr\u003E\r\n\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"led"},{"titleHtml":"светодиодные лампы"},{"titleHtml":"тест"}]}},"articlesIds":{"ARTICLES_LIST_TOP_PERIOD_DAILY":["580060","580124","580086","580092","580228","580210","580150","580094","579542","579854","580090","580080","580088","580172","580008","580194","572164","580050","580206","580196"]},"isLoading":false,"pagesCount":{"ARTICLES_LIST_TOP_PERIOD_DAILY":3},"route":{"name":"ARTICLES_LIST_TOP_PERIOD","params":{"period":"daily"},"query":{}},"reasonsList":null,"view":"cards","lastVisitedRoute":{},"ssrCommentsArticleIds":[""],"karma":{}},"authorContribution":{"authors":{}},"betaTest":{"currentAnnouncement":null,"announcements":{},"announcementCards":null,"announcementComments":{},"announcementCommentThreads":{},"announcementCommentingStatuses":{},"archivedList":[]},"authorStatistics":{"articleRefs":{},"articleIds":{},"pagesCount":{},"route":{},"viewsCount":[],"maxStatsCount":{}},"comments":{"articleComments":{},"searchCommentsResults":null,"previewComment":null,"pagesCount":null,"commentAccess":{},"scrollParents":{},"pageArticleComments":{"lastViewedComment":0,"postId":null,"lastCommentTimestamp":"","moderated":[],"moderatedIds":[],"commentRoute":""}},"companies":{"companyRefs":{},"companyIds":{},"companyTopIds":{},"pagesCount":{},"companyProfiles":{},"companiesCategories":[],"companiesCategoriesTotalCount":0,"companiesWidgets":{},"companiesWorkers":{},"companiesFans":{},"route":{},"isLoading":false,"companyWorkersLoading":false,"companyFansLoading":false,"vacancies":{}},"companiesContribution":{"hubs":{},"flows":{},"companyRefs":{}},"companyHubsContribution":{"contributionRefs":{"hubRefs":{},"hubIds":{}}},"conversation":{"messages":[],"respondent":null,"isLoadMore":false},"conversations":{"conversations":[],"unreadCount":0,"pagesCount":0,"isLoadMore":false},"desktopState":{"desktopFl":null,"desktopHl":null,"isChecked":false,"isLoginDemanded":false},"dfp":{"slotsDict":{}},"docs":{"menu":{},"articles":{},"mainMenu":[],"loading":{"main":false,"dropdown":false,"article":false}},"feature":{"isProbablyVisible":"true"},"flows":{"flows":[{"alias":"develop","id":1,"route":{"name":"FLOW_PAGE","params":{"flowName":"develop"}}},{"alias":"admin","id":6,"route":{"name":"FLOW_PAGE","params":{"flowName":"admin"}}},{"alias":"design","id":2,"route":{"name":"FLOW_PAGE","params":{"flowName":"design"}}},{"alias":"management","id":3,"route":{"name":"FLOW_PAGE","params":{"flowName":"management"}}},{"alias":"marketing","id":4,"route":{"name":"FLOW_PAGE","params":{"flowName":"marketing"}}},{"alias":"popsci","id":7,"route":{"name":"FLOW_PAGE","params":{"flowName":"popsci"}}}]},"global":{"isPwa":false,"device":"desktop","isHabrCom":true},"hubs":{"hubRefs":{},"hubIds":{},"pagesCount":{},"isLoading":false,"route":{}},"hubsBlock":{"hubRefs":{},"hubIds":{}},"i18n":{"fl":"ru","hl":"ru"},"info":{"infoPage":{},"isLoading":true},"location":{"urlStruct":{"protocol":null,"slashes":null,"auth":null,"host":null,"port":null,"hostname":null,"hash":null,"search":null,"query":{},"pathname":null,"path":null,"href":""},"searchQuery":null},"me":{"user":null,"ppgDemanded":false,"karmaResetInfo":{"canReincarnate":null,"wasReincarnated":null,"currentScore":null},"notes":null},"mostReadingList":{"mostReadingListIds":[],"mostReadingListRefs":null,"promoPost":null},"pinnedPost":{"pinnedPost":null},"ppa":{"articles":{},"card":null,"transactions":null,"totalTransactions":null,"isAccessible":null},"projectsBlocks":{"activeBlocks":{}},"pullRefresh":{"shouldRefresh":false},"sandbox":{"articleIds":[],"articleRefs":{},"pagesCount":null,"route":{},"lastVisitedRoute":{},"isLoading":false},"settingsOther":{"inputs":{"uiLang":{"errors":[],"ref":null,"value":""},"articlesLangEnglish":{"errors":[],"ref":null,"value":false},"articlesLangRussian":{"errors":[],"ref":null,"value":false},"agreement":{"errors":[],"ref":null,"value":false},"email":{"errors":[],"ref":null,"value":true},"digest":{"errors":[],"ref":null,"value":true}}},"similarList":{"similarListIds":["453720","430202","325372"],"similarListRefs":{"325372":{"id":"325372","timePublished":"2017-03-31T15:48:17+00:00","isCorporative":true,"lang":"ru","titleHtml":"Релиз CLion 2017.1: C++14, C++17, код на дизассемблере в отладчике, Catch, MSVC и многое другое","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"472304","alias":"anastasiak2512","fullname":"Казакова Анастасия","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F9a8\u002Fde0\u002Fe9e\u002F9a8de0e9eb6f367daeeac57a87124060.jpg","speciality":"Разработчик и ПММ"},"statistics":{"commentsCount":68,"favoritesCount":29,"readingCount":16266,"score":20,"votesCount":24},"hubs":[{"id":"7575","alias":"JetBrains","type":"corporative","title":"Блог компании JetBrains","titleHtml":"Блог компании JetBrains","isProfiled":false},{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"559","alias":"cpp","type":"collective","title":"C++","titleHtml":"C++","isProfiled":true},{"id":"17717","alias":"c","type":"collective","title":"C","titleHtml":"C","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"Привет, Хабр! Спешим поделиться радостной новостью – мы выпустили первый в этом году релиз нашей кросс-платформенной IDE для C и C++, \u003Cb\u003ECLion 2017.1\u003C\u002Fb\u003E!\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F955\u002F502\u002F34d\u002F95550234df58ca77219c759974171a4f.png\" alt=\"image\" width=\"500\" height=\"250\" \u002F\u003E\u003C\u002Fdiv\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nНаши планы, как обычно, немного превосходят наши возможности и ресурсы. Но в этот релиз нам удалось успеть почти все из \u003Ca href=\"https:\u002F\u002Fconfluence.jetbrains.com\u002Fdisplay\u002FCLION\u002FRoadmap+for+CLion+2017.1\"\u003Eзапланированного\u003C\u002Fa\u003E. Если вкратце:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003EПоддержка C++14 (всё кроме \u003Ci\u003Econstexpr\u003C\u002Fi\u003E)\u003C\u002Fli\u003E\r\n\u003Cli\u003EНачальная поддержка C++17 (мы начали с самой востребованной возможности – \u003Ci\u003Enested namespaces\u003C\u002Fi\u003E)\u003C\u002Fli\u003E\r\n\u003Cli\u003EВозможность конвертировать тип переменной в \u003Ci\u003Eauto\u003C\u002Fi\u003E\u003C\u002Fli\u003E\r\n\u003Cli\u003EВо время отладки программы, при отсутствии файлов с исходным кодом можно переходить на код на дизассемблере (disassembly view)\u003C\u002Fli\u003E\r\n\u003Cli\u003EПоддержка фреймворка для юнит-тестирования Catch\u003C\u002Fli\u003E\r\n\u003Cli\u003EЗначительное ускорение отклика редактора при печати кода (Zero Latency Typing)\u003C\u002Fli\u003E\r\n\u003Cli\u003EИ, наконец, экспериментальная поддержка компилятора Microsoft Visual C++!\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\nИ это еще не все! Читайте подробности ниже.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nКстати, попробовать все новые возможности можно на небольшом \u003Ca href=\"https:\u002F\u002Fgithub.com\u002Fanastasiak2512\u002FCLion2017_1Demo\"\u003Eдемо-проекте\u003C\u002Fa\u003E, который мы специально подготовили для этих целей.\u003Cbr\u002F\u003E\r\n","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null},"430202":{"id":"430202","timePublished":"2018-12-26T11:52:37+00:00","isCorporative":false,"lang":"ru","titleHtml":"Написание системы попарно взаимодействующих частиц на C++ с использованием DirectX 11","editorVersion":"1.0","postType":"article","postLabels":[{"type":"tutorial","data":null}],"author":{"id":"375563","alias":"asurkis","fullname":"Антон Суркис","avatarUrl":null,"speciality":"Студент"},"statistics":{"commentsCount":17,"favoritesCount":70,"readingCount":8233,"score":15,"votesCount":19},"hubs":[{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"559","alias":"cpp","type":"collective","title":"C++","titleHtml":"C++","isProfiled":true},{"id":"7773","alias":"gamedev","type":"collective","title":"Разработка игр","titleHtml":"Разработка игр","isProfiled":true},{"id":"11606","alias":"vs","type":"collective","title":"Visual Studio","titleHtml":"Visual Studio","isProfiled":true},{"id":"21456","alias":"win_dev","type":"collective","title":"Разработка под Windows","titleHtml":"Разработка под Windows","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002F3_\u002Fbk\u002Fc0\u002F3_bkc0juig5yj1z7fob5sbfrmjy.png\"\u003E\u003C\u002Fp\u003E\u003Cbr\u003E\r\n\u003Cp\u003EНа Хабре уже \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fpost\u002F346260\u002F\"\u003Eесть\u003C\u002Fa\u003E \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fpost\u002F346268\u002F\"\u003Eмного\u003C\u002Fa\u003E \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fpost\u002F248755\u002F\"\u003Eстатей\u003C\u002Fa\u003E про использование вычислительных шейдеров с Unity, однако статью о использовании вычислительного шейдера на \"чистом\" Win32 API + DirectX 11 найти затруднительно. Однако эта задача ненамного сложнее, подробнее — под катом.\u003C\u002Fp\u003E\u003Cbr\u003E\r\n\u003Cp\u003EДля этого будем использовать:\u003C\u002Fp\u003E\u003Cbr\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003EWindows 10\u003C\u002Fli\u003E\r\n\u003Cli\u003EVisual Studio 2017 Community Edition с модулем \"Разработка классических приложений на C++\"\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше →","image":null},"status":"published","plannedPublishTime":null,"checked":null},"453720":{"id":"453720","timePublished":"2019-05-27T16:43:29+00:00","isCorporative":false,"lang":"ru","titleHtml":"Тонкости Lambda Expressions в C#","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"1981387","alias":"brager17","fullname":"Евгений","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F774\u002F517\u002Fdd8\u002F774517dd83d7f546ca0452c4c1cda89a.jpg","speciality":".NET разработчик"},"statistics":{"commentsCount":6,"favoritesCount":59,"readingCount":12760,"score":19,"votesCount":19},"hubs":[{"id":"91","alias":"webdev","type":"collective","title":"Разработка веб-сайтов","titleHtml":"Разработка веб-сайтов","isProfiled":true},{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"546","alias":"net","type":"collective","title":".NET","titleHtml":".NET","isProfiled":true},{"id":"7504","alias":"refactoring","type":"collective","title":"Проектирование и рефакторинг","titleHtml":"Проектирование и рефакторинг","isProfiled":true},{"id":"17718","alias":"csharp","type":"collective","title":"C#","titleHtml":"C#","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EТо, о чем написано в статье, я отлавливал около 10 часов, это были 10 часов непрерывного дебага, которые cвелись к пошаговому сравнению рабочей и нерабочей версий кода, даже не так, к сравнению каждой строчки из окошка дебага рабочей и не рабочей версий кода\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше →","image":null},"status":"published","plannedPublishTime":null,"checked":null}}},"ssr":{"error":null,"isDataLoaded":false,"isDataLoading":false,"isHydrationFailed":false,"isServer":false},"userHubsContribution":{"contributionRefs":{"hubRefs":{},"hubIds":{}}},"userInvites":{"availableInvites":0,"usedInvitesIds":[],"usedInvitesRefs":{},"usedInvitesPagesCount":0,"unusedInvitesIds":[],"unusedInvitesRefs":{},"unusedInvitesPagesCount":0},"users":{"authorRefs":{"gooroo":{"scoreStats":{"score":116.2,"votesCount":294},"rating":0,"relatedData":null,"contacts":[],"authorContacts":[],"paymentDetails":{"paymentYandexMoney":null,"paymentPayPalMe":null,"paymentWebmoney":null},"id":"47034","alias":"GooRoo","fullname":"Сергей Оленда́ренко","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F97d\u002Ffb3\u002F1e1\u002F97dfb31e1954a5bacabf40b367a4945f.jpg","speciality":null}},"authorIds":{},"pagesCount":{},"authorProfiles":{},"userHubs":{},"userInvitations":{},"authorFollowers":{},"authorFollowed":{},"karmaStats":[],"statistics":null,"isLoading":false,"authorFollowersLoading":false,"authorFollowedLoading":false,"userHubsLoading":false,"userInvitationsLoading":false,"route":{}},"viewport":{"prevScrollY":{},"scrollY":0,"width":0},"tracker":{"items":{},"pagesCache":{},"markedViewedSilently":{},"markedRead":{},"unreadCounters":{"applications":null,"system":null,"mentions":null,"subscribers":null,"posts_and_comments":null},"unviewedCounters":{"applications":null,"system":null,"mentions":null,"subscribers":null,"posts_and_comments":null}}};(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());</script>
+<script src="https://assets.habr.com/habr-web/js/chunk-vendors.670ab961.js" defer></script><script src="https://assets.habr.com/habr-web/js/chunk-f458c7c4.6e221df6.js" defer></script><script src="https://assets.habr.com/habr-web/js/app.76acc47b.js" defer></script>
+
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    </script>
+  
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(24049213, "init", {
+      defer:true,
+      trackLinks:true,
+      accurateTrackBounce:true,
+      webvisor:false,
+    });
+  </script>
+  <noscript>
+    <div>
+      <img src="https://mc.yandex.ru/watch/24049213" style="position:absolute; left:-9999px;" alt="" />
+    </div>
+  </noscript>
+  
+    <script type="text/javascript">
+      window.addEventListener('load', function () {
+        setTimeout(() => {
+          const img = new Image();
+          img.src = 'https://vk.com/rtrg?p=VK-RTRG-421343-57vKE';
+        }, 0);
+      });
+    </script>
+  
+</body>
+</html>
