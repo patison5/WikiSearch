@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru" data-vue-meta="%7B%22lang%22:%7B%22ssr%22:%22ru%22%7D%7D">
+<head >
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+  <title>Учимся готовить: Spring 3 MVC + Spring Security + Hibernate / Хабр</title>
+  <style>
+    /* cyrillic-ext */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveSxf6TF0.woff2) format('woff2');
+      unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    /* cyrillic */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveQhf6TF0.woff2) format('woff2');
+      unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    /* latin-ext */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveSBf6TF0.woff2) format('woff2');
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+      font-family: 'Fira Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/firasans/v11/va9B4kDNxMZdWfMOD5VnZKveRhf6.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+  </style>
+  <link rel="preload" href="https://assets.habr.com/habr-web/css/chunk-vendors.0f7bdd8f.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/chunk-vendors.670ab961.js" as="script"><link rel="preload" href="https://assets.habr.com/habr-web/css/app.01bb2993.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/app.76acc47b.js" as="script"><link rel="preload" href="https://assets.habr.com/habr-web/css/chunk-f458c7c4.e48e8f79.css" as="style"><link rel="preload" href="https://assets.habr.com/habr-web/js/chunk-f458c7c4.6e221df6.js" as="script">
+  <link rel="stylesheet" href="https://assets.habr.com/habr-web/css/chunk-vendors.0f7bdd8f.css"><link rel="stylesheet" href="https://assets.habr.com/habr-web/css/app.01bb2993.css"><link rel="stylesheet" href="https://assets.habr.com/habr-web/css/chunk-f458c7c4.e48e8f79.css">
+  <script>window.i18nFetch = new Promise((res, rej) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', '/js/i18n/ru-compiled.4f7c12b4e1b1b4c0e44ef6f9f33b1f9f.json');
+          xhr.responseType = 'json';
+          xhr.onload = function(e) {
+            if (this.status === 200) {
+              res({ru: xhr.response});
+            } else {
+              rej(e);
+            }
+          };
+          xhr.send();
+        });</script>
+  
+  <script data-vue-meta="ssr" src="/js/ads.js" onload="window['zhY4i4nJ9K'] = true" data-vmid="checkad"></script><script data-vue-meta="ssr" type="application/ld+json" data-vmid="ldjson-schema">{"@context":"http:\/\/schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/habr.com\/ru\/post\/111102\/"},"headline":"Учимся готовить: Spring 3 MVC + Spring Security + Hibernate","datePublished":"2011-01-05T11:05:07+03:00","dateModified":"2013-12-29T20:47:17+04:00","author":{"@type":"Person","name":"Антон Щастный"},"publisher":{"@type":"Organization","name":"Habr","logo":{"@type":"ImageObject","url":"https:\/\/habrastorage.org\/webt\/a_\/lk\/9m\/a_lk9mjkccjox-zccjrpfolmkmq.png"}},"description":"Добрый день! Меня зовут Антон Щастный.  Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему уч...","url":"https:\/\/habr.com\/ru\/post\/111102\/#post-content-body","about":["h_java","f_develop"],"image":["https:\/\/habrastorage.org\/getpro\/habr\/post_images\/647\/324\/2c8\/6473242c8f6bc178b6586548cdeebda8.png","https:\/\/habrastorage.org\/getpro\/habr\/post_images\/ab6\/a57\/aa1\/ab6a57aa142814c22f492e539d8ec601.png","https:\/\/raw.github.com\/schastny\/habraposts\/master\/111102\/3.png","https:\/\/raw.github.com\/schastny\/habraposts\/master\/111102\/4.png","https:\/\/habrastorage.org\/getpro\/habr\/post_images\/8dd\/f6d\/84c\/8ddf6d84c099d1f480c0f006324b21a2.png"]}</script>
+  <script src="//www.googletagservices.com/tag/js/gpt.js" async></script>
+  <style>.grecaptcha-badge{visibility: hidden;}</style>
+  <meta name="habr-version" content="2.47.1">
+  
+  <meta data-vue-meta="ssr" property="fb:app_id" content="444736788986613"><meta data-vue-meta="ssr" property="fb:pages" content="472597926099084"><meta data-vue-meta="ssr" name="twitter:card" content="summary_large_image"><meta data-vue-meta="ssr" name="twitter:site" content="@habr_eng"><meta data-vue-meta="ssr" property="og:title" content="Учимся готовить: Spring 3 MVC + Spring Security + Hibernate" data-vmid="og:title"><meta data-vue-meta="ssr" name="twitter:title" content="Учимся готовить: Spring 3 MVC + Spring Security + Hibernate" data-vmid="twitter:title"><meta data-vue-meta="ssr" name="aiturec:title" content="Учимся готовить: Spring 3 MVC + Spring Security + Hibernate" data-vmid="aiturec:title"><meta data-vue-meta="ssr" name="description" content="Добрый день! Меня зовут Антон Щастный.
+
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с..." data-vmid="description"><meta data-vue-meta="ssr" itemprop="description" content="Добрый день! Меня зовут Антон Щастный.
+
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с..." data-vmid="description:itemprop"><meta data-vue-meta="ssr" property="og:description" content="Добрый день! Меня зовут Антон Щастный.
+
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с..." data-vmid="og:description"><meta data-vue-meta="ssr" name="twitter:description" content="Добрый день! Меня зовут Антон Щастный.
+
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с..." data-vmid="twitter:description"><meta data-vue-meta="ssr" property="aiturec:description" content="Добрый день! Меня зовут Антон Щастный.
+
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с..." data-vmid="aiturec:description"><meta data-vue-meta="ssr" itemprop="image" content="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="image:itemprop"><meta data-vue-meta="ssr" property="og:image" content="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="og:image"><meta data-vue-meta="ssr" property="aiturec:image" content="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="aiturec:image"><meta data-vue-meta="ssr" name="twitter:image" content="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="twitter:image"><meta data-vue-meta="ssr" property="vk:image" content="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="vk:image"><meta data-vue-meta="ssr" property="aiturec:item_id" content="111102" data-vmid="aiturec:item_id"><meta data-vue-meta="ssr" property="aiturec:datetime" content="2011-01-05T08:05:07.000Z" data-vmid="aiturec:datetime"><meta data-vue-meta="ssr" property="og:type" content="article" data-vmid="og:type"><meta data-vue-meta="ssr" property="og:locale" content="ru_RU" data-vmid="og:locale"><meta data-vue-meta="ssr" property="og:image:width" content="1200" data-vmid="og:image:width"><meta data-vue-meta="ssr" property="og:image:height" content="630" data-vmid="og:image:height">
+  <link data-vue-meta="ssr" href="https://habr.com/ru/rss/post/111102/?fl=ru" type="application/rss+xml" title="" rel="alternate" name="rss"><link data-vue-meta="ssr" href="https://habr.com/ru/post/111102/" rel="canonical" data-vmid="canonical"><link data-vue-meta="ssr" data-vmid="hreflang"><link data-vue-meta="ssr" image_src="image" href="https://habr.com/share/publication/111102/578f8cfdf64174e31be56a3721d478ac/" data-vmid="image:href">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#303b44">
+  <meta name="msapplication-TileColor" content="#629FBC">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link
+    rel="shortcut icon"
+    type="image/png"
+    sizes="16x16"
+    href="https://assets.habr.com/habr-web/img/favicons/favicon-16.png"
+  >
+  <link
+    rel="shortcut icon"
+    type="image/png"
+    sizes="32x32"
+    href="https://assets.habr.com/habr-web/img/favicons/favicon-32.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="76x76"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-76.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="120x120"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-120.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="152x152"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-152.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="180x180"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-180.png"
+  >
+  <link
+    rel="apple-touch-icon"
+    type="image/png"
+    sizes="256x256"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-256.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1136x640.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2436x1125.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1792x828.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_828x1792.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1334x750.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1242x2668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2208x1242.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1125x2436.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1242x2208.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2732x2048.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2688x1242.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2224x1668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_750x1334.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2048x2732.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2388x1668.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1668x2224.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_640x1136.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1668x2388.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_2048x1536.png"
+  >
+  <link
+    rel="apple-touch-startup-image"
+    media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+    href="https://assets.habr.com/habr-web/img/splashes/splash_1536x2048.png"
+  >
+  <link
+    rel="mask-icon"
+    color="#77a2b6"
+    href="https://assets.habr.com/habr-web/img/favicons/apple-touch-icon-120.svg"
+  >
+  <link
+    crossorigin="use-credentials"
+    href="/manifest.webmanifest"
+    rel="manifest"
+  >
+</head>
+<body>
+
+
+<div id="app" data-server-rendered="true" data-async-called="true"><div class="tm-layout__wrapper"><!----> <div></div> <!----> <header class="tm-header"><div class="tm-page-width"><div class="tm-header__container"><!----> <span class="tm-header__logo-wrap"><a href="/ru/" class="tm-header__logo tm-header__logo_ru"><svg height="16" width="16" class="tm-svg-img tm-header__icon"><title>Хабр</title> <use xlink:href="/img/habr-logo-ru.svg#logo"></use></svg></a> <span class="tm-header__beta-sign" style="display:none;">β</span></span> <div class="tm-dropdown tm-header__projects"><div class="tm-dropdown__head"><button class="tm-header__dropdown-toggle"><svg height="16" width="16" class="tm-svg-img tm-header__icon tm-header__icon_dropdown"><title>Открыть список</title> <use xlink:href="/img/megazord-v24.cee85629.svg#arrow-down"></use></svg></button></div> <!----></div> <a href="/ru/sandbox/start/" class="tm-header__become-author-btn">
+              Как стать автором
+            </a> <div class="tm-feature tm-header__feature tm-feature_variant-inline"><!----></div> <!----> <!----></div></div></header> <div class="tm-layout"><div class="tm-page-progress-bar"></div> <div data-menu-sticky="true" class="tm-base-layout__header tm-base-layout__header_is-sticky"><div class="tm-page-width"><div class="tm-base-layout__header-wrapper"><div class="tm-main-menu"><div class="tm-main-menu__section"><nav class="tm-main-menu__section-content"><!----> <a href="/ru/all/" class="tm-main-menu__item">
+        Все потоки
+      </a> <a href="/ru/flows/develop/" class="tm-main-menu__item">
+          Разработка
+        </a><a href="/ru/flows/admin/" class="tm-main-menu__item">
+          Администрирование
+        </a><a href="/ru/flows/design/" class="tm-main-menu__item">
+          Дизайн
+        </a><a href="/ru/flows/management/" class="tm-main-menu__item">
+          Менеджмент
+        </a><a href="/ru/flows/marketing/" class="tm-main-menu__item">
+          Маркетинг
+        </a><a href="/ru/flows/popsci/" class="tm-main-menu__item">
+          Научпоп
+        </a></nav></div></div> <div class="tm-header-user-menu tm-base-layout__user-menu"><a href="/ru/search/" class="tm-header-user-menu__item tm-header-user-menu__search"><svg height="24" width="24" class="tm-svg-img tm-header-user-menu__icon tm-header-user-menu__icon_search tm-header-user-menu__icon_dark"><title>Поиск</title> <use xlink:href="/img/megazord-v24.cee85629.svg#search"></use></svg></a> <!----> <!----> <!----> <div class="tm-header-user-menu__item tm-header-user-menu__user_desktop"><div class="tm-dropdown"><div class="tm-dropdown__head"><svg height="24" width="24" data-test-id="menu-toggle-guest" class="tm-svg-img tm-header-user-menu__icon"><title>Профиль</title> <use xlink:href="/img/megazord-v24.cee85629.svg#header-user"></use></svg> <!----></div> <!----></div> <!----></div> <!----></div></div></div></div> <!----> <div class="tm-page-width"></div> <main class="tm-layout__container"><div hl="ru" data-async-called="true" class="tm-page"><div class="tm-page-width"><!----> <div class="tm-page__wrapper"><div class="tm-page__main tm-page__main_has-sidebar"><div class="pull-down"><div class="pull-down__header" style="height:0px;"><div class="pull-down__content" style="bottom:10px;"><svg height="24" width="24" class="tm-svg-img pull-down__arrow"><title>Обновить</title> <use xlink:href="/img/megazord-v24.cee85629.svg#pull-arrow"></use></svg></div></div> <!----> <div class="tm-page-article__body"><article class="tm-page-article__content tm-page-article__content_inner"><div class="tm-page-article__head-wrapper"><!----> <div class="tm-article-snippet tm-page-article__snippet"><div class="tm-article-snippet__meta-container"><div class="tm-article-snippet__meta"><span class="tm-user-info tm-article-snippet__author"><a href="/ru/users/schaan/" title="schaan" class="tm-user-info__userpic"><div class="tm-entity-image"><img alt="" height="24" loading="lazy" src="//habrastorage.org/r/w32/getpro/habr/avatars/9b1/881/a5e/9b1881a5e17e8a81ee416e5468b1fa4e.jpg" width="24" class="tm-entity-image__pic"></div></a> <span class="tm-user-info__user"><a href="/ru/users/schaan/" class="tm-user-info__username">
+      schaan
+    </a> </span></span> <span class="tm-article-snippet__datetime-published"><time datetime="2011-01-05T08:05:07.000Z" title="2011-01-05, 11:05">5  января  2011 в 11:05</time></span></div> <!----></div> <h1 lang="ru" class="tm-article-snippet__title tm-article-snippet__title_h1"><span>Учимся готовить: Spring 3 MVC + Spring Security + Hibernate</span></h1> <div class="tm-article-snippet__hubs"><span class="tm-article-snippet__hubs-item"><a href="/ru/hub/java/" class="tm-article-snippet__hubs-item-link"><span>Java</span> <span title="Профильный хаб" class="tm-article-snippet__profiled-hub">*</span></a></span></div> <!----> <!----> <!----></div></div> <!----> <div data-gallery-root="" lang="ru" class="tm-article-body"><div id="post-content-body" class="article-formatted-body article-formatted-body_version-1"><div xmlns="http://www.w3.org/1999/xhtml">Добрый день! Меня зовут Антон Щастный.<br/>
+<br/>
+Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с использованием фреймворка Spring и библиотеки Hibernate.<br/>
+<br/>
+<h3>Что будет в приложении:</h3><br/>
+Будет простой менеджер контактов, позволяющий добавлять в базу новые записи, просматривать имеющиеся, удалять ненужные. Сведения будут храниться в базе данных. Доступ к приложению – через веб, с аутентификацией и авторизацией пользователей.<br/>
+<br/>
+<h3>Что будем использовать:</h3><br/>
+<ul>
+<li>веб фреймворк Spring MVC, </li>
+<li>фреймворк Spring Security,</li>
+<li>ORM библиотеку Hibernate,</li>
+<li>MySQL в качестве СУБД.</li>
+</ul><br/>
+Инфраструктура:<br/>
+<ul>
+<li>редактор SpringSource Tool Suite,</li>
+<li>сборщик проектов Maven,</li>
+<li>система логгирования Log4j,</li>
+<li>постоянное подключение к интернету.</li>
+</ul><br/>
+<br/>
+В моей <a href="http://habrahabr.ru/blogs/java2ee/83860/">предыдущей статье о Spring MVC</a> был упущен ряд моментов по использованию аннотаций в Java-коде и применению Maven для сборки проекта. В данной статье я попытался исправить упущение. <br/>
+<br/>
+<i>Цель статьи – показать начинающим веб разработчикам совместное использование различных технологий платформы Java.</i><br/>
+<br/>
+<a name="habracut"></a><br/>
+<h1>Содержание</h1><br/>
+<ol>
+<li>Создание нового проекта в IDE.</li>
+<li>Создание структуры пакетов.</li>
+<li>Добавление класса сущности в модель домена.</li>
+<li>Слой доступа к данным.</li>
+<li>Сервис-слой.</li>
+<li>Добавление веб.</li>
+<li>Контроллер.</li>
+<li>Вид.</li>
+<li>Запуск приложения.</li>
+<li>Безопасность.</li>
+<li>Заключение.</li>
+</ol><br/>
+<br/>
+<img src="/img/image-loader.svg" alt="Архитектура разрабатываемого приложения." data-src="https://habrastorage.org/getpro/habr/post_images/647/324/2c8/6473242c8f6bc178b6586548cdeebda8.png"/><br/>
+Архитектура разрабатываемого приложения.<br/>
+<br/>
+<h1>1. Создание нового проекта в IDE</h1><br/>
+<br/>
+Проект будем разрабатывать в <a href="http://www.springsource.com/developer/sts">SpringSource Tool Suite</a> (STS) – удобном редакторе, основанном на Eclipse IDE. <br/>
+<br/>
+После установки STS создадим шаблонный проект: <br/>
+<i>File > New > Spring Template Project > Spring MVC Project.</i><br/>
+<br/>
+Project name: <i>ContactManager</i><br/>
+Top level package: <i>net.schastny.contactmanager</i><br/>
+<br/>
+<img src="/img/image-loader.svg" alt="STS" data-src="https://habrastorage.org/getpro/habr/post_images/ab6/a57/aa1/ab6a57aa142814c22f492e539d8ec601.png"/><br/>
+<br/>
+Редактор создаст шаблонный веб проект с базовыми настройками, имеющий следующую структуру:<br/>
+<table border="1">
+<tbody>
+<tr>
+<td>src/main/java</td>
+<td>Java-классы приложения.</td>
+</tr>
+<tr>
+<td>src/main/resources</td>
+<td>Все остальные файлы (ресурсы), необходимые для работы: например файл настроек логгера <i>log4j.xml</i>, папка <i>META-INF</i>.</td>
+</tr>
+<tr>
+<td>src/test/java</td>
+<td>Папка для тестов JUnit.</td>
+</tr>
+<tr>
+<td>src/test/resources</td>
+<td>Папка ресурсов юнит-тестов.</td>
+</tr>
+<tr>
+<td>src/main/webapp</td>
+<td>Папка, в которой размещаются файлы веб составляющей менеджера контактов: дескриптор развёртывания приложения web.xml, xml-файлы с настройками фреймворка Spring, jsp-страницы. <br/>
+<i>Внимание, статические ресурсы приложения: картинки, css, js-скрипты лежат в папке resources.</i></td>
+</tr>
+<tr>
+<td>pom.xml</td>
+<td>Файл настроек проекта для Maven’а, содержит наименование проекта и перечень зависимостей проекта от сторонних библиотек.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+Поменяем в настройках проекта (pom.xml) версию Spring с <i>3.0.4.RELEASE</i> на <i>3.0.5.RELEASE</i>.<br/>
+<br/>
+Примечание: как создавать Maven-проекты вне IDE читайте <a href="http://habrahabr.ru/blogs/java/77382/">здесь</a>.<br/>
+<br/>
+<h1>2. Создание структуры пакетов</h1><br/>
+<table border="1">
+<tbody>
+<tr>
+<td>net.schastny.contactmanager.dao</td>
+<td><b>Слой доступа к данным.</b> <br/>
+В нём будем размещать Data Access Objects – объекты доступа к данным.</td>
+</tr>
+<tr>
+<td>net.schastny.contactmanager.domain</td>
+<td><b>Доменный слой.</b> <br/>
+Именно здесь лежат POJO-классы, описывающие объекты-сущности системы. В нашем случае это класс Contact.</td>
+</tr>
+<tr>
+<td>net.schastny.contactmanager.service</td>
+<td><b>Сервис-слой приложения.</b><br/>
+Содержит интерфейсы, в которых описан функционал приложения. Также содержит одну или несколько практических реализаций этих интерфейсов.</td>
+</tr>
+<tr>
+<td>net.schastny.contactmanager.web</td>
+<td><b>Веб-слой приложения.</b><br/>
+Здесь лежат классы-контроллеры, описывающие порядок взаимодействия пользователя с системой через веб.</td>
+</tr>
+</tbody>
+</table><br/>
+Примечание: класс-контроллер, созданный редактором, можно удалить.<br/>
+<br/>
+<h1>3. Добавление класса сущности в модель домена</h1><br/>
+<pre><code class="java">package net.schastny.contactmanager.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "CONTACTS")
+public class Contact {
+
+	@Id
+	@Column(name = "ID")
+	@GeneratedValue
+	private Integer id;
+
+	@Column(name = "FIRSTNAME")
+	private String firstname;
+
+	@Column(name = "LASTNAME")
+	private String lastname;
+
+	@Column(name = "EMAIL")
+	private String email;
+
+	@Column(name = "TELEPHONE")
+	private String telephone;
+
+	// Getters and setters
+}
+</code></pre><br/>
+Не забудьте добавить методы геттеры и сеттеры для свойств бина.<br/>
+<br/>
+Добавим зависимости проекта в файл <i>pom.xml</i>. Обратите внимание, что класс из модели домена не будет зависить ни от Спринга, ни от Хибернейта.<br/>
+<pre><code class="xml">		&lt;dependency>
+			&lt;groupId>javax.persistence&lt;/groupId>
+			&lt;artifactId>persistence-api&lt;/artifactId>
+			&lt;version>1.0&lt;/version>
+		&lt;/dependency>
+</code></pre><br/>
+Пояснение к использованным аннотациям.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td><code>@Entity</code></td>
+<td>Класс представляет объект, который нужно долговременно хранить.</td>
+</tr>
+<tr>
+<td><code>@Table(name = "CONTACTS")</code></td>
+<td>Свойства класса будем хранить в таблице CONTACTS.</td>
+</tr>
+<tr>
+<td><code>@Column(name = "FIRSTNAME")</code></td>
+<td>Это свойство будет храниться в столбце firstname.</td>
+</tr>
+<tr>
+<td><code>@Id</code></td>
+<td>Это поле уникальное для объектов, то есть по нему будем искать объекты.</td>
+</tr>
+<tr>
+<td><code>@GeneratedValue</code></td>
+<td>Значение этого поля будет назначаться не нами, а генерироваться автоматически.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+<h1>4. Слой доступа к данным</h1><br/>
+Интерфейс и практическая реализация объекта доступа к данным.<br/>
+<pre><code class="java">package net.schastny.contactmanager.dao;
+
+import java.util.List;
+import net.schastny.contactmanager.domain.Contact;
+
+public interface ContactDAO {
+
+	public void addContact(Contact contact);
+
+	public List&lt;Contact> listContact();
+
+	public void removeContact(Integer id);
+}
+</code></pre><br/>
+<pre><code class="java">package net.schastny.contactmanager.dao;
+
+import java.util.List;
+
+import net.schastny.contactmanager.domain.Contact;
+
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ContactDAOImpl implements ContactDAO {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void addContact(Contact contact) {
+		sessionFactory.getCurrentSession().save(contact);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List&lt;Contact> listContact() {
+
+		return sessionFactory.getCurrentSession().createQuery("from Contact")
+			.list();
+	}
+
+	public void removeContact(Integer id) {
+		Contact contact = (Contact) sessionFactory.getCurrentSession().load(
+				Contact.class, id);
+		if (null != contact) {
+			sessionFactory.getCurrentSession().delete(contact);
+		}
+
+	}
+}
+</code></pre><br/>
+Обновим зависимости проекта в файле <i>pom.xml</i>. Добавим Хибернейт.<br/>
+<pre><code class="xml">		&lt;dependency>
+			&lt;groupId>org.hibernate&lt;/groupId>
+			&lt;artifactId>hibernate-core&lt;/artifactId>
+			&lt;version>3.3.2.GA&lt;/version>
+		&lt;/dependency>
+		&lt;dependency>
+			&lt;groupId>org.hibernate&lt;/groupId>
+			&lt;artifactId>hibernate-annotations&lt;/artifactId>
+			&lt;version>3.3.1.GA&lt;/version>
+		&lt;/dependency>
+		&lt;dependency>
+			&lt;groupId>org.hibernate&lt;/groupId>
+			&lt;artifactId>hibernate-commons-annotations&lt;/artifactId>
+			&lt;version>3.3.0.ga&lt;/version>
+		&lt;/dependency>
+</code></pre><br/>
+Пояснение к использованным аннотациям.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td><code>@Repository</code></td>
+<td>Аннотация показывает, что класс функционирует как репозиторий и требует наличия прозрачной трансляции исключений. Преимуществом трансляции исключений является то, что слой сервиса будет иметь дело с общей иерархией исключений от Спринга (DataAccessException) вне зависимости от используемых технологий доступа к данным в DAO слое.</td>
+</tr>
+<tr>
+<td><code>@Autowired</code></td>
+<td>Аннотация позволяет автоматически установить значение поля SessionFactory.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+<h1>5. Сервис-слой</h1><br/>
+Опишем интерфейс взаимодействия пользователя с системой.<br/>
+<pre><code class="java">package net.schastny.contactmanager.service;
+
+import java.util.List;
+import net.schastny.contactmanager.domain.Contact;
+
+public interface ContactService {
+
+	public void addContact(Contact contact);
+
+	public List&lt;Contact> listContact();
+
+	public void removeContact(Integer id);
+}
+</code></pre><br/>
+Практическая реализация интерфейса сервиса – класс ContactServiceImpl.java.<br/>
+<pre><code class="java">package net.schastny.contactmanager.service;
+ 
+import java.util.List;
+ 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+ 
+import net.schastny.contactmanager.dao.ContactDAO;
+import net.schastny.contactmanager.domain.Contact;
+ 
+@Service
+public class ContactServiceImpl implements ContactService {
+ 
+    @Autowired
+    private ContactDAO contactDAO;
+ 
+    @Transactional
+    public void addContact(Contact contact) {
+        contactDAO.addContact(contact);
+    }
+ 
+    @Transactional
+    public List&lt;Contact> listContact() {
+ 
+        return contactDAO.listContact();
+    }
+ 
+    @Transactional
+    public void removeContact(Integer id) {
+        contactDAO.removeContact(id);
+    }
+}
+</code></pre><br/>
+Обновим зависимости проекта в файле <i>pom.xml</i>. Добавим поддержку транзакций. <br/>
+<pre><code class="xml">		&lt;dependency>
+			&lt;groupId>org.springframework&lt;/groupId>
+			&lt;artifactId>spring-tx&lt;/artifactId>
+			&lt;version>${org.springframework-version}&lt;/version>
+		&lt;/dependency>
+
+		&lt;dependency>
+			&lt;groupId>org.springframework&lt;/groupId>
+			&lt;artifactId>spring-orm&lt;/artifactId>
+			&lt;version>${org.springframework-version}&lt;/version>
+		&lt;/dependency>
+</code></pre><br/>
+Пояснение к использованным аннотациям.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td>@Service</td>
+<td>Мы используем данную аннотацию, чтобы объявить, что этот класс представляет сервис – компонент сервис-слоя. Сервис является подтипом класса  @Component. Использование данной аннотации позволит искать бины-сервисы автоматически (смотрите далее в root-context.xml).</td>
+</tr>
+<tr>
+<td>@Transactional</td>
+<td>Перед исполнением метода помеченного данной аннотацией начинается транзакция, после выполнения метода транзакция коммитится, при выбрасывании RuntimeException откатывается.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+<h1>6. Добавление веб</h1><br/>
+Настройку веб приложения начнём с самого главного – с тьмы xml-файлов. В большом приложении очень удобно хранить различные настройки в разных файлах. <br/>
+<br/>
+После xml-портянок напишем простенький контроллер.<br/>
+<br/>
+Файлы настроек вы можете найти по ссылкам ниже.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td><a href="https://raw.github.com/schastny/habraposts/master/111102/web.xml">web.xml</a></td>
+<td>Это <b>дескриптор развертывания</b>. Файл, который описывает настройки развертывания приложения на сервере.</td>
+</tr>
+<tr>
+<td><a href="https://raw.github.com/schastny/habraposts/master/111102/root-context.xml">spring/root-context.xml</a></td>
+<td><b>Root Context</b>. Контекст всего приложения. Бины, описанные здесь, будут доступны всем сервлетам и фильтрам. Также здесь следует описывать бины безопасности и доступа к данным (в нашей конфигурации они вынесены в отдельные файлы).</td>
+</tr>
+<tr>
+<td><a href="https://raw.github.com/schastny/habraposts/master/111102/data.xml">spring/data.xml</a></td>
+<td>Файл с настройками <b>ресурсов для работы с данными</b>.</td>
+</tr>
+<tr>
+<td>spring/security.xml</td>
+<td>Файл с <b>настройками безопасности</b>.</td>
+</tr>
+<tr>
+<td><a href="https://raw.github.com/schastny/habraposts/master/111102/servlet-context.xml">spring/appServlet/servlet-context.xml</a></td>
+<td><b>DispatcherServlet Context</b>. Определяет настройки одного сервлета и бины, которые доступны только этому сервлету.</td>
+</tr>
+<tr>
+<td><a href="https://raw.github.com/schastny/habraposts/master/111102/controllers.xml">spring/appServlet/controllers.xml</a></td>
+<td>Файл с настройками <b>контроллеров</b> для данного сервлета.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+spring/security.xml<br/>
+<pre><code class="xml">&lt;beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+&lt;/beans:beans>
+</code></pre><br/>
+<br/>
+Пояснение к используемым бинам.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td>messageSource</td>
+<td>Бин для обеспечения интернациолизации приложения. Ниже мы создадим файлы <b>messages_en.properties</b> и <b>messages_ru.properties</b> с локализованными сообщениями на русском и английском.</td>
+</tr>
+<tr>
+<td>propertyConfigurer</td>
+<td>Для загрузки файла с настройками БД <b>jdbc.properties</b>.</td>
+</tr>
+<tr>
+<td>dataSource</td>
+<td><b>Датасорс</b>, используется для подключения к БД. Мы предоставляем класс jdbc-драйвера, имя пользователя, пароль, другие настройки.</td>
+</tr>
+<tr>
+<td>sessionFactory</td>
+<td>Это бин конфигурации Хибернейта. В файле <b>hibernate.cfg.xml</b> будут содержаться маппинги на классы сущностей.</td>
+</tr>
+<tr>
+<td>transactionManager</td>
+<td>Бин настройки <b>менеджера транзакций</b>. Мы используем менеджер транзакций для управления транзакциями приложения.</td>
+</tr>
+</tbody>
+</table><br/>
+Файлы:<br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/messages_en.properties">/src/main/resources/messages_en.properties</a><br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/messages_ru.properties">/src/main/resources/messages_ru.properties</a><br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/hibernate.cfg.xml">/src/main/resources/hibernate.cfg.xml</a><br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/jdbc.properties">WEB-INF/jdbc.properties</a><br/>
+<br/>
+<h1>7. Контроллер</h1><br/>
+<pre><code class="java">package net.schastny.contactmanager.web;
+
+import java.util.Map;
+
+import net.schastny.contactmanager.domain.Contact;
+import net.schastny.contactmanager.service.ContactService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class ContactController {
+
+	@Autowired
+	private ContactService contactService;
+
+	@RequestMapping("/index")
+	public String listContacts(Map&lt;String, Object> map) {
+
+		map.put("contact", new Contact());
+		map.put("contactList", contactService.listContact());
+
+		return "contact";
+	}
+	
+	@RequestMapping("/")
+	public String home() {
+		return "redirect:/index";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addContact(@ModelAttribute("contact") Contact contact,
+			BindingResult result) {
+
+		contactService.addContact(contact);
+
+		return "redirect:/index";
+	}
+
+	@RequestMapping("/delete/{contactId}")
+	public String deleteContact(@PathVariable("contactId") Integer contactId) {
+
+		contactService.removeContact(contactId);
+
+		return "redirect:/index";
+	}
+}
+</code></pre><br/>
+Пояснение к использованным аннотациям.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td>@Controller</td>
+<td>Аннотация используется для магического превращения любого java класса в класс контроллера.<br/>
+Данный класс представляет собой компонент, похожий на <i>обычный сервлет (HttpServlet)</i> (работающий с объектами HttpServletRequest и HttpServletResponse), но с расширенными возможностями по применению в MVC-приложениях.</td>
+</tr>
+<tr>
+<td>@RequestMapping</td>
+<td>Аннотация используется для маппинга урл-адреса запроса на указанный метод или класс. Запрос можно маппить как на метод класса, так и на целый класс. Допускается указывать конкретный HTTP-метод, который будет обрабатываться (GET/POST), передавать параметры запроса.</td>
+</tr>
+<tr>
+<td>@ModelAttribute</td>
+<td>Аннотация, связывающая параметр метода или возвращаемое значение метода с атрибутом модели, которая будет использоваться при выводе jsp-страницы.</td>
+</tr>
+<tr>
+<td>@PathVariable</td>
+<td>Аннотация, которая показывает, что параметр метода должен быть связан с переменной из урл-адреса.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+<h1>8. Вид</h1><br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/contact.jsp">/src/main/webapp/WEB-INF/views/contact.jsp</a><br/>
+<br/>
+<h1>9. Запуск приложения</h1><br/>
+До запуска системы нам необходимо сделать ещё две вещи:<br/>
+<br/>
+Во-первых, создать <b>базу данных для приложения</b> и пользователя под неё в соответствии с настройками файла <i>jdbc.properties</i>:<br/>
+<pre><code class="sql">CREATE USER contactmanager@localhost identified BY '1234';
+GRANT usage ON *.* TO contactmanager@localhost identified BY '1234';
+CREATE DATABASE IF NOT EXISTS contactmanager;
+GRANT ALL privileges ON contactmanager.* TO contactmanager@localhost;
+USE contactmanager;
+CREATE TABLE CONTACTS
+  (
+     id        INT PRIMARY KEY AUTO_INCREMENT,
+     firstname VARCHAR(30),
+     lastname  VARCHAR(30),
+     telephone VARCHAR(15),
+     email     VARCHAR(30),
+     created   TIMESTAMP DEFAULT NOW()
+  ); 
+</code></pre><br/>
+Во-вторых, обновить зависимости в <i>pom.xml</i>. <br/>
+<pre><code class="xml">		&lt;dependency>
+			&lt;groupId>mysql&lt;/groupId>
+			&lt;artifactId>mysql-connector-java&lt;/artifactId>
+			&lt;version>5.1.6&lt;/version>
+		&lt;/dependency>
+
+</code></pre><br/>
+Теперь запустим приложение на сервере: <i>ContactManager > Run As > Run on Server > SpringSource tc Server Developer Edition v2.0</i>.<br/>
+<br/>
+<img src="/img/image-loader.svg" data-src="https://raw.github.com/schastny/habraposts/master/111102/3.png"/><br/>
+<br/>
+Откройте адрес <a href="http://localhost:8080/ContactManager">http://localhost:8080/ContactManager</a> в браузере.<br/>
+<br/>
+<img src="/img/image-loader.svg" data-src="https://raw.github.com/schastny/habraposts/master/111102/4.png"/><br/>
+<br/>
+Примечание: Проверьте кодировку базы данных, таблиц в БД, соединения с БД, кодировку проекта в редакторе, так как вместо родных кириллических букв в браузере могут появиться кракозябры.<br/>
+<br/>
+Для отладки работы Хибернейта можете в файл <i>src/main/resources/log4j.xml</i> добавить следующую строку:<br/>
+<pre><code class="xml">	&lt;!--org.hibernate.SQL logger-->
+	&lt;logger name="org.hibernate">
+		&lt;level value="info"/>
+	&lt;/logger>
+</code></pre><br/>
+<h1>10. Безопасность</h1><br/>
+Обновим зависимости проекта в файле <i>pom.xml</i>. Добавим модули Spring Security.<br/>
+<pre><code class="xml">		&lt;dependency>
+			&lt;groupId>org.springframework.security&lt;/groupId>
+			&lt;artifactId>spring-security-web&lt;/artifactId>
+			&lt;version>${org.springframework-version}&lt;/version>
+		&lt;/dependency>
+		&lt;dependency>
+			&lt;groupId>org.springframework.security&lt;/groupId>
+			&lt;artifactId>spring-security-config&lt;/artifactId>
+			&lt;version>${org.springframework-version}&lt;/version>
+		&lt;/dependency>
+		&lt;dependency>
+			&lt;groupId>org.springframework.security&lt;/groupId>
+			&lt;artifactId>spring-security-core&lt;/artifactId>
+			&lt;version>${org.springframework-version}&lt;/version>
+		&lt;/dependency>
+</code></pre><br/>
+<br/>
+Добавим в <i>web.xml</i> фильтр безопасности, действующий на всё приложение.<br/>
+<pre><code class="xml">	&lt;filter>
+		&lt;filter-name>springSecurityFilterChain&lt;/filter-name>
+		&lt;filter-class>org.springframework.web.filter.DelegatingFilterProxy&lt;/filter-class>
+	&lt;/filter>
+	&lt;filter-mapping>
+		&lt;filter-name>springSecurityFilterChain&lt;/filter-name>
+		&lt;url-pattern>/*&lt;/url-pattern>
+	&lt;/filter-mapping>
+</code></pre><br/>
+<br/>
+В целях безопасности страницу логина <i>не следует помещать внутри папки WEB-INF</i>, так что разместим её в корне веб приложения – в папке webapp.<br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/login.jsp">webapp/login.jsp</a><br/>
+<br/>
+Там же разместим страницу ошибки 403: <a href="https://raw.github.com/schastny/habraposts/master/111102/error403.jsp">webapp/error403.jsp</a><br/>
+<br/>
+Подредактируем файл security.xml.<br/>
+<a href="https://raw.github.com/schastny/habraposts/master/111102/security.xml">security.xml</a><br/>
+<br/>
+<h4>Пояснение к сделанным настройкам в файле security.xml</h4><br/>
+Выделим в приложении три группы пользователей (роли пользователей): <br/>
+<ul>
+<li>анонимный пользователь (ROLE_ANONYMOUS), </li>
+<li>просто пользователь (ROLE_USER),</li>
+<li>администратор (ROLE_ADMIN). </li>
+</ul><br/>
+Разграничим доступ к приложению:<br/>
+<ul>
+<li>Сделаем возможность просматривать контакты доступной всем категориям пользователей.</li>
+<li>Добавлять новые контакты смогут только зарегистрированные пользователи.</li>
+<li>Удалять записи сможет только админ.</li>
+</ul><br/>
+<br/>
+<h4>Где хранить данные о пользователях</h4><br/>
+Можно прямо в конфигурационном файле, если их немного. Можно в базе данных, можно в LDAP-хранилище.<br/>
+<br/>
+Пример записи (<i>security.xml</i>) при использовании БД для хранения паролей.<br/>
+<pre><code class="xml">	&lt;authentication-manager>
+		&lt;authentication-provider>
+			&lt;jdbc-user-service data-source-ref="dataSource" />
+		&lt;/authentication-provider>
+	&lt;/authentication-manager>
+</code></pre><br/>
+<br/>
+Пояснения к некоторым элементам.<br/>
+<table border="1">
+<tbody>
+<tr>
+<td><pre><code class="xml">&lt;remember-me /></code></pre></td>
+<td>Поддержка мультисессии. После повторного запуска браузера не нужно заново логиниться.</td>
+</tr>
+<tr>
+<td><pre><code class="xml">&lt;anonymous username="guest" granted-authority="ROLE_ANONYMOUS" /></code></pre></td>
+<td>Определение анонимного пользователя и наделение его ролями, так чтобы с ним можно было работать, как с обыкновенным пользователем приложения.</td>
+</tr>
+<tr>
+<td><pre><code class="xml">&lt;password-encoder hash="md5" /></code></pre></td>
+<td>Хранение паролей в зашифрованном виде. <br/>
+В нашем приложении не используется.</td>
+</tr>
+</tbody>
+</table><br/>
+<br/>
+<h1>11. Заключение</h1><br/>
+Вот и всё! Осталось прикрутить дизайн, рюшечки на jQuery (<a href="http://anton.shevchuk.name/javascript/jquery-for-beginners/">статья для начинающих</a>) и продавать поделку за деньги. Но это, дорогие мои читатели, уже совсем другая история.<br/>
+<br/>
+После выполнения всех манипуляций у вас должна получиться следующая структура проекта:<br/>
+<img src="/img/image-loader.svg" alt="image" data-src="https://habrastorage.org/getpro/habr/post_images/8dd/f6d/84c/8ddf6d84c099d1f480c0f006324b21a2.png"/><br/>
+<br/>
+Буду признателен за указанные ошибки и неточности в статье.<br/>
+<br/>
+<h4>Использованные ресурсы:</h4><br/>
+1. Spring Recipes: A Problem-Solution Approach, Second Edition, Gary Mak, Ken Sipe, Josh Long, Daniel Rubio.<br/>
+2. <a href="http://viralpatel.net/blogs/2010/11/spring3-mvc-hibernate-maven-tutorial-eclipse-example.html">Create Spring 3 MVC Hibernate 3 Example using Maven in Eclipse</a>,<br/>
+3. The Spring Framework Reference Documentation,<br/>
+4. <a href="https://src.springframework.org/svn/spring-samples/mvc-showcase/MasteringSpringMVC3.pdf">Mastering Spring MVC 3 by Keith Donald</a>.<br/>
+<br/>
+Скачать готовый проект можно <a href="https://raw.github.com/schastny/habraposts/master/111102/contactmanager.tar.gz">здесь</a>, а базу данных для проекта — <a href="https://raw.github.com/schastny/habraposts/master/111102/contactmanagerdb.tar.gz">здесь</a>.</div></div> <!----> <!----></div> <div class="tm-article-body__tags"><div class="tm-article-body__tags-links"><span class="tm-article-body__tags-title">Теги:</span> <span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bspring%20framework%5D" class="tm-article-body__tags-item-link">spring framework</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bspring%20mvc%5D" class="tm-article-body__tags-item-link">spring mvc</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bspring%20security%5D" class="tm-article-body__tags-item-link">spring security</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5Bhibernate%5D" class="tm-article-body__tags-item-link">hibernate</a></span><span class="tm-article-body__tags-item"><a href="/ru/search/?target_type=posts&amp;order=relevance&amp;q=%5B%D0%BC%D0%BD%D0%BE%D0%B3%D0%B0%D0%B1%D1%83%D0%BA%D0%B0%D1%84%5D" class="tm-article-body__tags-item-link">многабукаф</a></span></div> <div class="tm-article-body__tags-links"><span class="tm-article-body__tags-title">Хабы:</span> <span class="tm-article-body__tags-item"><a href="/ru/hub/java/" class="tm-article-body__tags-item-link">
+                  Java
+                </a></span></div></div></article> <div class="tm-article__icons-wrapper"><div class="tm-data-icons tm-page-article__counters-panel"><div class="tm-article-rating tm-data-icons__item"><div class="tm-votes-meter tm-article-rating__votes-switcher"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_medium"><title>Всего голосов 43: ↑41 и ↓2</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 43: ↑41 и ↓2" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_medium">+39</span></div> <DIV class="v-portal" style="display:none;"></DIV></div> <!----> <!----> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    652
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/111102/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      52
+    </span></a> <!----></div> <div title="Поделиться" class="tm-sharing tm-data-icons__item"><button type="button" class="tm-sharing__button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tm-sharing__icon"><path fill="currentColor" d="M10.33.275l9.047 7.572a.2.2 0 010 .306l-9.048 7.572a.2.2 0 01-.328-.153V11c-8 0-9.94 6-9.94 6S-1 5 10 5V.428a.2.2 0 01.328-.153z"></path></svg></button> <!----></div> <DIV class="v-portal" style="display:none;"></DIV></div></div> <!----></div> <!----> <div class="tm-page-article__additional-blocks"><!----> <section class="tm-block tm-block_spacing-bottom"><!----> <div class="tm-block__body"><div class="tm-article-author tm-page-article__author"><!----> <div class="tm-user-card tm-article-author__user-card tm-user-card_variant-two-column"><div class="tm-user-card__info-container"><div class="tm-user-card__header"><div class="tm-user-card__header-data"><a href="/ru/users/schaan/" class="tm-user-card__userpic tm-user-card__userpic_size-40"><div class="tm-entity-image"><img alt="" src="//habrastorage.org/getpro/habr/avatars/9b1/881/a5e/9b1881a5e17e8a81ee416e5468b1fa4e.jpg" class="tm-entity-image__pic"></div></a> <div class="tm-user-card__meta"><div title=" 87 голосов " class="tm-karma tm-user-card__karma"><div class="tm-karma__votes tm-karma__votes_positive">
+    69
+  </div> <div class="tm-karma__text">
+    Карма
+  </div></div> <div title="Рейтинг пользователя" class="tm-rating tm-user-card__rating"><div class="tm-rating__header"> <div class="tm-rating__counter">0</div></div> <div class="tm-rating__text">
+    Рейтинг
+  </div></div></div></div></div> <div class="tm-user-card__info"><div class="tm-user-card__title"><span class="tm-user-card__name">Антон Щастный</span> <a href="/ru/users/schaan/" class="tm-user-card__nickname">
+          @schaan
+        </a> <!----></div> <p class="tm-user-card__short-info">Пользователь</p></div></div> <div class="tm-user-card__buttons tm-user-card__buttons_variant-two-column"><!----> <!----> <!----> <!----> <!----></div></div> <!----></div></div> <!----></section> <div class="tm-page-article__comments"><div class="tm-article-page-comments"><div class="tm-article-comments-counter-link tm-article-comments-counter-button"><a href="/ru/post/111102/comments/" class="tm-article-comments-counter-link__link tm-article-comments-counter-link__link_button-style"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon tm-article-comments-counter-link__icon_contrasted"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value tm-article-comments-counter-link__value_contrasted">
+       Комментарии 52 
+    </span></a> <!----></div></div></div> <div class="tm-ad-banner__container tm-page-article__banner"><!----> <div id="articleBottomBanner" class="tm-ad-banner"></div></div> <section class="tm-block tm-block_spacing-around"><header class="tm-block__header"><h2 class="tm-block__title">Похожие публикации</h2> <!----></header> <div class="tm-block__body"><ul class="tm-article-list-block__list"><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2019-12-09T06:57:47.000Z" title="2019-12-09, 09:57">9  декабря  2019 в 09:57</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/479286/" class="tm-article-title__link"><span>Пишем простое веб-приложение используя Spring MVC, Spring Data JPA и Hibernate</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 18: ↑11 и ↓7</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 18: ↑11 и ↓7" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+4</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">34K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    81
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/479286/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      5
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2015-12-08T06:28:56.000Z" title="2015-12-08, 09:28">8  декабря  2015 в 09:28</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/271719/" class="tm-article-title__link"><span>Spring MVC/Security, REST, Hibernate, Liquibase запускаем в две строки</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 9: ↑8 и ↓1</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 9: ↑8 и ↓1" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+7</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">37K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    231
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/271719/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      8
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2015-04-15T13:00:29.000Z" title="2015-04-15, 16:00">15  апреля  2015 в 16:00</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/255773/" class="tm-article-title__link"><span>Java-based конфигурирование embedded Jetty/Spring MVC/Spring Security</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 16: ↑9 и ↓7</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 16: ↑9 и ↓7" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+2</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">31K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    83
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/255773/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      7
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li> <!----></ul></div> <!----></section> <!----> <!----> <section class="tm-block tm-block_spacing-around"><header class="tm-block__header"><h2 class="tm-block__title">Лучшие публикации за сутки</h2> <!----></header> <div class="tm-block__body"><ul class="tm-article-list-block__list"><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-29T06:19:53.000Z" title="2021-09-29, 09:19">сегодня в 09:19</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/580582/" class="tm-article-title__link"><span>Конфиденциальность пользователей Telegram снова нарушена. Представители мессенджера требуют не раскрывать подробностей</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 184: ↑180 и ↓4</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 184: ↑180 и ↓4" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+176</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">28K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    26
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/580582/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      71
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-28T14:25:12.000Z" title="2021-09-28, 17:25">вчера в 17:25</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/580516/" class="tm-article-title__link"><span>Лучший язык программирования</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 168: ↑161 и ↓7</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 168: ↑161 и ↓7" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+154</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">39K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    182
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/580516/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      87
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-28T17:18:57.000Z" title="2021-09-28, 20:18">вчера в 20:18</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/post/580034/" class="tm-article-title__link"><span>Пыль, пылевые клещи и их аллергены. Профилактика и защита</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 62: ↑58 и ↓4</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 62: ↑58 и ↓4" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+54</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">11K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    61
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/post/580034/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      53
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-29T13:00:01.000Z" title="2021-09-29, 16:00">сегодня в 16:00</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/ruvds/blog/579972/" class="tm-article-title__link"><span>Апскейл, который смог</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 39: ↑39 и ↓0</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 39: ↑39 и ↓0" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+39</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">2K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    31
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/ruvds/blog/579972/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      9
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li><li class="tm-article-list-block__item"><article class="tm-article-snippet-block-block tm-article-snippet-block-block_preview"><div class="tm-article-snippet-block__user-meta"><div class="tm-article-snippet-block__date"><time datetime="2021-09-29T00:18:17.000Z" title="2021-09-29, 03:18">сегодня в 03:18</time></div></div> <h2 class="tm-article-title tm-article-title_block"><a href="/ru/company/selectel/blog/579530/" class="tm-article-title__link"><span>Лучше поздно, чем никогда: Microsoft решила продолжить историю Skype</span></a></h2> <div class="tm-data-icons"><!----> <div class="tm-votes-meter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-votes-meter__icon tm-votes-meter__icon_small"><title>Всего голосов 41: ↑39 и ↓2</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-rating"></use></svg> <span title="Всего голосов 41: ↑39 и ↓2" class="tm-votes-meter__value tm-votes-meter__value_positive tm-votes-meter__value_small">+37</span></div> <span title="Количество просмотров" class="tm-icon-counter tm-data-icons__item"><svg height="16" width="16" class="tm-svg-img tm-icon-counter__icon"><title>Просмотры</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-views"></use></svg> <span class="tm-icon-counter__value">16K</span></span> <button title="Добавить в закладки" type="button" class="bookmarks-button tm-data-icons__item"><span title="Добавить в закладки" class="tm-svg-icon__wrapper bookmarks-button__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Добавить в закладки</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-favorite"></use></svg></span> <span title="Количество пользователей, добавивших публикацию в закладки" class="bookmarks-button__counter">
+    8
+  </span></button> <div title="Читать комментарии" class="tm-article-comments-counter-link tm-data-icons__item"><a href="/ru/company/selectel/blog/579530/comments/" class="tm-article-comments-counter-link__link"><svg height="16" width="16" class="tm-svg-img tm-article-comments-counter-link__icon"><title>Комментарии</title> <use xlink:href="/img/megazord-v24.cee85629.svg#counter-comments"></use></svg> <span class="tm-article-comments-counter-link__value">
+      58
+    </span></a> <!----></div> <!----> <DIV class="v-portal" style="display:none;"></DIV></div></article></li> <!----></ul></div> <!----></section> <!----> <!----></div></div></div> <div class="tm-page__sidebar"><div hl="ru" id="111102" class="tm-layout-sidebar"><div class="tm-layout-sidebar__ads tm-layout-sidebar__ads_initial"><div class="tm-ad-banner__container tm-layout-sidebar__banner"><!----> <div id="sidebarBanner" class="tm-ad-banner"></div></div></div> <div class="tm-sexy-sidebar tm-sexy-sidebar_initial" style="margin-top:0px;"><!----></div></div></div></div></div></div></main> <!----></div> <div class="tm-footer-menu"><div class="tm-page-width"><div class="tm-footer-menu__container"><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Ваш аккаунт
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/kek/v1/auth/habrahabr/?back=/ru/post/111102/&amp;hl=ru" rel="nofollow" target="_self">
+                Войти
+              </a></li><li class="tm-footer-menu__list-item"><a href="/kek/v1/auth/habrahabr-register/?back=/ru/post/111102/&amp;hl=ru" rel="nofollow" target="_self">
+                Регистрация
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Разделы
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/ru/" class="footer-menu__item-link router-link-active">
+                Публикации
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/news/" class="footer-menu__item-link">
+                Новости
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/hubs/" class="footer-menu__item-link">
+                Хабы
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/companies/" class="footer-menu__item-link">
+                Компании
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/users/" class="footer-menu__item-link">
+                Авторы
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/sandbox/" class="footer-menu__item-link">
+                Песочница
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Информация
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="/ru/docs/help/" class="footer-menu__item-link">
+                Устройство сайта
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/authors/codex/" class="footer-menu__item-link">
+                Для авторов
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/companies/corpblogs/" class="footer-menu__item-link">
+                Для компаний
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/docs/docs/transparency/" class="footer-menu__item-link">
+                Документы
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://account.habr.com/info/agreement" target="_blank">
+                Соглашение
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://account.habr.com/info/confidential/" target="_blank">
+                Конфиденциальность
+              </a></li></ul></div></div><div class="tm-footer-menu__block"><h3 class="tm-footer-menu__block-title">
+          Услуги
+        </h3> <div class="tm-footer-menu__block-content"><ul class="tm-footer-menu__list"><li class="tm-footer-menu__list-item"><a href="https://docs.google.com/presentation/d/e/2PACX-1vQLwRfQmXibiUlWaRg-BAc38s7oM3lJiaPju7qmdJsp8ysIvZ_G-Npem0njJLMozE2bPHMpDqiI5hhy/pub?start=false&amp;loop=false&amp;delayms=60000&amp;slide=id.g91a03369cd_4_297" target="_blank">
+                Реклама
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://habrastorage.org/storage/stuff/habr/service_price.pdf" target="_blank">
+                Тарифы
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://docs.google.com/presentation/d/e/2PACX-1vQJJds8-Di7BQSP_guHxICN7woVYoN5NP_22ra-BIo4bqnTT9FR6fB-Ku2P0AoRpX0Ds-LRkDeAoD8F/pub?start=false&amp;loop=false&amp;delayms=60000" target="_blank">
+                Контент
+              </a></li><li class="tm-footer-menu__list-item"><a href="https://tmtm.timepad.ru/" target="_blank">
+                Семинары
+              </a></li><li class="tm-footer-menu__list-item"><a href="/ru/megaprojects/" class="footer-menu__item-link">
+                Мегапроекты
+              </a></li></ul></div></div></div></div></div> <div class="tm-footer"><div class="tm-page-width"><div class="tm-footer__container"><!----> <div class="tm-footer__social"><a href="https://www.facebook.com/habrahabr.ru" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Facebook</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-facebook"></use></svg></a><a href="https://twitter.com/habr_com" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Twitter</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-twitter"></use></svg></a><a href="https://vk.com/habr" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>VK</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-vkontakte"></use></svg></a><a href="https://telegram.me/habr_com" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Telegram</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-telegram"></use></svg></a><a href="https://www.youtube.com/channel/UCd_sTwKqVrweTt4oAKY5y4w" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Youtube</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-youtube"></use></svg></a><a href="https://zen.yandex.ru/habr" rel="nofollow noopener noreferrer" target="_blank" class="tm-svg-icon__wrapper tm-social-icons__icon"><svg height="16" width="16" class="tm-svg-img tm-svg-icon"><title>Яндекс Дзен</title> <use xlink:href="/img/social-icons-sprite.svg#social-logo-zen"></use></svg></a></div> <DIV class="v-portal" style="display:none;"></DIV> <button class="tm-footer__link"><!---->
+        Настройка языка
+      </button> <a href="/ru/about" class="tm-footer__link">
+        О сайте
+      </a> <a href="/ru/feedback/" class="tm-footer__link">
+        Техническая поддержка
+      </a> <!----> <a href="/berserk-mode-nope" class="tm-footer__link">
+        Вернуться на старую версию
+      </a> <div class="tm-footer-copyright"><span class="tm-copyright"><span class="tm-copyright__years">© 2006–2021 </span> <span class="tm-copyright__name">«<a href="https://company.habr.com/" rel="noopener" target="_blank" class="tm-copyright__link">Habr</a>»</span></span></div></div></div></div> <!----> <!----></div> <div class="vue-portal-target"></div></div>
+<script>window.__INITIAL_STATE__={"adblock":{"hasAcceptableAdsFilter":false,"hasAdblock":false},"articlesList":{"articlesList":{"111102":{"id":"111102","timePublished":"2011-01-05T08:05:07+00:00","isCorporative":false,"lang":"ru","titleHtml":"Учимся готовить: Spring 3 MVC + Spring Security + Hibernate","leadData":{"textHtml":"Добрый день! Меня зовут Антон Щастный.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЭто моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с использованием фреймворка Spring и библиотеки Hibernate.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch3\u003EЧто будет в приложении:\u003C\u002Fh3\u003E\u003Cbr\u002F\u003E\r\nБудет простой менеджер контактов, позволяющий добавлять в базу новые записи, просматривать имеющиеся, удалять ненужные. Сведения будут храниться в базе данных. Доступ к приложению – через веб, с аутентификацией и авторизацией пользователей.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch3\u003EЧто будем использовать:\u003C\u002Fh3\u003E\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003Eвеб фреймворк Spring MVC, \u003C\u002Fli\u003E\r\n\u003Cli\u003Eфреймворк Spring Security,\u003C\u002Fli\u003E\r\n\u003Cli\u003EORM библиотеку Hibernate,\u003C\u002Fli\u003E\r\n\u003Cli\u003EMySQL в качестве СУБД.\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\nИнфраструктура:\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003Eредактор SpringSource Tool Suite,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eсборщик проектов Maven,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eсистема логгирования Log4j,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eпостоянное подключение к интернету.\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ моей \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fblogs\u002Fjava2ee\u002F83860\u002F\"\u003Eпредыдущей статье о Spring MVC\u003C\u002Fa\u003E был упущен ряд моментов по использованию аннотаций в Java-коде и применению Maven для сборки проекта. В данной статье я попытался исправить упущение. \u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ci\u003EЦель статьи – показать начинающим веб разработчикам совместное использование различных технологий платформы Java.\u003C\u002Fi\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"editorVersion":"1.0","postType":"article","postLabels":[],"author":{"scoreStats":{"score":69,"votesCount":87},"rating":0,"relatedData":null,"contacts":[],"authorContacts":[],"paymentDetails":{"paymentYandexMoney":null,"paymentPayPalMe":null,"paymentWebmoney":null},"id":"48345","alias":"schaan","fullname":"Антон Щастный","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F9b1\u002F881\u002Fa5e\u002F9b1881a5e17e8a81ee416e5468b1fa4e.jpg","speciality":null},"statistics":{"commentsCount":52,"favoritesCount":652,"readingCount":343855,"score":39,"votesCount":43},"hubs":[{"relatedData":null,"id":"375","alias":"java","type":"collective","title":"Java","titleHtml":"Java","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"textHtml":"\u003Cdiv xmlns=\"http:\u002F\u002Fwww.w3.org\u002F1999\u002Fxhtml\"\u003EДобрый день! Меня зовут Антон Щастный.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nЭто моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с использованием фреймворка Spring и библиотеки Hibernate.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch3\u003EЧто будет в приложении:\u003C\u002Fh3\u003E\u003Cbr\u002F\u003E\r\nБудет простой менеджер контактов, позволяющий добавлять в базу новые записи, просматривать имеющиеся, удалять ненужные. Сведения будут храниться в базе данных. Доступ к приложению – через веб, с аутентификацией и авторизацией пользователей.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch3\u003EЧто будем использовать:\u003C\u002Fh3\u003E\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003Eвеб фреймворк Spring MVC, \u003C\u002Fli\u003E\r\n\u003Cli\u003Eфреймворк Spring Security,\u003C\u002Fli\u003E\r\n\u003Cli\u003EORM библиотеку Hibernate,\u003C\u002Fli\u003E\r\n\u003Cli\u003EMySQL в качестве СУБД.\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\nИнфраструктура:\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003Eредактор SpringSource Tool Suite,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eсборщик проектов Maven,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eсистема логгирования Log4j,\u003C\u002Fli\u003E\r\n\u003Cli\u003Eпостоянное подключение к интернету.\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ моей \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fblogs\u002Fjava2ee\u002F83860\u002F\"\u003Eпредыдущей статье о Spring MVC\u003C\u002Fa\u003E был упущен ряд моментов по использованию аннотаций в Java-коде и применению Maven для сборки проекта. В данной статье я попытался исправить упущение. \u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ci\u003EЦель статьи – показать начинающим веб разработчикам совместное использование различных технологий платформы Java.\u003C\u002Fi\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ca name=\"habracut\"\u003E\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Ch1\u003EСодержание\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Col\u003E\r\n\u003Cli\u003EСоздание нового проекта в IDE.\u003C\u002Fli\u003E\r\n\u003Cli\u003EСоздание структуры пакетов.\u003C\u002Fli\u003E\r\n\u003Cli\u003EДобавление класса сущности в модель домена.\u003C\u002Fli\u003E\r\n\u003Cli\u003EСлой доступа к данным.\u003C\u002Fli\u003E\r\n\u003Cli\u003EСервис-слой.\u003C\u002Fli\u003E\r\n\u003Cli\u003EДобавление веб.\u003C\u002Fli\u003E\r\n\u003Cli\u003EКонтроллер.\u003C\u002Fli\u003E\r\n\u003Cli\u003EВид.\u003C\u002Fli\u003E\r\n\u003Cli\u003EЗапуск приложения.\u003C\u002Fli\u003E\r\n\u003Cli\u003EБезопасность.\u003C\u002Fli\u003E\r\n\u003Cli\u003EЗаключение.\u003C\u002Fli\u003E\r\n\u003C\u002Fol\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cimg src=\"\u002Fimg\u002Fimage-loader.svg\" alt=\"Архитектура разрабатываемого приложения.\" data-src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F647\u002F324\u002F2c8\u002F6473242c8f6bc178b6586548cdeebda8.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\nАрхитектура разрабатываемого приложения.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E1. Создание нового проекта в IDE\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПроект будем разрабатывать в \u003Ca href=\"http:\u002F\u002Fwww.springsource.com\u002Fdeveloper\u002Fsts\"\u003ESpringSource Tool Suite\u003C\u002Fa\u003E (STS) – удобном редакторе, основанном на Eclipse IDE. \u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПосле установки STS создадим шаблонный проект: \u003Cbr\u002F\u003E\r\n\u003Ci\u003EFile \u003E New \u003E Spring Template Project \u003E Spring MVC Project.\u003C\u002Fi\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nProject name: \u003Ci\u003EContactManager\u003C\u002Fi\u003E\u003Cbr\u002F\u003E\r\nTop level package: \u003Ci\u003Enet.schastny.contactmanager\u003C\u002Fi\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cimg src=\"\u002Fimg\u002Fimage-loader.svg\" alt=\"STS\" data-src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002Fab6\u002Fa57\u002Faa1\u002Fab6a57aa142814c22f492e539d8ec601.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nРедактор создаст шаблонный веб проект с базовыми настройками, имеющий следующую структуру:\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Esrc\u002Fmain\u002Fjava\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EJava-классы приложения.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Esrc\u002Fmain\u002Fresources\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EВсе остальные файлы (ресурсы), необходимые для работы: например файл настроек логгера \u003Ci\u003Elog4j.xml\u003C\u002Fi\u003E, папка \u003Ci\u003EMETA-INF\u003C\u002Fi\u003E.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Esrc\u002Ftest\u002Fjava\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EПапка для тестов JUnit.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Esrc\u002Ftest\u002Fresources\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EПапка ресурсов юнит-тестов.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Esrc\u002Fmain\u002Fwebapp\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EПапка, в которой размещаются файлы веб составляющей менеджера контактов: дескриптор развёртывания приложения web.xml, xml-файлы с настройками фреймворка Spring, jsp-страницы. \u003Cbr\u002F\u003E\r\n\u003Ci\u003EВнимание, статические ресурсы приложения: картинки, css, js-скрипты лежат в папке resources.\u003C\u002Fi\u003E\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Epom.xml\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EФайл настроек проекта для Maven’а, содержит наименование проекта и перечень зависимостей проекта от сторонних библиотек.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПоменяем в настройках проекта (pom.xml) версию Spring с \u003Ci\u003E3.0.4.RELEASE\u003C\u002Fi\u003E на \u003Ci\u003E3.0.5.RELEASE\u003C\u002Fi\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПримечание: как создавать Maven-проекты вне IDE читайте \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fblogs\u002Fjava\u002F77382\u002F\"\u003Eздесь\u003C\u002Fa\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E2. Создание структуры пакетов\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Enet.schastny.contactmanager.dao\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EСлой доступа к данным.\u003C\u002Fb\u003E \u003Cbr\u002F\u003E\r\nВ нём будем размещать Data Access Objects – объекты доступа к данным.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Enet.schastny.contactmanager.domain\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EДоменный слой.\u003C\u002Fb\u003E \u003Cbr\u002F\u003E\r\nИменно здесь лежат POJO-классы, описывающие объекты-сущности системы. В нашем случае это класс Contact.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Enet.schastny.contactmanager.service\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EСервис-слой приложения.\u003C\u002Fb\u003E\u003Cbr\u002F\u003E\r\nСодержит интерфейсы, в которых описан функционал приложения. Также содержит одну или несколько практических реализаций этих интерфейсов.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Enet.schastny.contactmanager.web\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EВеб-слой приложения.\u003C\u002Fb\u003E\u003Cbr\u002F\u003E\r\nЗдесь лежат классы-контроллеры, описывающие порядок взаимодействия пользователя с системой через веб.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\nПримечание: класс-контроллер, созданный редактором, можно удалить.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E3. Добавление класса сущности в модель домена\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.domain;\n\nimport javax.persistence.Column;\nimport javax.persistence.Entity;\nimport javax.persistence.GeneratedValue;\nimport javax.persistence.Id;\nimport javax.persistence.Table;\n\n@Entity\n@Table(name = \"CONTACTS\")\npublic class Contact {\n\n\t@Id\n\t@Column(name = \"ID\")\n\t@GeneratedValue\n\tprivate Integer id;\n\n\t@Column(name = \"FIRSTNAME\")\n\tprivate String firstname;\n\n\t@Column(name = \"LASTNAME\")\n\tprivate String lastname;\n\n\t@Column(name = \"EMAIL\")\n\tprivate String email;\n\n\t@Column(name = \"TELEPHONE\")\n\tprivate String telephone;\n\n\t\u002F\u002F Getters and setters\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nНе забудьте добавить методы геттеры и сеттеры для свойств бина.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nДобавим зависимости проекта в файл \u003Ci\u003Epom.xml\u003C\u002Fi\u003E. Обратите внимание, что класс из модели домена не будет зависить ни от Спринга, ни от Хибернейта.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Ejavax.persistence&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Epersistence-api&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E1.0&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nПояснение к использованным аннотациям.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Entity\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EКласс представляет объект, который нужно долговременно хранить.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Table(name = \"CONTACTS\")\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EСвойства класса будем хранить в таблице CONTACTS.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Column(name = \"FIRSTNAME\")\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EЭто свойство будет храниться в столбце firstname.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Id\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EЭто поле уникальное для объектов, то есть по нему будем искать объекты.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@GeneratedValue\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EЗначение этого поля будет назначаться не нами, а генерироваться автоматически.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E4. Слой доступа к данным\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nИнтерфейс и практическая реализация объекта доступа к данным.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.dao;\n\nimport java.util.List;\nimport net.schastny.contactmanager.domain.Contact;\n\npublic interface ContactDAO {\n\n\tpublic void addContact(Contact contact);\n\n\tpublic List&lt;Contact\u003E listContact();\n\n\tpublic void removeContact(Integer id);\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.dao;\n\nimport java.util.List;\n\nimport net.schastny.contactmanager.domain.Contact;\n\nimport org.hibernate.SessionFactory;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Repository;\n\n@Repository\npublic class ContactDAOImpl implements ContactDAO {\n\n\t@Autowired\n\tprivate SessionFactory sessionFactory;\n\n\tpublic void addContact(Contact contact) {\n\t\tsessionFactory.getCurrentSession().save(contact);\n\t}\n\n\t@SuppressWarnings(\"unchecked\")\n\tpublic List&lt;Contact\u003E listContact() {\n\n\t\treturn sessionFactory.getCurrentSession().createQuery(\"from Contact\")\n\t\t\t.list();\n\t}\n\n\tpublic void removeContact(Integer id) {\n\t\tContact contact = (Contact) sessionFactory.getCurrentSession().load(\n\t\t\t\tContact.class, id);\n\t\tif (null != contact) {\n\t\t\tsessionFactory.getCurrentSession().delete(contact);\n\t\t}\n\n\t}\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nОбновим зависимости проекта в файле \u003Ci\u003Epom.xml\u003C\u002Fi\u003E. Добавим Хибернейт.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.hibernate&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Ehibernate-core&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E3.3.2.GA&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.hibernate&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Ehibernate-annotations&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E3.3.1.GA&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.hibernate&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Ehibernate-commons-annotations&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E3.3.0.ga&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nПояснение к использованным аннотациям.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Repository\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация показывает, что класс функционирует как репозиторий и требует наличия прозрачной трансляции исключений. Преимуществом трансляции исключений является то, что слой сервиса будет иметь дело с общей иерархией исключений от Спринга (DataAccessException) вне зависимости от используемых технологий доступа к данным в DAO слое.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ccode\u003E@Autowired\u003C\u002Fcode\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация позволяет автоматически установить значение поля SessionFactory.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E5. Сервис-слой\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nОпишем интерфейс взаимодействия пользователя с системой.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.service;\n\nimport java.util.List;\nimport net.schastny.contactmanager.domain.Contact;\n\npublic interface ContactService {\n\n\tpublic void addContact(Contact contact);\n\n\tpublic List&lt;Contact\u003E listContact();\n\n\tpublic void removeContact(Integer id);\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nПрактическая реализация интерфейса сервиса – класс ContactServiceImpl.java.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.service;\n \nimport java.util.List;\n \nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport org.springframework.transaction.annotation.Transactional;\n \nimport net.schastny.contactmanager.dao.ContactDAO;\nimport net.schastny.contactmanager.domain.Contact;\n \n@Service\npublic class ContactServiceImpl implements ContactService {\n \n    @Autowired\n    private ContactDAO contactDAO;\n \n    @Transactional\n    public void addContact(Contact contact) {\n        contactDAO.addContact(contact);\n    }\n \n    @Transactional\n    public List&lt;Contact\u003E listContact() {\n \n        return contactDAO.listContact();\n    }\n \n    @Transactional\n    public void removeContact(Integer id) {\n        contactDAO.removeContact(id);\n    }\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nОбновим зависимости проекта в файле \u003Ci\u003Epom.xml\u003C\u002Fi\u003E. Добавим поддержку транзакций. \u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.springframework&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Espring-tx&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E${org.springframework-version}&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\n\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.springframework&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Espring-orm&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E${org.springframework-version}&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nПояснение к использованным аннотациям.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@Service\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EМы используем данную аннотацию, чтобы объявить, что этот класс представляет сервис – компонент сервис-слоя. Сервис является подтипом класса  @Component. Использование данной аннотации позволит искать бины-сервисы автоматически (смотрите далее в root-context.xml).\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@Transactional\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EПеред исполнением метода помеченного данной аннотацией начинается транзакция, после выполнения метода транзакция коммитится, при выбрасывании RuntimeException откатывается.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E6. Добавление веб\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nНастройку веб приложения начнём с самого главного – с тьмы xml-файлов. В большом приложении очень удобно хранить различные настройки в разных файлах. \u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПосле xml-портянок напишем простенький контроллер.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nФайлы настроек вы можете найти по ссылкам ниже.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fweb.xml\"\u003Eweb.xml\u003C\u002Fa\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EЭто \u003Cb\u003Eдескриптор развертывания\u003C\u002Fb\u003E. Файл, который описывает настройки развертывания приложения на сервере.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Froot-context.xml\"\u003Espring\u002Froot-context.xml\u003C\u002Fa\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003ERoot Context\u003C\u002Fb\u003E. Контекст всего приложения. Бины, описанные здесь, будут доступны всем сервлетам и фильтрам. Также здесь следует описывать бины безопасности и доступа к данным (в нашей конфигурации они вынесены в отдельные файлы).\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fdata.xml\"\u003Espring\u002Fdata.xml\u003C\u002Fa\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EФайл с настройками \u003Cb\u003Eресурсов для работы с данными\u003C\u002Fb\u003E.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003Espring\u002Fsecurity.xml\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EФайл с \u003Cb\u003Eнастройками безопасности\u003C\u002Fb\u003E.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fservlet-context.xml\"\u003Espring\u002FappServlet\u002Fservlet-context.xml\u003C\u002Fa\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EDispatcherServlet Context\u003C\u002Fb\u003E. Определяет настройки одного сервлета и бины, которые доступны только этому сервлету.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fcontrollers.xml\"\u003Espring\u002FappServlet\u002Fcontrollers.xml\u003C\u002Fa\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EФайл с настройками \u003Cb\u003Eконтроллеров\u003C\u002Fb\u003E для данного сервлета.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nspring\u002Fsecurity.xml\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E&lt;beans:beans xmlns=\"http:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fsecurity\"\n\txmlns:beans=\"http:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fbeans\" xmlns:xsi=\"http:\u002F\u002Fwww.w3.org\u002F2001\u002FXMLSchema-instance\"\n\txsi:schemaLocation=\"http:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fbeans\nhttp:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fbeans\u002Fspring-beans-3.0.xsd\nhttp:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fsecurity\nhttp:\u002F\u002Fwww.springframework.org\u002Fschema\u002Fsecurity\u002Fspring-security-3.0.xsd\"\u003E\n\n&lt;\u002Fbeans:beans\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПояснение к используемым бинам.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003EmessageSource\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EБин для обеспечения интернациолизации приложения. Ниже мы создадим файлы \u003Cb\u003Emessages_en.properties\u003C\u002Fb\u003E и \u003Cb\u003Emessages_ru.properties\u003C\u002Fb\u003E с локализованными сообщениями на русском и английском.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003EpropertyConfigurer\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EДля загрузки файла с настройками БД \u003Cb\u003Ejdbc.properties\u003C\u002Fb\u003E.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003EdataSource\u003C\u002Ftd\u003E\r\n\u003Ctd\u003E\u003Cb\u003EДатасорс\u003C\u002Fb\u003E, используется для подключения к БД. Мы предоставляем класс jdbc-драйвера, имя пользователя, пароль, другие настройки.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003EsessionFactory\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EЭто бин конфигурации Хибернейта. В файле \u003Cb\u003Ehibernate.cfg.xml\u003C\u002Fb\u003E будут содержаться маппинги на классы сущностей.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003EtransactionManager\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EБин настройки \u003Cb\u003Eменеджера транзакций\u003C\u002Fb\u003E. Мы используем менеджер транзакций для управления транзакциями приложения.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\nФайлы:\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fmessages_en.properties\"\u003E\u002Fsrc\u002Fmain\u002Fresources\u002Fmessages_en.properties\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fmessages_ru.properties\"\u003E\u002Fsrc\u002Fmain\u002Fresources\u002Fmessages_ru.properties\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fhibernate.cfg.xml\"\u003E\u002Fsrc\u002Fmain\u002Fresources\u002Fhibernate.cfg.xml\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fjdbc.properties\"\u003EWEB-INF\u002Fjdbc.properties\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E7. Контроллер\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"java\"\u003Epackage net.schastny.contactmanager.web;\n\nimport java.util.Map;\n\nimport net.schastny.contactmanager.domain.Contact;\nimport net.schastny.contactmanager.service.ContactService;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Controller;\nimport org.springframework.validation.BindingResult;\nimport org.springframework.web.bind.annotation.ModelAttribute;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\n\n@Controller\npublic class ContactController {\n\n\t@Autowired\n\tprivate ContactService contactService;\n\n\t@RequestMapping(\"\u002Findex\")\n\tpublic String listContacts(Map&lt;String, Object\u003E map) {\n\n\t\tmap.put(\"contact\", new Contact());\n\t\tmap.put(\"contactList\", contactService.listContact());\n\n\t\treturn \"contact\";\n\t}\n\t\n\t@RequestMapping(\"\u002F\")\n\tpublic String home() {\n\t\treturn \"redirect:\u002Findex\";\n\t}\n\n\t@RequestMapping(value = \"\u002Fadd\", method = RequestMethod.POST)\n\tpublic String addContact(@ModelAttribute(\"contact\") Contact contact,\n\t\t\tBindingResult result) {\n\n\t\tcontactService.addContact(contact);\n\n\t\treturn \"redirect:\u002Findex\";\n\t}\n\n\t@RequestMapping(\"\u002Fdelete\u002F{contactId}\")\n\tpublic String deleteContact(@PathVariable(\"contactId\") Integer contactId) {\n\n\t\tcontactService.removeContact(contactId);\n\n\t\treturn \"redirect:\u002Findex\";\n\t}\n}\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nПояснение к использованным аннотациям.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@Controller\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация используется для магического превращения любого java класса в класс контроллера.\u003Cbr\u002F\u003E\r\nДанный класс представляет собой компонент, похожий на \u003Ci\u003Eобычный сервлет (HttpServlet)\u003C\u002Fi\u003E (работающий с объектами HttpServletRequest и HttpServletResponse), но с расширенными возможностями по применению в MVC-приложениях.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@RequestMapping\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация используется для маппинга урл-адреса запроса на указанный метод или класс. Запрос можно маппить как на метод класса, так и на целый класс. Допускается указывать конкретный HTTP-метод, который будет обрабатываться (GET\u002FPOST), передавать параметры запроса.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@ModelAttribute\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация, связывающая параметр метода или возвращаемое значение метода с атрибутом модели, которая будет использоваться при выводе jsp-страницы.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E@PathVariable\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EАннотация, которая показывает, что параметр метода должен быть связан с переменной из урл-адреса.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E8. Вид\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fcontact.jsp\"\u003E\u002Fsrc\u002Fmain\u002Fwebapp\u002FWEB-INF\u002Fviews\u002Fcontact.jsp\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E9. Запуск приложения\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nДо запуска системы нам необходимо сделать ещё две вещи:\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВо-первых, создать \u003Cb\u003Eбазу данных для приложения\u003C\u002Fb\u003E и пользователя под неё в соответствии с настройками файла \u003Ci\u003Ejdbc.properties\u003C\u002Fi\u003E:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"sql\"\u003ECREATE USER contactmanager@localhost identified BY '1234';\nGRANT usage ON *.* TO contactmanager@localhost identified BY '1234';\nCREATE DATABASE IF NOT EXISTS contactmanager;\nGRANT ALL privileges ON contactmanager.* TO contactmanager@localhost;\nUSE contactmanager;\nCREATE TABLE CONTACTS\n  (\n     id        INT PRIMARY KEY AUTO_INCREMENT,\n     firstname VARCHAR(30),\n     lastname  VARCHAR(30),\n     telephone VARCHAR(15),\n     email     VARCHAR(30),\n     created   TIMESTAMP DEFAULT NOW()\n  ); \n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nВо-вторых, обновить зависимости в \u003Ci\u003Epom.xml\u003C\u002Fi\u003E. \u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Emysql&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Emysql-connector-java&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E5.1.6&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\nТеперь запустим приложение на сервере: \u003Ci\u003EContactManager \u003E Run As \u003E Run on Server \u003E SpringSource tc Server Developer Edition v2.0\u003C\u002Fi\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cimg src=\"\u002Fimg\u002Fimage-loader.svg\" data-src=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002F3.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nОткройте адрес \u003Ca href=\"http:\u002F\u002Flocalhost:8080\u002FContactManager\"\u003Ehttp:\u002F\u002Flocalhost:8080\u002FContactManager\u003C\u002Fa\u003E в браузере.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Cimg src=\"\u002Fimg\u002Fimage-loader.svg\" data-src=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002F4.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПримечание: Проверьте кодировку базы данных, таблиц в БД, соединения с БД, кодировку проекта в редакторе, так как вместо родных кириллических букв в браузере могут появиться кракозябры.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nДля отладки работы Хибернейта можете в файл \u003Ci\u003Esrc\u002Fmain\u002Fresources\u002Flog4j.xml\u003C\u002Fi\u003E добавить следующую строку:\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t&lt;!--org.hibernate.SQL logger--\u003E\n\t&lt;logger name=\"org.hibernate\"\u003E\n\t\t&lt;level value=\"info\"\u002F\u003E\n\t&lt;\u002Flogger\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E10. Безопасность\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nОбновим зависимости проекта в файле \u003Ci\u003Epom.xml\u003C\u002Fi\u003E. Добавим модули Spring Security.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.springframework.security&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Espring-security-web&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E${org.springframework-version}&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.springframework.security&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Espring-security-config&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E${org.springframework-version}&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\t\t&lt;dependency\u003E\n\t\t\t&lt;groupId\u003Eorg.springframework.security&lt;\u002FgroupId\u003E\n\t\t\t&lt;artifactId\u003Espring-security-core&lt;\u002FartifactId\u003E\n\t\t\t&lt;version\u003E${org.springframework-version}&lt;\u002Fversion\u003E\n\t\t&lt;\u002Fdependency\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nДобавим в \u003Ci\u003Eweb.xml\u003C\u002Fi\u003E фильтр безопасности, действующий на всё приложение.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t&lt;filter\u003E\n\t\t&lt;filter-name\u003EspringSecurityFilterChain&lt;\u002Ffilter-name\u003E\n\t\t&lt;filter-class\u003Eorg.springframework.web.filter.DelegatingFilterProxy&lt;\u002Ffilter-class\u003E\n\t&lt;\u002Ffilter\u003E\n\t&lt;filter-mapping\u003E\n\t\t&lt;filter-name\u003EspringSecurityFilterChain&lt;\u002Ffilter-name\u003E\n\t\t&lt;url-pattern\u003E\u002F*&lt;\u002Furl-pattern\u003E\n\t&lt;\u002Ffilter-mapping\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ целях безопасности страницу логина \u003Ci\u003Eне следует помещать внутри папки WEB-INF\u003C\u002Fi\u003E, так что разместим её в корне веб приложения – в папке webapp.\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Flogin.jsp\"\u003Ewebapp\u002Flogin.jsp\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nТам же разместим страницу ошибки 403: \u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Ferror403.jsp\"\u003Ewebapp\u002Ferror403.jsp\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПодредактируем файл security.xml.\u003Cbr\u002F\u003E\r\n\u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fsecurity.xml\"\u003Esecurity.xml\u003C\u002Fa\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch4\u003EПояснение к сделанным настройкам в файле security.xml\u003C\u002Fh4\u003E\u003Cbr\u002F\u003E\r\nВыделим в приложении три группы пользователей (роли пользователей): \u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003Eанонимный пользователь (ROLE_ANONYMOUS), \u003C\u002Fli\u003E\r\n\u003Cli\u003Eпросто пользователь (ROLE_USER),\u003C\u002Fli\u003E\r\n\u003Cli\u003Eадминистратор (ROLE_ADMIN). \u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\nРазграничим доступ к приложению:\u003Cbr\u002F\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003EСделаем возможность просматривать контакты доступной всем категориям пользователей.\u003C\u002Fli\u003E\r\n\u003Cli\u003EДобавлять новые контакты смогут только зарегистрированные пользователи.\u003C\u002Fli\u003E\r\n\u003Cli\u003EУдалять записи сможет только админ.\u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch4\u003EГде хранить данные о пользователях\u003C\u002Fh4\u003E\u003Cbr\u002F\u003E\r\nМожно прямо в конфигурационном файле, если их немного. Можно в базе данных, можно в LDAP-хранилище.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПример записи (\u003Ci\u003Esecurity.xml\u003C\u002Fi\u003E) при использовании БД для хранения паролей.\u003Cbr\u002F\u003E\r\n\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E\t&lt;authentication-manager\u003E\n\t\t&lt;authentication-provider\u003E\n\t\t\t&lt;jdbc-user-service data-source-ref=\"dataSource\" \u002F\u003E\n\t\t&lt;\u002Fauthentication-provider\u003E\n\t&lt;\u002Fauthentication-manager\u003E\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПояснения к некоторым элементам.\u003Cbr\u002F\u003E\r\n\u003Ctable border=\"1\"\u003E\r\n\u003Ctbody\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E&lt;remember-me \u002F\u003E\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EПоддержка мультисессии. После повторного запуска браузера не нужно заново логиниться.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E&lt;anonymous username=\"guest\" granted-authority=\"ROLE_ANONYMOUS\" \u002F\u003E\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EОпределение анонимного пользователя и наделение его ролями, так чтобы с ним можно было работать, как с обыкновенным пользователем приложения.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003Ctr\u003E\r\n\u003Ctd\u003E\u003Cpre\u003E\u003Ccode class=\"xml\"\u003E&lt;password-encoder hash=\"md5\" \u002F\u003E\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\u003C\u002Ftd\u003E\r\n\u003Ctd\u003EХранение паролей в зашифрованном виде. \u003Cbr\u002F\u003E\r\nВ нашем приложении не используется.\u003C\u002Ftd\u003E\r\n\u003C\u002Ftr\u003E\r\n\u003C\u002Ftbody\u003E\r\n\u003C\u002Ftable\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch1\u003E11. Заключение\u003C\u002Fh1\u003E\u003Cbr\u002F\u003E\r\nВот и всё! Осталось прикрутить дизайн, рюшечки на jQuery (\u003Ca href=\"http:\u002F\u002Fanton.shevchuk.name\u002Fjavascript\u002Fjquery-for-beginners\u002F\"\u003Eстатья для начинающих\u003C\u002Fa\u003E) и продавать поделку за деньги. Но это, дорогие мои читатели, уже совсем другая история.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nПосле выполнения всех манипуляций у вас должна получиться следующая структура проекта:\u003Cbr\u002F\u003E\r\n\u003Cimg src=\"\u002Fimg\u002Fimage-loader.svg\" alt=\"image\" data-src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F8dd\u002Ff6d\u002F84c\u002F8ddf6d84c099d1f480c0f006324b21a2.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nБуду признателен за указанные ошибки и неточности в статье.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\n\u003Ch4\u003EИспользованные ресурсы:\u003C\u002Fh4\u003E\u003Cbr\u002F\u003E\r\n1. Spring Recipes: A Problem-Solution Approach, Second Edition, Gary Mak, Ken Sipe, Josh Long, Daniel Rubio.\u003Cbr\u002F\u003E\r\n2. \u003Ca href=\"http:\u002F\u002Fviralpatel.net\u002Fblogs\u002F2010\u002F11\u002Fspring3-mvc-hibernate-maven-tutorial-eclipse-example.html\"\u003ECreate Spring 3 MVC Hibernate 3 Example using Maven in Eclipse\u003C\u002Fa\u003E,\u003Cbr\u002F\u003E\r\n3. The Spring Framework Reference Documentation,\u003Cbr\u002F\u003E\r\n4. \u003Ca href=\"https:\u002F\u002Fsrc.springframework.org\u002Fsvn\u002Fspring-samples\u002Fmvc-showcase\u002FMasteringSpringMVC3.pdf\"\u003EMastering Spring MVC 3 by Keith Donald\u003C\u002Fa\u003E.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nСкачать готовый проект можно \u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fcontactmanager.tar.gz\"\u003Eздесь\u003C\u002Fa\u003E, а базу данных для проекта — \u003Ca href=\"https:\u002F\u002Fraw.github.com\u002Fschastny\u002Fhabraposts\u002Fmaster\u002F111102\u002Fcontactmanagerdb.tar.gz\"\u003Eздесь\u003C\u002Fa\u003E.\u003C\u002Fdiv\u003E","tags":[{"titleHtml":"spring framework"},{"titleHtml":"spring mvc"},{"titleHtml":"spring security"},{"titleHtml":"hibernate"},{"titleHtml":"многабукаф"}],"metadata":{"stylesUrls":[],"scriptUrls":[],"shareImageUrl":"https:\u002F\u002Fhabr.com\u002Fshare\u002Fpublication\u002F111102\u002F578f8cfdf64174e31be56a3721d478ac\u002F","shareImageWidth":1200,"shareImageHeight":630,"vkShareImageUrl":"https:\u002F\u002Fhabr.com\u002Fshare\u002Fpublication\u002F111102\u002F578f8cfdf64174e31be56a3721d478ac\u002F?format=vk","schemaJsonLd":"{\"@context\":\"http:\\\u002F\\\u002Fschema.org\",\"@type\":\"Article\",\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https:\\\u002F\\\u002Fhabr.com\\\u002Fru\\\u002Fpost\\\u002F111102\\\u002F\"},\"headline\":\"Учимся готовить: Spring 3 MVC + Spring Security + Hibernate\",\"datePublished\":\"2011-01-05T11:05:07+03:00\",\"dateModified\":\"2013-12-29T20:47:17+04:00\",\"author\":{\"@type\":\"Person\",\"name\":\"Антон Щастный\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Habr\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https:\\\u002F\\\u002Fhabrastorage.org\\\u002Fwebt\\\u002Fa_\\\u002Flk\\\u002F9m\\\u002Fa_lk9mjkccjox-zccjrpfolmkmq.png\"}},\"description\":\"Добрый день! Меня зовут Антон Щастный.  Это моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему уч...\",\"url\":\"https:\\\u002F\\\u002Fhabr.com\\\u002Fru\\\u002Fpost\\\u002F111102\\\u002F#post-content-body\",\"about\":[\"h_java\",\"f_develop\"],\"image\":[\"https:\\\u002F\\\u002Fhabrastorage.org\\\u002Fgetpro\\\u002Fhabr\\\u002Fpost_images\\\u002F647\\\u002F324\\\u002F2c8\\\u002F6473242c8f6bc178b6586548cdeebda8.png\",\"https:\\\u002F\\\u002Fhabrastorage.org\\\u002Fgetpro\\\u002Fhabr\\\u002Fpost_images\\\u002Fab6\\\u002Fa57\\\u002Faa1\\\u002Fab6a57aa142814c22f492e539d8ec601.png\",\"https:\\\u002F\\\u002Fraw.github.com\\\u002Fschastny\\\u002Fhabraposts\\\u002Fmaster\\\u002F111102\\\u002F3.png\",\"https:\\\u002F\\\u002Fraw.github.com\\\u002Fschastny\\\u002Fhabraposts\\\u002Fmaster\\\u002F111102\\\u002F4.png\",\"https:\\\u002F\\\u002Fhabrastorage.org\\\u002Fgetpro\\\u002Fhabr\\\u002Fpost_images\\\u002F8dd\\\u002Ff6d\\\u002F84c\\\u002F8ddf6d84c099d1f480c0f006324b21a2.png\"]}","metaDescription":"Добрый день! Меня зовут Антон Щастный.\r\n\r\nЭто моя очередная статья, посвящённая разработке веб приложений на Java. Хочу предложить вам сделать небольшую систему учёта клиентов, написанную с...","mainImageUrl":null,"amp":false},"polls":[],"commentsEnabled":true,"votesEnabled":true,"status":"published","plannedPublishTime":null,"checked":null,"isEditorial":false},"578690":{"id":"578690","timePublished":"2021-09-29T09:00:02+00:00","isCorporative":true,"lang":"ru","titleHtml":"Пишем драйвер виртуального EEPROM для STM32F030","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"1705055","alias":"Neoprog","fullname":"Алексей","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F829\u002F06a\u002F3e1\u002F82906a3e13b5a04dee9b4deead9ffd8c.png","speciality":"Инженер-программист"},"statistics":{"commentsCount":16,"favoritesCount":44,"readingCount":1344,"score":33,"votesCount":35},"hubs":[{"relatedData":null,"id":"19791","alias":"ruvds","type":"corporative","title":"Блог компании RUVDS.com","titleHtml":"Блог компании RUVDS.com","isProfiled":false},{"relatedData":null,"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"relatedData":null,"id":"19737","alias":"controllers","type":"collective","title":"Программирование микроконтроллеров","titleHtml":"Программирование микроконтроллеров","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F578690\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Ftn\u002Fn0\u002Fm6\u002Ftnn0m62rtstlnjf-sl8axn3zves.png\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E\u003Cbr\u003E\r\nКто хотел сохранять какие-либо данные в FLASH микроконтроллера во время работы устройства сталкивались с особенностями работы с этим видом памяти. Из-за необходимости стирания страницы большого объёма для перезаписи ячейки FLASH памяти, возникает угроза потери данных из-за отключения питания во время процесса обновления (один из вариантов). В этой статье я расскажу как можно упростить работу с FLASH, да и ещё с гарантией сохранения данных при прерывании процедуры обновления на любом этапе. Реализуем это на STM32F030.\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"veeprom"},{"titleHtml":"flash-память"},{"titleHtml":"ruvds_статьи"},{"titleHtml":"программирование микроконтроллеров"}]},"578788":{"id":"578788","timePublished":"2021-09-28T17:03:01+00:00","isCorporative":true,"lang":"ru","titleHtml":"Принцип работы планировщика задач в Linux","editorVersion":"1.0","postType":"article","postLabels":[{"type":"translation","data":{"originalAuthorName":"Eliran","originalUrl":"https:\u002F\u002Fcodingkaiser.blog\u002F2021\u002F09\u002F16\u002Fprocess-scheduling-in-linux\u002F"}}],"author":{"id":"2488151","alias":"Bright_Translate","fullname":"Дмитрий Брайт","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Ff9c\u002Fff9\u002F7d9\u002Ff9cff97d9c0677af28dab451897f88e4.jpg","speciality":"Переводчик"},"statistics":{"commentsCount":12,"favoritesCount":70,"readingCount":4768,"score":33,"votesCount":37},"hubs":[{"relatedData":null,"id":"19791","alias":"ruvds","type":"corporative","title":"Блог компании RUVDS.com","titleHtml":"Блог компании RUVDS.com","isProfiled":false},{"relatedData":null,"id":"221","alias":"sys_admin","type":"collective","title":"Системное администрирование","titleHtml":"Системное администрирование","isProfiled":true},{"relatedData":null,"id":"7289","alias":"nix","type":"collective","title":"*nix","titleHtml":"*nix","isProfiled":true},{"relatedData":null,"id":"19727","alias":"linux_dev","type":"collective","title":"Разработка под Linux","titleHtml":"Разработка под Linux","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F578788\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fhf\u002Fx2\u002Fht\u002Fhfx2htdiptolxklsfgogcobnvkc.png\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nПланирование – это процесс распределения ресурсов системы для выполнения задач. В статье мы рассмотрим его вариант, в котором ресурсом является одно или несколько ядер процессора, а задачи представлены потоками или процессами, которые нужно выполнить.","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"ruvds_перевод"},{"titleHtml":"linux"},{"titleHtml":"планировщик"}]},"579106":{"id":"579106","timePublished":"2021-09-29T09:02:01+00:00","isCorporative":true,"lang":"ru","titleHtml":"Геоанализ этажности Санкт-Петербурга алгоритмом KDE, или Как меняется облик города","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2652123","alias":"MaximML","fullname":"Максим","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F924\u002Fe65\u002Fe7f\u002F924e65e7f813ba32d53a7891fd45bc62.jpg","speciality":"Machine Learning"},"statistics":{"commentsCount":3,"favoritesCount":10,"readingCount":849,"score":12,"votesCount":16},"hubs":[{"relatedData":null,"id":"22390","alias":"citymobil","type":"corporative","title":"Блог компании Ситимобил","titleHtml":"Блог компании Ситимобил","isProfiled":false},{"relatedData":null,"id":"8000","alias":"algorithms","type":"collective","title":"Алгоритмы","titleHtml":"Алгоритмы","isProfiled":true},{"relatedData":null,"id":"17783","alias":"geo","type":"collective","title":"Геоинформационные сервисы","titleHtml":"Геоинформационные сервисы","isProfiled":true},{"relatedData":null,"id":"17795","alias":"bigdata","type":"collective","title":"Big Data","titleHtml":"Big Data","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВсем привет, меня зовут Максим Шаланкин, в Ситимобил я занимаюсь машинным обучением. Мы используем множество крутых алгоритмов для оптимизации наших сервисов и улучшения бизнес-процессов. В этой публикации я расскажу, как использовать в геоаналитике алгоритм ядерной оценки плотности (Kernel Density Estimation) и строить полигоны на карте, основываясь на распределении географических данных.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F68a\u002F80b\u002F38d\u002F68a80b38d498f5a6941119e81b1856b1.png","buttonTextHtml":"Врууум","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F68a\u002F80b\u002F38d\u002F68a80b38d498f5a6941119e81b1856b1.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"полигоны"},{"titleHtml":"аналитика"},{"titleHtml":"ядерная оценка плотности"},{"titleHtml":"kernel density estimation"},{"titleHtml":"kde"},{"titleHtml":"санкт-петербург"},{"titleHtml":"геоаналитика"},{"titleHtml":"геоданные"},{"titleHtml":"гео"}]},"579530":{"id":"579530","timePublished":"2021-09-29T00:18:17+00:00","isCorporative":true,"lang":"ru","titleHtml":"Лучше поздно, чем никогда: Microsoft решила продолжить историю Skype","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"2413033","alias":"kkxen","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fdeb\u002Fc7f\u002Fe41\u002Fdebc7fe41d3a22ed05b308e454b3f3fd.jpg","speciality":"Influencer-marketing manager"},"statistics":{"commentsCount":58,"favoritesCount":8,"readingCount":16407,"score":37,"votesCount":41},"hubs":[{"relatedData":null,"id":"14740","alias":"selectel","type":"corporative","title":"Блог компании Selectel","titleHtml":"Блог компании Selectel","isProfiled":false},{"relatedData":null,"id":"92","alias":"instant_messaging","type":"collective","title":"Мессенджеры","titleHtml":"Мессенджеры","isProfiled":true},{"relatedData":null,"id":"20688","alias":"research","type":"collective","title":"Исследования и прогнозы в IT","titleHtml":"Исследования и прогнозы в IT","isProfiled":false},{"relatedData":null,"id":"21906","alias":"history","type":"collective","title":"История IT","titleHtml":"История IT","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"3","alias":"management","title":"Менеджмент"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fpost_images\u002F8fc\u002Ff2b\u002F5e4\u002F8fcf2b5e48070f436d4ac6f9d4fe6558.png\"\u003E\u003C\u002Fdiv\u003E\u003Cbr\u003E\r\nКорпорация Microsoft приобрела VoIP-сервис Skype в 2011 году, можно сказать, на пике его популярности, за $8,5 млрд. И сейчас это огромная даже по меркам IT-отрасли сумма, а в 2011 году она была еще более внушительной. \u003Cbr\u003E\r\n\u003Cbr\u003E\r\nКомпания, по словам ее экс-руководителя Стива Баллмера, собиралась развивать вместе со Skype коммуникации, создав простую среду для общения друзей, родственников и коллег. В целом, все выглядело неплохо, ведь тогда количество пользователей составляло 663 млн человек, при должном старании Skype (а значит, и Microsoft) мог стать едва ли не монополистом среди коммуникационных инструментов. Но что-то пошло не так. \u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"skype"},{"titleHtml":"мессенджер"},{"titleHtml":"развитие"},{"titleHtml":"Microsoft"}]},"579626":{"id":"579626","timePublished":"2021-09-29T10:52:57+00:00","isCorporative":true,"lang":"ru","titleHtml":"Если крысе не давать спать, она умрёт через 3 недели — как работают мозг и сон","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"2221530","alias":"Asya_Dyu","fullname":"Анастасия","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Ffec\u002F943\u002F098\u002Ffec943098e84d65a162934040de8b9ed.gif","speciality":"Иллюстратор"},"statistics":{"commentsCount":1,"favoritesCount":57,"readingCount":4050,"score":21,"votesCount":21},"hubs":[{"relatedData":null,"id":"17357","alias":"timeweb","type":"corporative","title":"Блог компании Timeweb","titleHtml":"Блог компании Timeweb","isProfiled":false},{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21990","alias":"brain","type":"collective","title":"Мозг","titleHtml":"Мозг","isProfiled":false},{"relatedData":null,"id":"21996","alias":"health","type":"collective","title":"Здоровье","titleHtml":"Здоровье","isProfiled":false},{"relatedData":null,"id":"22750","alias":"biology","type":"collective","title":"Биология","titleHtml":"Биология","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002F8y\u002Fnt\u002Feg\u002F8ynteg9tee4b_rbudidreaw4ksm.gif\"\u003E\u003C\u002Fdiv\u003E\u003Cbr\u003E\r\nПосмотрела 2х-часовую \u003Ca href=\"https:\u002F\u002Fwww.youtube.com\u002Fwatch?v=Zdy9wy8N8Lo&amp;t=2s\" rel=\"nofollow noopener noreferrer\"\u003Eлекцию \u003C\u002Fa\u003Eпрофессора МГУ Вячеслава Дубынина про влияние сна на мозг и мозга на сон. Под катом конспект минут на 20 чтения. Если попытаться сжать до 1 минуты, то получится что-то вроде этого:\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Cul\u003E\r\n\u003Cli\u003EСколько нужно спать. Индивидуально, от 6 до 10 часов — для взрослого человека в пределах нормы.\u003C\u002Fli\u003E\r\n\u003Cli\u003E\u003Ca href=\"#Example\"\u003EГигиена сна\u003C\u002Fa\u003E — правила, чтобы нормально засыпать и высыпаться. (Просто якорь на слайд-список).\u003C\u002Fli\u003E\r\n\u003Cli\u003EБиологические часы — реальный физиологический процесс, который ориентируется на циркадные ритмы. Смена часовых поясов и работа по сменам «расшатывает» механизмы биологических часов. \u003C\u002Fli\u003E\r\n\u003Cli\u003EСпать надо ложиться не позже, чем… — фигня. Просто в одно и то же время.\u003C\u002Fli\u003E\r\n\u003Cli\u003EЕсли вы спите днем, купите себе хорошие шторы. Мелатонин коррелирует с освещением. Если в глаза (даже закрытые) светит солнце, вы не отдыхаете полноценно.\u003C\u002Fli\u003E\r\n\u003Cli\u003EСколько можно не спать. Без необратимых серьезных последствий взрослый человек выдержит до 4-х суток. \u003C\u002Fli\u003E\r\n\u003Cli\u003EСон делится на медленную и парадоксальную фазы. \u003C\u002Fli\u003E\r\n\u003Cli\u003EМедленная фаза сна — про очищение организма. Если нет медленной фазы сна, иммунитет, эндокринка, обменные процессы и гомеостаз идут лесом. Экспериментальные крысы умирают на 15-20 день без сна от воспаления, когда кишечные бактерии попадают в кровь.\u003C\u002Fli\u003E\r\n\u003Cli\u003EПарадоксальная фаза сна участвует в обработке информации. По уровню электрической активности мозга она близка к состоянию активного решения сложных задач. \u003C\u002Fli\u003E\r\n\u003Cli\u003EКогда правильно просыпаться. На переходе от парадоксальной фазы к медленной. \u003C\u002Fli\u003E\r\n\u003Cli\u003EКак определить на глаз, когда можно будить. Когда человек лежал спокойно и начал ворочаться, можно будить.\u003C\u002Fli\u003E\r\n\u003Cli\u003EКофеин не позволяет организму получить сигнал об усталости, но не дает дополнительную энергию.\u003C\u002Fli\u003E\r\n\u003Cli\u003EКак затормозить перевозбужденную нервную систему нежно. Фенобарбитал в малых дозах — корвалол, валокордин, валосердин. Противогистаминные препараты. \u003C\u002Fli\u003E\r\n\u003C\u002Ful\u003E\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"здоровье"},{"titleHtml":"сон"},{"titleHtml":"мозг"},{"titleHtml":"нейрофизиология"},{"titleHtml":"нейробиология"},{"titleHtml":"нейроны"}]},"579960":{"id":"579960","timePublished":"2021-09-28T17:50:38+00:00","isCorporative":false,"lang":"ru","titleHtml":"Архитектура Вселенной, часть 1: Сознание","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"248181","alias":"SergioShpadi","fullname":"Сергей Шпадырев","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F4c0\u002Fe3f\u002F7f3\u002F4c0e3f7f3dd535053b9bd3bbcc7fbfde.png","speciality":"Software Engineer"},"statistics":{"commentsCount":110,"favoritesCount":72,"readingCount":7320,"score":14,"votesCount":26},"hubs":[{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003E\u003Cem\u003E'По одной капле воды человек, умеющий мыслить логически, может сделать вывод о возможности существования Атлантического океана или Ниагарского водопада, даже если он не видал ни того, ни другого и никогда о них не слыхал' -&nbsp;Артур Конан-Дойль, «Этюд в багровых тонах».\u003C\u002Fem\u003E\u003C\u002Fp\u003E\u003Cp\u003EМеня всегда восхищали древние философы, которые не имея никаких инструментов познания мира кроме собственного разума, бесстрашно погружались в пучины тайн мироздания. С помощью одних лишь только рассуждений они обретали исключительно глубокое понимание принципов работы механизма Вселенной, тем самым расширяя наши представления о мире.\u003C\u002Fp\u003E\u003Cp\u003EТрудно переоценить влияние философии на науку, так как наука произошла именно от философии. Использующаяся для формализации процесса рассуждений математика стала первенцем философии. Даже сами слова \"философия\" и \"математика\" произошли из терминов религиозной школы одного из величайших философов античности - Пифагора. Физика, названию которой мы обязаны другому великому античному философу - Аристотелю, примерно до XVIII века именовалась натуральной философией. Ему же мы обязаны появлением логики - науки о мышлении. Кроме того, философы, изучавшие процесс познания и его ограничения, создали важнейший инструмент исследования природы - научный метод. \u003C\u002Fp\u003E\u003Cp\u003EДаже многие научные открытия последних веков были вдохновлены философией. Иоганн Кеплер, Николай Коперник и Исаак Ньютон вдохновлялись теорией о гармонии мира Пифагора, о чем сами и писали в своих научных трудах. Альберт Эйнштейн был ярым приверженцем философии средневекового философа Бенедикта Спинозы, но также считал себя в некотором смысле платоником и пифагорейцем. Один из основоположников квантовой механики Эрвин Шрёдингер написал целую книгу о том, как его открытия в квантовой механике согласуются с индийской философией веданты. \u003C\u002Fp\u003E\u003Cp\u003EДо сих пор в западных университетах всем специалистам в точных и естественных науках, успешно защитившим свою диссертацию, присваивают почетное звание доктора философии - \u003Cem\u003EPhilosophiæ Doctor\u003C\u002Fem\u003E, часто сокращаемое в речи и на письме до простого PhD. Тем самым университеты подчеркивают, что философия лежит в самом основании всего человеческого знания. Но чем именно занимается философия, в чем состоит её роль?\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fd13\u002Fd45\u002F8ea\u002Fd13d458ea0fe8e643a0444a0133f0472.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fd13\u002Fd45\u002F8ea\u002Fd13d458ea0fe8e643a0444a0133f0472.jpg","fit":"cover","positionY":53.409090909091,"positionX":3.974358974359}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"сознание"},{"titleHtml":"квалиа"},{"titleHtml":"философский зомби"},{"titleHtml":"цвет"},{"titleHtml":"дэвид чалмерс"},{"titleHtml":"шредингер"},{"titleHtml":"макс планк"},{"titleHtml":"спиноза"}]},"579972":{"id":"579972","timePublished":"2021-09-29T13:00:01+00:00","isCorporative":true,"lang":"ru","titleHtml":"Апскейл, который смог","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"410650","alias":"man_of_letters","fullname":null,"avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fb59\u002Fd10\u002Fcc4\u002Fb59d10cc4887ce1d5ac2382e5f034940.png","speciality":"Человек смыслов"},"statistics":{"commentsCount":9,"favoritesCount":31,"readingCount":2014,"score":39,"votesCount":39},"hubs":[{"relatedData":null,"id":"19791","alias":"ruvds","type":"corporative","title":"Блог компании RUVDS.com","titleHtml":"Блог компании RUVDS.com","isProfiled":false},{"relatedData":null,"id":"17175","alias":"image_processing","type":"collective","title":"Обработка изображений","titleHtml":"Обработка изображений","isProfiled":true},{"relatedData":null,"id":"19439","alias":"machine_learning","type":"collective","title":"Машинное обучение","titleHtml":"Машинное обучение","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"Термин «апскейл» используется для обозначения процесса увеличения разрешения цифровых изображений с фокусом на создание иллюзии «настоящего» высокого разрешения. Правда, 90% таких продуктов — это барахло, больше намёк на перспективы, чем волшебство. Недавно мои ручки добрались до двух алгоритмов повышения чёткости, которые оказались настолько хороши, что появилась эта статья. Будут субъективные и объективные тесты алгоритма Real-ESRGAN для увеличения разрешения и алгоритма GFPGAN для детализации лиц.\u003Cbr\u003E\r\n\u003Cblockquote\u003E\u003Cb\u003E\u003Cfont color=\"#3AC1EF\"\u003ETraffic_Warning:\u003C\u002Ffont\u003E\u003C\u002Fb\u003E в статье демонстрируется множество примеров.\u003C\u002Fblockquote\u003E\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fruvds\u002Fblog\u002F579972\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Feg\u002F1j\u002Fkt\u002Feg1jktqrr0hcjrqsua4rsxqqio0.jpeg\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"ruvds_статьи"},{"titleHtml":"машинное обучение"},{"titleHtml":"нейросети"},{"titleHtml":"искусственный интеллект"},{"titleHtml":"machine learning"},{"titleHtml":"upscale"},{"titleHtml":"Lancoz"},{"titleHtml":"Topaz Gigapixe"},{"titleHtml":"Real-ESRGAN"}]},"580034":{"id":"580034","timePublished":"2021-09-28T17:18:57+00:00","isCorporative":false,"lang":"ru","titleHtml":"Пыль, пылевые клещи и их аллергены. Профилактика и защита","editorVersion":"1.0","postType":"article","postLabels":[{"type":"tutorial","data":null}],"author":{"id":"1841275","alias":"steanlab","fullname":"Cергей Бесараб (Siarhei Besarab) EU1AEY","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F2d8\u002Fb91\u002F145\u002F2d8b911451a45b7d469e3eead16f750d.jpg","speciality":"Хабра-химик, турист, авантюрист и радиолюбитель :)"},"statistics":{"commentsCount":53,"favoritesCount":61,"readingCount":10972,"score":54,"votesCount":62},"hubs":[{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21996","alias":"health","type":"collective","title":"Здоровье","titleHtml":"Здоровье","isProfiled":false},{"relatedData":null,"id":"22010","alias":"Chemistry","type":"collective","title":"Химия","titleHtml":"Химия","isProfiled":false},{"relatedData":null,"id":"22012","alias":"Ecology","type":"collective","title":"Экология","titleHtml":"Экология","isProfiled":false},{"relatedData":null,"id":"22750","alias":"biology","type":"collective","title":"Биология","titleHtml":"Биология","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"Пыль и пылевые клещи в ней есть практически везде и всегда. Уничтожить их удается возможно только в условиях «чистых комнат» на производстве полупроводников. Приходится с этим мириться, и жить допуская, что все что нам под силу — уменьшить их количество. Считается, что если концентрация клещей &lt; 100 штук на грамм пыли — аллергия у большинства не возникает. После того как пришлось пару-тройку минут чихать без остановки — у меня накопилось достаточно злобы, чтобы \u003Ca href=\"https:\u002F\u002Ft.me\u002Fjoinchat\u002FAAAAAFFhzPKyiLO85pRxUA\" rel=\"nofollow noopener noreferrer\"\u003Eрассмотреть\u003C\u002Fa\u003E, что же представляет из себя пыль в квартире и что и кто в этой пыли живет. А теперь вот нашлось время, чтобы познакомить с «нашими маленькими друзьями» и читателей Хабра. В заметке рассуждения о некоторых особенностях биологии вездесущего домашнего паразита и методикам его контроля. То, что под катом можешь смело давать почитать жене, %username%!\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F580034\u002F\"\u003E\u003Cdiv style=\"text-align:center;\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fw0\u002F9u\u002Fzv\u002Fw09uzvckqowxlqadjnpx414mf6y.jpeg\"\u003E\u003C\u002Fdiv\u003E\u003C\u002Fa\u003E\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Дружно скажем НЕТ пыли и ее обитателям","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"пыль"},{"titleHtml":"пыль это"},{"titleHtml":"пыль под микроскопом"},{"titleHtml":"пыль аллергия"},{"titleHtml":"пыль бытовая"},{"titleHtml":"мебельные клещи"},{"titleHtml":"пыль в воздухе"},{"titleHtml":"пыль текстура"},{"titleHtml":"из чего состоит пыль"},{"titleHtml":"пыль откуда берется"},{"titleHtml":"пыль от постельного белья"},{"titleHtml":"пыль обветшания"},{"titleHtml":"пыль размер частиц"},{"titleHtml":"пыль уборка"},{"titleHtml":"пыль химический состав"},{"titleHtml":"пыль что это"},{"titleHtml":"что такое пыль"},{"titleHtml":"откуда берется пыль"},{"titleHtml":"пыль это кожа"},{"titleHtml":"пылевые клещи как избавиться"},{"titleHtml":"пылевые клещи аллергия"},{"titleHtml":"пылевые клещи размер"},{"titleHtml":"где живут пылевые клещи"},{"titleHtml":"пылевые клещи борьба с ними"},{"titleHtml":"пылевые клещи борьба"},{"titleHtml":"пылевые клещи боятся холода"},{"titleHtml":"клещи пылевые"},{"titleHtml":"пылевые клещи в подушках"},{"titleHtml":"в постели"},{"titleHtml":"в матрасе"},{"titleHtml":"в постельном белье"},{"titleHtml":"в мягких игрушках"},{"titleHtml":"в одежде"},{"titleHtml":"в каждом доме"},{"titleHtml":"в диване"},{"titleHtml":"в ковре"},{"titleHtml":"пылевые клещи вред"},{"titleHtml":"пылевые клещи дезинфекция"},{"titleHtml":"пылевые клещи и ультрафиолет"},{"titleHtml":"пылевые клещи избавление"},{"titleHtml":"пыль и пылевые клещи"},{"titleHtml":"пылевые клещи мороз"},{"titleHtml":"пылевые клещи обработка"},{"titleHtml":"пылевые клещи профилактика"},{"titleHtml":"клещи при стирке"},{"titleHtml":"средства от клещей"},{"titleHtml":"пылевые клещи температура"},{"titleHtml":"клещи озон"},{"titleHtml":"аллергия на пыль"},{"titleHtml":"плесень"},{"titleHtml":"Валлемия"},{"titleHtml":"микотоксины"},{"titleHtml":"никто не читает тэги"}]},"580118":{"id":"580118","timePublished":"2021-09-29T09:34:41+00:00","isCorporative":true,"lang":"ru","titleHtml":"Вычисляем на видеокартах. Технология OpenCL. Часть 1a. Как работает OpenCL","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"2690813","alias":"xjossy","fullname":"Georgy Osipov","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F5c1\u002Ff73\u002F5f3\u002F5c1f735f3c77ebd66743a8e2f38a98b2.png","speciality":"Пользователь"},"statistics":{"commentsCount":3,"favoritesCount":41,"readingCount":1398,"score":18,"votesCount":18},"hubs":[{"relatedData":null,"id":"22588","alias":"yandex_praktikum","type":"corporative","title":"Блог компании Яндекс.Практикум","titleHtml":"Блог компании Яндекс.Практикум","isProfiled":false},{"relatedData":null,"id":"4","alias":"hi","type":"collective","title":"Высокая производительность","titleHtml":"Высокая производительность","isProfiled":true},{"relatedData":null,"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"relatedData":null,"id":"9233","alias":"gpgpu","type":"collective","title":"GPGPU","titleHtml":"GPGPU","isProfiled":true},{"relatedData":null,"id":"21944","alias":"videocards","type":"collective","title":"Видеокарты","titleHtml":"Видеокарты","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"22 июня автор курса \u003Ca href=\"https:\u002F\u002Fpracticum.yandex.ru\u002Fcpp?utm_source=pr&amp;utm_medium=content&amp;utm_content=28_09_21&amp;utm_campaign=pr_content_cpp_habr\" rel=\"nofollow noopener noreferrer\"\u003E«Разработчик C++» \u003C\u002Fa\u003Eв Яндекс.Практикуме Георгий Осипов провёл вебинар \u003Ca href=\"https:\u002F\u002Fyoutu.be\u002FyPCeYXxSLjA\" rel=\"nofollow noopener noreferrer\"\u003E«Вычисляем на видеокартах. Технология OpenCL».\u003C\u002Fa\u003E\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Ca href=\"https:\u002F\u002Fyoutu.be\u002FyPCeYXxSLjA\" rel=\"nofollow noopener noreferrer\"\u003E\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fwq\u002Frf\u002Fap\u002Fwqrfaphypdz0hchnq36fsinwes8.png\"\u003E\u003C\u002Fa\u003E\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nМы подготовили для вас его текстовую версию, для удобства разбив её на смысловые блоки.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fyandex_praktikum\u002Fblog\u002F575484\u002F\"\u003E0. Зачем мы здесь собрались. Краткая история GPGPU.\u003C\u002Fa\u003E\u003Cbr\u003E\r\n \u003Cb\u003E1a. Как работает OpenCL.\u003C\u002Fb\u003E\u003Cbr\u003E\r\n 1b. Пишем для OpenCL.\u003Cbr\u003E\r\n 2. Алгоритмы в условиях массового параллелизма.\u003Cbr\u003E\r\n 3. Сравнение технологий.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\nМы обещали, что разберём написание полноценной программы уже в этой части, но материала оказалось слишком много, и мы разбили эту часть надвое. В первой половине расскажем про основные принципы, которые должен знать каждый OpenCL-разработчик, а во второй напишем программу.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Ci\u003EЕсть мнение, что для написания эффективного кода для GPU программист обязан понимать архитектуру видеокарты. И это мнение не чьё-нибудь там, а NVIDIA (см. \u003Ca href=\"https:\u002F\u002Fwww.nvidia.ru\u002Fcontent\u002FEMEAI\u002FCUDA\u002Flecture_documents\u002FLecture_11.pdf\" rel=\"nofollow noopener noreferrer\"\u003EЛекции NVIDIA по GPGPU\u003C\u002Fa\u003E). Не будем спорить и разберём базовые принципы работы видеокарты.\u003C\u002Fi\u003E\u003Cbr\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"OpenCL"},{"titleHtml":"CUDA"},{"titleHtml":"GPU"},{"titleHtml":"GPGPU"},{"titleHtml":"NVIDIA"},{"titleHtml":"OpenGL"},{"titleHtml":"видеокарты"},{"titleHtml":"высокая производительность"},{"titleHtml":"курс Разработчик C++"},{"titleHtml":"высокопроизводительные"},{"titleHtml":"многопоточные вычисления"},{"titleHtml":"Яндекс Практикум"}]},"580296":{"id":"580296","timePublished":"2021-09-28T17:06:29+00:00","isCorporative":true,"lang":"ru","titleHtml":"О чём .NET-разработчикам расскажут на DotNext 2021 Moscow","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2238368","alias":"k_tultseva","fullname":"Christina","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F44b\u002Fd20\u002F52c\u002F44bd2052c476b5ee251ae790021fcde4.jpg","speciality":"Редактор"},"statistics":{"commentsCount":2,"favoritesCount":8,"readingCount":1433,"score":12,"votesCount":12},"hubs":[{"relatedData":null,"id":"18226","alias":"jugru","type":"corporative","title":"Блог компании JUG Ru Group","titleHtml":"Блог компании JUG Ru Group","isProfiled":false},{"relatedData":null,"id":"4","alias":"hi","type":"collective","title":"Высокая производительность","titleHtml":"Высокая производительность","isProfiled":true},{"relatedData":null,"id":"546","alias":"net","type":"collective","title":".NET","titleHtml":".NET","isProfiled":true},{"relatedData":null,"id":"20754","alias":"tech_events","type":"collective","title":"Конференции","titleHtml":"Конференции","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"4","alias":"marketing","title":"Маркетинг"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EПорой жизнь разработчика превращается в кошмар. Называться это может по-разному: «миграция большого проекта», «отладка асинхронного кода», «запущенное легаси» или даже «зоопарк технологий для распределённых приложений». Уже скоро мы проведем .NET-конференцию \u003Cstrong\u003E\u003Ca href=\"https:\u002F\u002Fdotnext-moscow.ru\u002F?utm_source=habr&amp;utm_medium=580296\"\u003E\u003Cu\u003EDotNext\u003C\u002Fu\u003E\u003C\u002Fa\u003E\u003C\u002Fstrong\u003E, и поучаствовать в ней не только интересно, но и может помогать от кошмаров.\u003C\u002Fp\u003E\u003Cp\u003EСреди тем конференции — и низкоуровневый хардкор, и нестандартные подходы, и личные истории преодоления препятствий. А рассказывать обо всём этом будут яркие спикеры, уже знакомые многим .NET-разработчикам: например, Скотт Влашин, Дилан Битти, Стивен Тауб, Егор Богатов, Евгений Пешков.\u003C\u002Fp\u003E\u003Cp\u003EВ программу сейчас вносятся последние штрихи, так что возможны маленькие изменения, но в целом доклады будет такими, как описано под катом. А кроме докладов, будут ещё и активности от программного комитета (вроде игры в формате ЧГК), о них позже расскажем отдельно.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Faee\u002F58c\u002F604\u002Faee58c604114791cf6e493e61c72f433.png","buttonTextHtml":"Смотреть программу","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Faee\u002F58c\u002F604\u002Faee58c604114791cf6e493e61c72f433.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":".net"},{"titleHtml":".net development"},{"titleHtml":"конференция"},{"titleHtml":"dotnext"}]},"580392":{"id":"580392","timePublished":"2021-09-29T09:00:14+00:00","isCorporative":true,"lang":"ru","titleHtml":"Дообучаем готовую нейросеть для классификации данных","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2072505","alias":"MrNightSky","fullname":"Yaroslav Murzaev","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F9ce\u002F822\u002Fa59\u002F9ce822a590f5ae38e2ccd2507deaf9ef.jpg","speciality":"Data Scientist, ML engineer"},"statistics":{"commentsCount":0,"favoritesCount":34,"readingCount":780,"score":33,"votesCount":35},"hubs":[{"relatedData":null,"id":"18232","alias":"funcorp","type":"corporative","title":"Блог компании FUNCORP","titleHtml":"Блог компании FUNCORP","isProfiled":false},{"relatedData":null,"id":"340","alias":"python","type":"collective","title":"Python","titleHtml":"Python","isProfiled":true},{"relatedData":null,"id":"17175","alias":"image_processing","type":"collective","title":"Обработка изображений","titleHtml":"Обработка изображений","isProfiled":true},{"relatedData":null,"id":"19439","alias":"machine_learning","type":"collective","title":"Машинное обучение","titleHtml":"Машинное обучение","isProfiled":true},{"relatedData":null,"id":"22374","alias":"data_engineering","type":"collective","title":"Data Engineering","titleHtml":"Data Engineering","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"6","alias":"admin","title":"Администрирование"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВ \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Ffuncorp\u002Fblog\u002F576658\u002F\"\u003E\u003Cu\u003Eпрошлой статье\u003C\u002Fu\u003E\u003C\u002Fa\u003E мы научились классифицировать данные без разметки с помощью понижения размерности и методов кластеризации. По итогам получили первичную разметку данных и узнали, что это картинки. С такими начальными условиями можно придумать что-то более серьёзное, например, дообучить существующую нейросеть на наши классы, даже если до этого она их никогда не видела. В iFunny на первом уровне модерации мы выделяем три основных класса:&nbsp;\u003C\u002Fp\u003E\u003Cp\u003E• approved — картинки идут в раздел collective (развлекательный контент и мемы);\u003Cbr\u003E• not suitable — не попадают в общую ленту, но остаются в ленте пользователя (селфи, пейзажи и другие);\u003Cbr\u003E• risked — получают бан и удаляются из приложения (расизм, порнография, расчленёнка и всё, что попадает под определение «противоправный контент»).\u003C\u002Fp\u003E\u003Cp\u003EСегодня расскажу на наглядных примерах, как мы перестраивали модель под наши классы, обучали её и выделяли паттерны распознавания картинок. Технические подробности — под катом.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F3d9\u002F2b4\u002F678\u002F3d92b46781695b6ccf2e69c5b4b4fe3c.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F3d9\u002F2b4\u002F678\u002F3d92b46781695b6ccf2e69c5b4b4fe3c.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"обработка данных"},{"titleHtml":"машинное обучение"},{"titleHtml":"python"},{"titleHtml":"machine learning"},{"titleHtml":"data engineering"},{"titleHtml":"классификация изображений"},{"titleHtml":"нейросети"},{"titleHtml":"классификатор данных"},{"titleHtml":"data science"}]},"580516":{"id":"580516","timePublished":"2021-09-28T14:25:12+00:00","isCorporative":false,"lang":"ru","titleHtml":"Лучший язык программирования","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"8114","alias":"markshevchenko","fullname":"Марк Шевченко","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002Fb16\u002F6c1\u002Fc82\u002Fb166c1c82387bf9406fcd39f40dc264e.jpg","speciality":"программист"},"statistics":{"commentsCount":87,"favoritesCount":182,"readingCount":39052,"score":154,"votesCount":168},"hubs":[{"relatedData":null,"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВопрос, который часто задают начинающие программисты&nbsp;— какой язык программирования изучать? Вопрос звучит разумно. Хочется выбрать самый лучший, чтобы потом не пришлось переучиваться.\u003C\u002Fp\u003E\u003Cp\u003EМожно ли на него ответить?\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"образование"},{"titleHtml":"языки программирования"}]},"580534":{"id":"580534","timePublished":"2021-09-28T16:33:56+00:00","isCorporative":false,"lang":"ru","titleHtml":"Виниловый проигрыватель своими руками","editorVersion":"2.0","postType":"article","postLabels":[{"type":"sandbox","data":null}],"author":{"id":"365505","alias":"Gromushka","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":61,"favoritesCount":21,"readingCount":6859,"score":15,"votesCount":25},"hubs":[{"relatedData":null,"id":"21976","alias":"DIY","type":"collective","title":"DIY или Сделай сам","titleHtml":"DIY или Сделай сам","isProfiled":false},{"relatedData":null,"id":"21988","alias":"sound","type":"collective","title":"Звук","titleHtml":"Звук","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EДля многих старый звук с пластинок - это ностальгия. Кому-то нравится просто вид вращающегося диска, другим нравится пощелкивание и поскрипывание в процессе проигрывания. \u003C\u002Fp\u003E\u003Cp\u003EСовременные пластмассовые балалайки - не выдерживают критики, редкие модели можно использовать действительно для извлечения звука, а не стонов. Более интересные модели - слишком дороги, а винтаж стар и требует внимания, кроме того, не каждый винтаж хорош, а действительно интересные предложения совсем не дешевые. \u003C\u002Fp\u003E\u003Cp\u003EА вот сделать самому, используя не сильно большой бюджет - вертушку с хорошими возможностями и всеми необходимыми функциями - это интересно. \u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F2a1\u002F9a0\u002F730\u002F2a19a073018436be3f5821b68c8cbe9f.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"винил"},{"titleHtml":"аудио"},{"titleHtml":"винтаж"},{"titleHtml":"звук"},{"titleHtml":"сделай сам"},{"titleHtml":"проигрыватель винила"},{"titleHtml":"проигрыватель пластинок"}]},"580560":{"id":"580560","timePublished":"2021-09-28T18:48:12+00:00","isCorporative":false,"lang":"ru","titleHtml":"Интересное применение WordCloud","editorVersion":"2.0","postType":"article","postLabels":[{"type":"sandbox","data":null}],"author":{"id":"2784957","alias":"Arsem","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":0,"favoritesCount":16,"readingCount":1037,"score":12,"votesCount":12},"hubs":[{"relatedData":null,"id":"340","alias":"python","type":"collective","title":"Python","titleHtml":"Python","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EИспользование WordCloud для создания облака слов из переписки.\u003C\u002Fp\u003E","imageUrl":null,"buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F2e2\u002Ff0f\u002F65b\u002F2e2f0f65b10692ce0e8e90d0b39459c6.jpeg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"wordcloud"}]},"580572":{"id":"580572","timePublished":"2021-09-29T03:42:38+00:00","isCorporative":false,"lang":"ru","titleHtml":"Байконур, часть 4: МИК «Протонов»","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"368687","alias":"lozga","fullname":"Филипп Терехов","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F817\u002F6fa\u002Fd6b\u002F8176fad6ba9b8839f4372de9d0187146.png","speciality":"Тестировщик и популяризатор космонавтики"},"statistics":{"commentsCount":1,"favoritesCount":5,"readingCount":3777,"score":14,"votesCount":14},"hubs":[{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21962","alias":"space","type":"collective","title":"Космонавтика","titleHtml":"Космонавтика","isProfiled":false}],"flows":[{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EУже после того, как модуль \"Наука\" отправился на старт, мы получили возможность зайти в монтажно-испытательный комплекс (МИК), где его устанавливали на ракету-носитель. Нам несколько раз говорили, что мы стали первыми посторонними посетителями этого МИКа. И по количеству просьб не снимать эта локация заняла первое место со значительным отрывом.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F707\u002Fc87\u002Fa1c\u002F707c87a1cd773efcc1e03242fdd40502.jpg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F707\u002Fc87\u002Fa1c\u002F707c87a1cd773efcc1e03242fdd40502.jpg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"Космодром Байконур"},{"titleHtml":"ракеты-носители"},{"titleHtml":"ракета &quot;Протон&quot;"},{"titleHtml":"репортаж"},{"titleHtml":"экскурсия"}]},"580582":{"id":"580582","timePublished":"2021-09-29T06:19:53+00:00","isCorporative":false,"lang":"ru","titleHtml":"Конфиденциальность пользователей Telegram снова нарушена. Представители мессенджера требуют не раскрывать подробностей","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"1800409","alias":"ne555","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":71,"favoritesCount":26,"readingCount":28460,"score":176,"votesCount":184},"hubs":[{"relatedData":null,"id":"50","alias":"infosecurity","type":"collective","title":"Информационная безопасность","titleHtml":"Информационная безопасность","isProfiled":true},{"relatedData":null,"id":"92","alias":"instant_messaging","type":"collective","title":"Мессенджеры","titleHtml":"Мессенджеры","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EВ конце февраля 2021 года выходит обновленный релиз клиента Telegram с заголовком: ‘\u003Cem\u003EАвтоудаление, виджеты и временные ссылки для приглашений’.\u003C\u002Fem\u003E\u003C\u002Fp\u003E\u003Cp\u003EНа красивой, художественной \u003Ca href=\"https:\u002F\u002Ftelegram.org\u002Ffile\u002F464001519\u002F2\u002Fpw2YpXpzBFk.222382\u002F9ec672b0125c50ad34\" rel=\"noopener noreferrer nofollow\"\u003Eобложке\u003C\u002Fa\u003E к пресс-релизу новой верси Tg-мессенджера пользователи видят корзину с таймером и уничтоженными данными, а так же лицезреют главных героев из культового хакерского сериала \u003Ca href=\"https:\u002F\u002Fru.wikipedia.org\u002Fwiki\u002F%D0%9C%D0%B8%D1%81%D1%82%D0%B5%D1%80_%D0%A0%D0%BE%D0%B1%D0%BE%D1%82#%D0%9D%D0%B0%D0%B3%D1%80%D0%B0%D0%B4%D1%8B_%D0%B8_%D0%BD%D0%BE%D0%BC%D0%B8%D0%BD%D0%B0%D1%86%D0%B8%D0%B8\" rel=\"noopener noreferrer nofollow\"\u003EМистер Робот\u003C\u002Fa\u003E. Но действительно ли все так круто с зачисткой следов как и в сериале? Подробности об одной щекотливой bug bounty в этой статье.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F1e9\u002F2a3\u002F6cc\u002F1e92a36cc8aeb8ec3f80bd8c3dd26b44.jpeg","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F1e9\u002F2a3\u002F6cc\u002F1e92a36cc8aeb8ec3f80bd8c3dd26b44.jpeg","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"telegram"},{"titleHtml":"уязвимость"}]},"580588":{"id":"580588","timePublished":"2021-09-29T07:57:53+00:00","isCorporative":true,"lang":"ru","titleHtml":"Техподдержка без бюрократии: автоматизации под капотом ServiceDesk Яндекса","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"2792513","alias":"arvidasgafiulin","fullname":"Арвидас Гафиулин","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F463\u002Fe51\u002Ff5d\u002F463e51f5d7d8eaf0704e3db17fdee1e5.jpg","speciality":"Руководитель отдела эксплуатации и развития"},"statistics":{"commentsCount":6,"favoritesCount":10,"readingCount":1364,"score":17,"votesCount":17},"hubs":[{"relatedData":null,"id":"4991","alias":"yandex","type":"corporative","title":"Блог компании Яндекс","titleHtml":"Блог компании Яндекс","isProfiled":false},{"relatedData":null,"id":"17739","alias":"crm","type":"collective","title":"CRM-системы","titleHtml":"CRM-системы","isProfiled":true},{"relatedData":null,"id":"19369","alias":"service_desk","type":"collective","title":"Service Desk","titleHtml":"Service Desk","isProfiled":true},{"relatedData":null,"id":"21904","alias":"office","type":"collective","title":"Офисы IT-компаний","titleHtml":"Офисы IT-компаний","isProfiled":false},{"relatedData":null,"id":"22026","alias":"itcompanies","type":"collective","title":"IT-компании","titleHtml":"IT-компании","isProfiled":false}],"flows":[{"id":"3","alias":"management","title":"Менеджмент"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"Привет! Меня зовут Арвидас Гафиулин, я руководитель отдела эксплуатации и развития ИТ-инфраструктуры в Яндексе. Важнейшее направление работы отдела — наша внутренняя служба поддержки, ServiceDesk. Именно команда SD отвечает за то, чтобы у сотрудников компании была возможность работать из офиса или на удалёнке со всеми необходимыми доступами, оборудованием и комфортом. В среднем служба получает 10 тысяч запросов каждую неделю и постоянно работает над тем, чтобы решать их качественнее и быстрее, а также предотвращать новые инциденты, устраняя корни проблем. \u003Cbr\u003E\r\n\u003Cbr\u003E\r\nМы уже писали на Хабр о том, как работает \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fcompany\u002Fyandex\u002Fblog\u002F487078\u002F\"\u003Eвендомат ServiceDesk\u003C\u002Fa\u003E, выдающий расходники и компьютерные аксессуары без согласований и бумажек, а сегодня расскажем, как выглядит работа службы изнутри и какие технические решения живут у ServiceDesk «под капотом», помогая нам автоматизировать львиную долю задач. Добро пожаловать под кат, если вам интересно, откуда техподдержка знает, кому уже пора апгрейдить технику, а кому придётся ещё немного подождать, у кого устарела версия ОС или доживает последние дни жёсткий диск, какие автоматизации мы можем создавать на основе пользовательских данных, а главное — от скольких часов ожидания и кругов согласований это избавляет сотрудников Яндекса.\u003Cbr\u003E\r\n\u003Cbr\u003E\r\n\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Fwebt\u002Fao\u002Fg-\u002Fgv\u002Faog-gvbfx0gynbv_nderxmcmooi.jpeg\"\u003E\u003Cbr\u003E\r\n\u003Csup\u003EWelcome-зона службы ИТ-поддержки в одном из офисов\u003C\u002Fsup\u003E","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"служба поддержки"},{"titleHtml":"service desk"},{"titleHtml":"автоматизация"},{"titleHtml":"data lake"},{"titleHtml":"crm"},{"titleHtml":"api"}]},"580604":{"id":"580604","timePublished":"2021-09-29T08:11:26+00:00","isCorporative":false,"lang":"ru","titleHtml":"Поговорим о высшем образовании, требованиях и ожиданиях","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"56016","alias":"onlinehead","fullname":"Anton Kostenko","avatarUrl":"","speciality":"DevOps\u002FSRE"},"statistics":{"commentsCount":18,"favoritesCount":13,"readingCount":2645,"score":14,"votesCount":18},"hubs":[{"relatedData":null,"id":"20696","alias":"study","type":"collective","title":"Учебный процесс в IT","titleHtml":"Учебный процесс в IT","isProfiled":false},{"relatedData":null,"id":"20740","alias":"career","type":"collective","title":"Карьера в IT-индустрии","titleHtml":"Карьера в IT-индустрии","isProfiled":false}],"flows":[{"id":"3","alias":"management","title":"Менеджмент"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EОчень много комментариев собрал \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F579998\u002Fhttps:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F579998\u002F\" rel=\"noopener noreferrer nofollow\"\u003Eпост\u003C\u002Fa\u003E молодого человека, первокурсника, пришедшего учиться на \"программиста\", но получившего несколько не то, что он ожидал. Я сам 15 лет назад поступил в региональный университет на \"айтишную\" специальность и мне это близко. \u003C\u002Fp\u003E\u003Cp\u003EКак это обычно и бывает для постов, поднявших весьма больную тему, комментарии оказались как бы не интереснее самого поста. \u003C\u002Fp\u003E\u003Cp\u003EВ них эдаким лейтмотивом проходит несколько мыслей, которые я бы и хотел выделить, обсудить и в некотором роде постараться опровергнуть или, как минимум, поставить под сомнение.\u003C\u002Fp\u003E\u003Cp\u003EЯ заранее извиняюсь у авторов комментариев за то, что не буду упоминать их ники. Одна и та же мысль могла быть высказана десятки раз в разных формах и я не вижу никакой разумной возможности найти и упомянуть их всех, поэтому ограничусь или переформулированной идеей, или небольшой прямой цитатой там, где это совершенно необходимо.\u003C\u002Fp\u003E\u003Cp\u003EАналогично, я оговорюсь, что в некоторых ВУЗах все может быть по-другому. Частные случаи хорошо подсвечивают проблему, но никак не отменяют её наличия.\u003C\u002Fp\u003E\u003Cp\u003EКроме этого, я бы не хотел рассуждать о причинах проблем и\\или предлагать какие-либо способы решения. Но, конечно же, это всегда можно обсудить в комментариях.\u003C\u002Fp\u003E\u003Cp\u003EИтак, примем к рассмотрению следующие тезисы, которые достаточно массово высказывались в комментариях:\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F3a1\u002Fe0c\u002F854\u002F3a1e0c854b5d502922bcbb9528301fc1.jpg","buttonTextHtml":"Три тезиса, о которых мы поговорим","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002F3a1\u002Fe0c\u002F854\u002F3a1e0c854b5d502922bcbb9528301fc1.jpg","fit":"cover","positionY":89.772727272727,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"высшее образование"},{"titleHtml":"проблемы образования"},{"titleHtml":"проблемы профессии it"},{"titleHtml":"образование в ит"},{"titleHtml":"образование в it"},{"titleHtml":"образование"},{"titleHtml":"государство"},{"titleHtml":"государственные учереждения"}]},"580618":{"id":"580618","timePublished":"2021-09-29T08:38:40+00:00","isCorporative":false,"lang":"ru","titleHtml":"Заметки о дельта-роботе. Часть 1. Историческая справка и обзор научных работ","editorVersion":"2.0","postType":"article","postLabels":[{"type":"sandbox","data":null}],"author":{"id":"2647083","alias":"multiengineer","fullname":null,"avatarUrl":"","speciality":""},"statistics":{"commentsCount":1,"favoritesCount":5,"readingCount":921,"score":11,"votesCount":11},"hubs":[{"relatedData":null,"id":"19309","alias":"lib","type":"collective","title":"Профессиональная литература","titleHtml":"Профессиональная литература","isProfiled":false},{"relatedData":null,"id":"19735","alias":"robo_dev","type":"collective","title":"Разработка робототехники","titleHtml":"Разработка робототехники","isProfiled":true},{"relatedData":null,"id":"21902","alias":"robot","type":"collective","title":"Робототехника","titleHtml":"Робототехника","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EЭтой публикацией я начинаю цикл статей о дельта-роботе. Здесь поговорим об истории этого механизма и я расскажу немного об интересных работах по этой тематике. В следующих статьях будут материалы, посвящённые его теоретическому анализу, построению рабочей зоны, выбору приводов, конструированию, изготовлению, сборке и созданию системы управления.\u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fd7f\u002Fe6f\u002Fa2e\u002Fd7fe6fa2ea118b8426f3aa4c479345e2.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fd7f\u002Fe6f\u002Fa2e\u002Fd7fe6fa2ea118b8426f3aa4c479345e2.png","fit":"cover","positionY":0,"positionX":60.128205128205}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"дельта-робот"},{"titleHtml":"манипулятор"},{"titleHtml":"робототехника"},{"titleHtml":"роботостроение"}]},"580620":{"id":"580620","timePublished":"2021-09-29T09:30:34+00:00","isCorporative":false,"lang":"ru","titleHtml":"Членимая калейдоскопическая сложность. Об устройстве и потенциале фасеточного глаза","editorVersion":"2.0","postType":"article","postLabels":[],"author":{"id":"2534007","alias":"OlegSivchenko","fullname":"Олег Сивченко","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F27b\u002Ff35\u002Ff6f\u002F27bf35f6f595fc136b70c384752ba387.jpg","speciality":"Переводчик, PM, автор, просветитель-любитель"},"statistics":{"commentsCount":3,"favoritesCount":11,"readingCount":1432,"score":11,"votesCount":13},"hubs":[{"relatedData":null,"id":"17175","alias":"image_processing","type":"collective","title":"Обработка изображений","titleHtml":"Обработка изображений","isProfiled":true},{"relatedData":null,"id":"21910","alias":"popular_science","type":"collective","title":"Научно-популярное","titleHtml":"Научно-популярное","isProfiled":false},{"relatedData":null,"id":"21912","alias":"biotech","type":"collective","title":"Биотехнологии","titleHtml":"Биотехнологии","isProfiled":false},{"relatedData":null,"id":"21946","alias":"video_tech","type":"collective","title":"Видеотехника","titleHtml":"Видеотехника","isProfiled":false},{"relatedData":null,"id":"21968","alias":"physics","type":"collective","title":"Физика","titleHtml":"Физика","isProfiled":false}],"flows":[{"id":"1","alias":"develop","title":"Разработка"},{"id":"7","alias":"popsci","title":"Научпоп"}],"relatedData":null,"leadData":{"textHtml":"\u003Cp\u003EНекоторое время назад я планировал разместить здесь откровенно антирелигиозную статью и пройтись по излюбленному примеру креационистов, связанному с \u003Ca href=\"https:\u002F\u002Fru.wikipedia.org\u002Fwiki\u002F%D0%9D%D0%B5%D1%87%D0%BB%D0%B5%D0%BD%D0%B8%D0%BC%D0%B0%D1%8F_%D1%81%D0%BB%D0%BE%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C\" rel=\"noopener noreferrer nofollow\"\u003Eнечленимой сложностью\u003C\u002Fa\u003E. Я хотел разобрать казус с отказом признавать эволюцию глаз, но обнаружил на Хабре \u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fru\u002Fpost\u002F387101\u002F\" rel=\"noopener noreferrer nofollow\"\u003Eпревосходную статью\u003C\u002Fa\u003E Вячеслава Пуговкина @\u003Ca href=\"https:\u002F\u002Fhabr.com\u002Fusers\u002Fra3vdx\u002F\" rel=\"noopener noreferrer nofollow\"\u003Era3vdx\u003C\u002Fa\u003E, в которой разобрана именно эта проблема. Поэтому я решил изменить акценты и развернуть не менее интересную тему: рассказать об устройстве и бионическом потенциале фасеточного глаза. Давайте об этом поговорим – и начну я, пожалуй, с ваятельницы Лин, главной героини гротескного романа, написанного Чайной Мьевилем. \u003C\u002Fp\u003E","imageUrl":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fbd1\u002Fe25\u002F23a\u002Fbd1e2523aa1cbf2a4cf144122e6f1382.png","buttonTextHtml":"Читать далее","image":{"url":"https:\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Fupload_files\u002Fbd1\u002Fe25\u002F23a\u002Fbd1e2523aa1cbf2a4cf144122e6f1382.png","fit":"cover","positionY":0,"positionX":0}},"status":"published","plannedPublishTime":null,"checked":null,"tags":[{"titleHtml":"бионика"},{"titleHtml":"фотоника"},{"titleHtml":"омматидии"},{"titleHtml":"оптика"},{"titleHtml":"обработка изображений"}]}},"articlesIds":{"ARTICLES_LIST_TOP_PERIOD_DAILY":["580582","580516","580034","579972","579530","580392","578690","578788","579626","580118","580588","580534","580604","580572","579960","579106","580560","580296","580620","580618"]},"isLoading":false,"pagesCount":{"ARTICLES_LIST_TOP_PERIOD_DAILY":3},"route":{"name":"ARTICLES_LIST_TOP_PERIOD","params":{"period":"daily"},"query":{}},"reasonsList":null,"view":"cards","lastVisitedRoute":{},"ssrCommentsArticleIds":[""],"karma":{}},"authorContribution":{"authors":{}},"betaTest":{"currentAnnouncement":null,"announcements":{},"announcementCards":null,"announcementComments":{},"announcementCommentThreads":{},"announcementCommentingStatuses":{},"archivedList":[]},"authorStatistics":{"articleRefs":{},"articleIds":{},"pagesCount":{},"route":{},"viewsCount":[],"maxStatsCount":{}},"comments":{"articleComments":{},"searchCommentsResults":null,"previewComment":null,"pagesCount":null,"commentAccess":{},"scrollParents":{},"pageArticleComments":{"lastViewedComment":0,"postId":null,"lastCommentTimestamp":"","moderated":[],"moderatedIds":[],"commentRoute":""}},"companies":{"companyRefs":{},"companyIds":{},"companyTopIds":{},"pagesCount":{},"companyProfiles":{},"companiesCategories":[],"companiesCategoriesTotalCount":0,"companiesWidgets":{},"companiesWorkers":{},"companiesFans":{},"route":{},"isLoading":false,"companyWorkersLoading":false,"companyFansLoading":false,"vacancies":{}},"companiesContribution":{"hubs":{},"flows":{},"companyRefs":{}},"companyHubsContribution":{"contributionRefs":{"hubRefs":{},"hubIds":{}}},"conversation":{"messages":[],"respondent":null,"isLoadMore":false},"conversations":{"conversations":[],"unreadCount":0,"pagesCount":0,"isLoadMore":false},"desktopState":{"desktopFl":null,"desktopHl":null,"isChecked":false,"isLoginDemanded":false},"dfp":{"slotsDict":{}},"docs":{"menu":{},"articles":{},"mainMenu":[],"loading":{"main":false,"dropdown":false,"article":false}},"feature":{"isProbablyVisible":"true"},"flows":{"flows":[{"alias":"develop","id":1,"route":{"name":"FLOW_PAGE","params":{"flowName":"develop"}}},{"alias":"admin","id":6,"route":{"name":"FLOW_PAGE","params":{"flowName":"admin"}}},{"alias":"design","id":2,"route":{"name":"FLOW_PAGE","params":{"flowName":"design"}}},{"alias":"management","id":3,"route":{"name":"FLOW_PAGE","params":{"flowName":"management"}}},{"alias":"marketing","id":4,"route":{"name":"FLOW_PAGE","params":{"flowName":"marketing"}}},{"alias":"popsci","id":7,"route":{"name":"FLOW_PAGE","params":{"flowName":"popsci"}}}]},"global":{"isPwa":false,"device":"desktop","isHabrCom":true},"hubs":{"hubRefs":{},"hubIds":{},"pagesCount":{},"isLoading":false,"route":{}},"hubsBlock":{"hubRefs":{},"hubIds":{}},"i18n":{"fl":"ru","hl":"ru"},"info":{"infoPage":{},"isLoading":true},"location":{"urlStruct":{"protocol":null,"slashes":null,"auth":null,"host":null,"port":null,"hostname":null,"hash":null,"search":null,"query":{},"pathname":null,"path":null,"href":""},"searchQuery":null},"me":{"user":null,"ppgDemanded":false,"karmaResetInfo":{"canReincarnate":null,"wasReincarnated":null,"currentScore":null},"notes":null},"mostReadingList":{"mostReadingListIds":[],"mostReadingListRefs":null,"promoPost":null},"pinnedPost":{"pinnedPost":null},"ppa":{"articles":{},"card":null,"transactions":null,"totalTransactions":null,"isAccessible":null},"projectsBlocks":{"activeBlocks":{}},"pullRefresh":{"shouldRefresh":false},"sandbox":{"articleIds":[],"articleRefs":{},"pagesCount":null,"route":{},"lastVisitedRoute":{},"isLoading":false},"settingsOther":{"inputs":{"uiLang":{"errors":[],"ref":null,"value":""},"articlesLangEnglish":{"errors":[],"ref":null,"value":false},"articlesLangRussian":{"errors":[],"ref":null,"value":false},"agreement":{"errors":[],"ref":null,"value":false},"email":{"errors":[],"ref":null,"value":true},"digest":{"errors":[],"ref":null,"value":true}}},"similarList":{"similarListIds":["479286","271719","255773"],"similarListRefs":{"255773":{"id":"255773","timePublished":"2015-04-15T13:00:29+00:00","isCorporative":false,"lang":"ru","titleHtml":"Java-based конфигурирование embedded Jetty\u002FSpring MVC\u002FSpring Security","editorVersion":"1.0","postType":"article","postLabels":[],"author":{"id":"167574","alias":"IDVsbruck","fullname":null,"avatarUrl":null,"speciality":null},"statistics":{"commentsCount":7,"favoritesCount":83,"readingCount":31156,"score":2,"votesCount":16},"hubs":[{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"375","alias":"java","type":"collective","title":"Java","titleHtml":"Java","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"Кому-то нравится исключительно xml-конфигурация, так как позволяет собрать всю настройку проекта если не в одном файле, то в одной папке с конфигурационными файлами точно, кому-то нет. К примеру, я считаю, что времена \u003Ci\u003Epersistence.xml\u003C\u002Fi\u003E ушли безвозвратно — отображения сущностей для ДБ удобнее прописывать в классах сущностей, а маппинги контроллеров и методов удобнее назначать непосредственно в классах контроллеров. Вывод очевиден: если разработчик не страдает анахронизмом, то так или иначе проект будет иметь смешанную настройку — часть в аннотациях, часть в xml-файлах. Это не хорошо и не плохо, это данность времени — все привыкли к \u003Ci\u003Eweb.xml\u003C\u002Fi\u003E, \u003Ci\u003Eapplication.xml\u003C\u002Fi\u003E, \u003Ci\u003Espringmvc-servlet.xml\u003C\u002Fi\u003E и т.д., но при этом активно пользуются аннотациями \u003Ci\u003E@ Controller, @ Repository, @ Autowired, @ Value, @ ResponseBody\u003C\u002Fi\u003E и т.д. Начиная с версии 3 Spring добавил возможность использования \u003Cb\u003EJava-based конфигурации\u003C\u002Fb\u003E, что позволило полностью отказаться от xml-файлов в настройке проекта. Ранее на Хабре \u003Ca href=\"http:\u002F\u002Fhabrahabr.ru\u002Fcompany\u002Fjugru\u002Fblog\u002F218203\"\u003Eбыла публикация с анализом преимуществ и недостатков одних способов перед другими\u003C\u002Fa\u003E, с рядом плюсов xml-конфигурации я полностью согласен.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nОднако в данной публикации речь не о преимуществах одних или недостатков других, и тем более не попытка агитации за новые технологии и возможности, это только лишь консолидированный отчет о сборке веб-проекта с нуля до рабочего проекта. И главное — с включением в проект embedded сервера Jetty. На самом деле отдельных фрагментов по настройке как встроенного Jetty, так и контекстов Spring Application, MVC, Security, навалом. Но чтобы разобраться в тонкостях этих настроек, не внедрять сложную структуру и не городить костыли, потребовалось кое-какое время и просмотр большого числа документации и исходников. Но даже имея значительный опыт настройки, пришлось столкнуться с рядом затруднений, после решения которых пришла идея опубликовать все это в одном месте.","imageUrl":null,"buttonTextHtml":"Далее много текста и кода","image":null},"status":"published","plannedPublishTime":null,"checked":null},"271719":{"id":"271719","timePublished":"2015-12-08T06:28:56+00:00","isCorporative":false,"lang":"ru","titleHtml":"Spring MVC\u002FSecurity, REST, Hibernate, Liquibase запускаем в две строки","editorVersion":"1.0","postType":"article","postLabels":[{"type":"tutorial","data":null}],"author":{"id":"344727","alias":"intet","fullname":"Сиводедов Дмитрий","avatarUrl":null,"speciality":null},"statistics":{"commentsCount":8,"favoritesCount":231,"readingCount":36508,"score":7,"votesCount":9},"hubs":[{"id":"91","alias":"webdev","type":"collective","title":"Разработка веб-сайтов","titleHtml":"Разработка веб-сайтов","isProfiled":true},{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"375","alias":"java","type":"collective","title":"Java","titleHtml":"Java","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"\u003Cimg src=\"https:\u002F\u002Fhabrastorage.org\u002Ffiles\u002F200\u002F413\u002F9d3\u002F2004139d3c1042a69ae608ca5422ee60.png\"\u002F\u003E\u003Cbr\u002F\u003E\r\nСовременные системы сборки позволяют полностью автоматизировать процесс компиляции и запуска приложения из исходников. На целевой машине необходим лишь JDK, все остальное включая и сам сборщик загрузится налету. Надо лишь правильно построить процесс сборки и по запуску двух команд получить, например, следующее: запуск базы данных, выполнение SQL скриптов, компиляцию Java, Javascript и CSS файлов, запуск контейнера сервлетов. Реализуется это с помощью Gradle, HSQLDB, Liquibase, Google closure compile и Gretty. Подробнее в статье.\u003Cbr\u002F\u003E\r\n","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null},"479286":{"id":"479286","timePublished":"2019-12-09T06:57:47+00:00","isCorporative":false,"lang":"ru","titleHtml":"Пишем простое веб-приложение используя Spring MVC, Spring Data JPA и Hibernate","editorVersion":"1.0","postType":"article","postLabels":[{"type":"sandbox","data":null}],"author":{"id":"2143045","alias":"Wuwed","fullname":"Nikita Volkov","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F6f1\u002F9e6\u002F8c3\u002F6f19e68c35e3eecc6d35657d5ad8ae06.jpg","speciality":null},"statistics":{"commentsCount":5,"favoritesCount":81,"readingCount":34469,"score":4,"votesCount":18},"hubs":[{"id":"359","alias":"programming","type":"collective","title":"Программирование","titleHtml":"Программирование","isProfiled":true},{"id":"375","alias":"java","type":"collective","title":"Java","titleHtml":"Java","isProfiled":true}],"flows":[{"id":"1","alias":"develop","title":"Разработка","titleHtml":"Разработка"}],"relatedData":null,"leadData":{"textHtml":"Привет, Хабр! Представляю Вашему вниманию перевод руководства \u003Ca href=\"https:\u002F\u002Fwww.codejava.net\u002Fframeworks\u002Fspring\u002Fspring-mvc-spring-data-jpa-hibernate-crud-example\"\u003E«Spring MVC + Spring Data JPA + Hibernate — CRUD Example»\u003C\u002Fa\u003E автора Nam Ha Minh.\u003Cbr\u002F\u003E\r\n\u003Cbr\u002F\u003E\r\nВ этом руководстве по Java Spring вы узнаете, как настроить Spring MVC приложение для работы с Spring Data JPA, разработав простое веб-приложение, которое позволяет управлять информацией о клиентах.\u003Cbr\u002F\u003E\r\n","imageUrl":null,"buttonTextHtml":"Читать дальше &rarr;","image":null},"status":"published","plannedPublishTime":null,"checked":null}}},"ssr":{"error":null,"isDataLoaded":false,"isDataLoading":false,"isHydrationFailed":false,"isServer":false},"userHubsContribution":{"contributionRefs":{"hubRefs":{},"hubIds":{}}},"userInvites":{"availableInvites":0,"usedInvitesIds":[],"usedInvitesRefs":{},"usedInvitesPagesCount":0,"unusedInvitesIds":[],"unusedInvitesRefs":{},"unusedInvitesPagesCount":0},"users":{"authorRefs":{"schaan":{"scoreStats":{"score":69,"votesCount":87},"rating":0,"relatedData":null,"contacts":[],"authorContacts":[],"paymentDetails":{"paymentYandexMoney":null,"paymentPayPalMe":null,"paymentWebmoney":null},"id":"48345","alias":"schaan","fullname":"Антон Щастный","avatarUrl":"\u002F\u002Fhabrastorage.org\u002Fgetpro\u002Fhabr\u002Favatars\u002F9b1\u002F881\u002Fa5e\u002F9b1881a5e17e8a81ee416e5468b1fa4e.jpg","speciality":null}},"authorIds":{},"pagesCount":{},"authorProfiles":{},"userHubs":{},"userInvitations":{},"authorFollowers":{},"authorFollowed":{},"karmaStats":[],"statistics":null,"isLoading":false,"authorFollowersLoading":false,"authorFollowedLoading":false,"userHubsLoading":false,"userInvitationsLoading":false,"route":{}},"viewport":{"prevScrollY":{},"scrollY":0,"width":0},"tracker":{"items":{},"pagesCache":{},"markedViewedSilently":{},"markedRead":{},"unreadCounters":{"applications":null,"system":null,"mentions":null,"subscribers":null,"posts_and_comments":null},"unviewedCounters":{"applications":null,"system":null,"mentions":null,"subscribers":null,"posts_and_comments":null}}};(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());</script>
+<script src="https://assets.habr.com/habr-web/js/chunk-vendors.670ab961.js" defer></script><script src="https://assets.habr.com/habr-web/js/chunk-f458c7c4.6e221df6.js" defer></script><script src="https://assets.habr.com/habr-web/js/app.76acc47b.js" defer></script>
+
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    </script>
+  
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(24049213, "init", {
+      defer:true,
+      trackLinks:true,
+      accurateTrackBounce:true,
+      webvisor:false,
+    });
+  </script>
+  <noscript>
+    <div>
+      <img src="https://mc.yandex.ru/watch/24049213" style="position:absolute; left:-9999px;" alt="" />
+    </div>
+  </noscript>
+  
+    <script type="text/javascript">
+      window.addEventListener('load', function () {
+        setTimeout(() => {
+          const img = new Image();
+          img.src = 'https://vk.com/rtrg?p=VK-RTRG-421343-57vKE';
+        }, 0);
+      });
+    </script>
+  
+</body>
+</html>
