@@ -1,6 +1,15 @@
 # WikiSearch
 Парсер необходимый для скачивания корпуса докуметов.
 
+
+Параметр | Описание | Дополнительно
+--- | --- | ---
+RANGE | Максимальное кол-во запросов | при скорости 1 запрос/сек -> 3600 запросов в час
+TOTAL_MAX | Кол-во постов на сайте | Если известно
+START | Стартовый индекс | Если приравнять к 'last_file_idx' - будет брать последний из дирректории
+SLEEP_TIME | Скорость | 1 запрос в 1 секунду  
+
+
 #### Установка расширений
 ```
 pip install requests
@@ -12,6 +21,7 @@ pip install requests
 .\venv\Scripts\python.exe .\HabrParser.py
 ```
 
+#### Скриншоты
 <p align="center">
     <img src="https://raw.githubusercontent.com/patison5/WikiSearch/main/img/Screenshot_1.png" alt="Пример работы">
     <br />

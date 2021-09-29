@@ -23,7 +23,7 @@ for i in range(START, END):
 
     if (i - START) % 15 == 0:
         dir_files = listdir(WORKING_DIRECTORY_PATH)
-        print(f"Выполнено: {round(((i - START) / (END - START)), 4)}%, idx: {i}, файлов на диске: {len(dir_files)}")
+        print(f"Выполнено: {round(((i - START) / (END - START)), 4)}%   совершено запросов: {i}/{TOTAL_MAX}   файлов на диске: {len(dir_files)}")
 
     if response.status_code == 200:
         data = response.content.decode('utf-8', 'ignore')
