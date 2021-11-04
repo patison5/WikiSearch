@@ -2,6 +2,7 @@
 import io
 import os
 import string
+from imp import reload
 from os import listdir, path
 from os.path import isfile, join
 from dotenv import load_dotenv
@@ -31,6 +32,37 @@ def remove_html_tags(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
 
+# -*- coding: utf-8 -*-
+import sys
+import codecs
+
+def setup_console(sys_enc="utf-8"):
+    reload(sys)
+    try:
+        # для win32 вызываем системную библиотечную функцию
+        if sys.platform.startswith("win"):
+            import ctypes
+            enc = "cp%d" % ctypes.windll.kernel32.GetOEMCP() #TODO: проверить на win64/python64
+        else:
+            # для Linux всё, кажется, есть и так
+            enc = (sys.stdout.encoding if sys.stdout.isatty() else
+                        sys.stderr.encoding if sys.stderr.isatty() else
+                            sys.getfilesystemencoding() or sys_enc)
+
+        # кодировка для sys
+        sys.setdefaultencoding(sys_enc)
+
+        # переопределяем стандартные потоки вывода, если они не перенаправлены
+        if sys.stdout.isatty() and sys.stdout.encoding != enc:
+            sys.stdout = codecs.getwriter(enc)(sys.stdout, 'replace')
+
+        if sys.stderr.isatty() and sys.stderr.encoding != enc:
+            sys.stderr = codecs.getwriter(enc)(sys.stderr, 'replace')
+
+    except:
+        pass # Ошибка? Всё равно какая - работаем по-старому...
+
+setup_console()
 
 dirty_files = []
 clean_files = []
@@ -43,6 +75,8 @@ for file_name in list_of_files:
     full_path = DIRTY_DATA_PATH + "/" + file_name
     clean_file_path = CLEAN_DATA_PATH + "/txt/" + file_name[:-4] + 'txt'
     clean_file_path_json = CLEAN_DATA_PATH + "/json/" + file_name[:-4] + 'json'
+
+    print("full_path : " + full_path)
 
     HTMLFile = codecs.open(full_path, "r", "utf-8") # на винде работает, на маке строчка ниже
     # HTMLFile = open(full_path, "r")
@@ -72,22 +106,36 @@ for file_name in list_of_files:
     print("dirty_file_length, {0}".format(dirty_file_length))
     print("clean_file_length, {0}".format(len(article_body)))
 
-    with codecs.open(clean_file_path, encoding='utf-8', mode='w+') as cf:
-        cf.write(article_h1)
-        cf.write("\n")
-        cf.write(article_body)
+    print("clean_file_path : " + clean_file_path)
+    print("clean_file_path : " + clean_file_path_json)
 
-    with open(clean_file_path_json, 'w+', encoding='utf-8') as f:
-        json.dump({
+    with open("D:/Github/WikiSearch/habr/clean/txt/11.txt", 'w+', encoding='cp866', errors='replace', newline='') as csvfile:
+        csvfile.write(article_h1)
+        csvfile.write("\n")
+        csvfile.write(article_body)
+
+    with open(clean_file_path, 'w+', encoding='cp866', errors='replace') as csvfile:
+        csvfile.write(article_h1)
+        csvfile.write("\n")
+        csvfile.write(article_body)
+
+    with open(clean_file_path_json, 'w+', encoding='utf8', errors='replace') as f:
+        data = {
             "id": file_name[5:-5],
             "title": article_h1,
             "body": article_body,
-        }, f, ensure_ascii=False, indent=4)
+        }
+        data_string = json.dumps(data, sort_keys=False, indent=4, ensure_ascii=False, separators=(',', ': ')).encode("utf8")
+        f.write(data_string.decode())
 
-    # with open(clean_file_path, 'w+') as cf:
-    #     cf.write(article_h1)
-    #     cf.write("\n")
-    #     cf.write(article_body)
+    # with open(clean_file_path_json, 'w+', encoding='cp866', errors='replace') as f:
+    #     data = {
+    #         "id": file_name[5:-5],
+    #         "title": article_h1,
+    #         "body": article_body,
+    #     }
+    #     data_string = json.dumps(data, sort_keys=False, indent=4, ensure_ascii=True, separators=(',', ': ')).encode("utf8")
+    #     f.write(data_string.decode())
 
     dirty_size = os.path.getsize("{0}/{1}".format(DIRTY_DATA_PATH, file_name))
     clean_size = os.path.getsize("{0}/{1}".format(CLEAN_DATA_PATH + "/json/", file_name[:-4] + 'json'))

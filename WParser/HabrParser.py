@@ -1,8 +1,8 @@
+import re
 import requests
 import time
 from os import listdir
 from os.path import isfile, join
-import re
 
 WORKING_DIRECTORY_PATH = "D:/Github/WikiSearch/habr/"  # Путь к дирректории для сохранения
 
