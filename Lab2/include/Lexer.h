@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <list>
 #include <cstring>
 
 using namespace std;
@@ -13,7 +14,7 @@ class Lexer
         Lexer();
         ~Lexer();
 
-        void get_lexem(string text);
+        list<char *> get_lexem(string text);
 
     protected:
 

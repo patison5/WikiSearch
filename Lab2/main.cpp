@@ -33,8 +33,8 @@ int main()
         string title = data["title"];
         string body = data["body"];
 
-        lexer.get_lexem(title);
-        lexer.get_lexem(body);
+        list<char *> title_lexems = lexer.get_lexem(title);
+        list<char *> boty_lexems = lexer.get_lexem(body);
     }
 
     return 0;

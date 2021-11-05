@@ -17,7 +17,6 @@ class JSONReader
         JSONReader(string path);
         ~JSONReader();
         json get_json(string file);
-        void get_lexem(string text);
 
     protected:
 
