@@ -14,7 +14,7 @@ class Lexer
         Lexer();
         ~Lexer();
 
-        list<char *> get_lexem(string text);
+        list<string> get_lexem(string text);
 
     protected:
 

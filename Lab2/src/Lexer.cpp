@@ -4,20 +4,19 @@ Lexer::Lexer() {}
 
 Lexer::~Lexer() {}
 
-list<char *> Lexer::get_lexem(string text) {
+list<string> Lexer::get_lexem(string text) {
     char text_arr[text.length() + 1];
     strcpy(text_arr, text.c_str());
     char * lexem = strtok (text_arr," ,.-?");
 
-    list<char *> result;
+    list<string> result;
 
     while (lexem != NULL)                         // пока есть лексемы
     {
-        cout << lexem  << " - ";
-        lexem = strtok (NULL, " ,.-?");
-        result.push_back(lexem);
+        string str = lexem;
+        lexem = strtok (NULL, " ,.-?!");
+        result.push_back(str);
     }
-    cout << endl;
     return result;
 }
 
